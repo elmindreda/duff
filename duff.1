@@ -1,0 +1,77 @@
+.\" Copyright (C) Camilla Berglund
+.\"
+.Dd April 23, 2005
+.Os
+.Dt DUFF 1
+.Sh NAME
+.Nm duff
+.Nd duplicate file finder
+.Sh SYNOPSIS
+.Nm
+.Op Fl h
+.Op Fl v
+.Nm
+.Op Fl aeqrt
+.Op Fl f Ar format
+.Ar
+.Sh DESCRIPTION
+The
+.Nm
+utility reports any clusters of duplicates in the specified files.
+.Pp
+The following options are available:
+.Bl -tag -offset indent
+.It Fl a
+Include hidden files and directories.
+.It Fl e
+Excess mode. List all excess files; i.e. all but one of each cluster of duplicates.
+.It Fl e Ar format
+Sets the format string for duplicate cluster headers.
+This header, unless the format string is empty, is printed once before each cluster of duplicate files.
+The following escape sequences are available:
+.Bl -tag
+.It
+.Cm %c
+The number of files in the cluster.
+.It
+.Cm %k
+The hexadecimal checksum of files in the cluster.
+.It
+.Cm %n
+The index of the file cluster.
+.It
+.Cm %s
+The size, in bytes, of a file in the cluster.
+.It
+.Cm %%
+A
+.Sq %
+character.
+.El
+.Pp
+The default format string is:
+.Pp
+.Dl %c files in cluster %n (%s bytes, checksum %k)
+.It Fl h
+Display help information and exit.
+.It Fl q
+Quiet mode; supresses warnings and error messages.
+.It Fl r
+Recursively search into all specified directories.
+.It Fl t
+Thorough mode.
+.It Fl v
+Displays version information and exits.
+.El
+.Sh EXAMPLES
+The command:
+.Dl duff -e * | xargs rm
+.Pp
+removes all duplicate files in the current directory.
+.Pp
+.Sh DIAGNOSTICS
+.Ex -std
+.Sh AUTHORS
+.An "Camilla Berglund" Aq elmindreda@users.sourceforge.net
+.Sh BUGS
+Lots, probably.

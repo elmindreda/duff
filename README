@@ -1,0 +1,9 @@
+duff - Duplicate file finder
+Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+
+About duff
+----------
+
+Duff is a command-line utility for identifying duplicates in a
+given set of files.
+

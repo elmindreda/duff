@@ -1,0 +1,15 @@
+duff - Duplicate file finder
+Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+
+Version 0.2
+===========
+
+* Added customisable cluster headers.
+* Split code into multiple files.
+* Got SourceForge.net account (duff.sf.net).
+
+Version 0.1
+===========
+
+* Basic functionality.
+
