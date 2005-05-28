@@ -251,9 +251,7 @@ int main(int argc, char** argv)
   }
   
   for (i = 0;  i < argc;  i++)
-  {
     process_path(argv[i]);
-  }
   
   number = 1;
   
