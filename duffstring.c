@@ -44,8 +44,8 @@ int vasprintf(char** result, const char* format, va_list vl)
     buffer[sizeof(buffer) - 1] = '\0';
 
   size_t length = strlen(buffer);
-  *ret = (char*) malloc(length + 1);
-  strcpy(*ret, buffer);
+  *result = (char*) malloc(length + 1);
+  strcpy(*result, buffer);
 
   return length;
 }
@@ -57,9 +57,10 @@ int vasprintf(char** result, const char* format, va_list vl)
 int asprintf(char** result, const char* format, ...)
 {
   va_list vl;
+  int length;
   
   va_start(vl, format);
-  vasprintf(result, format, vl);
+  length = vasprintf(result, format, vl);
   va_end(vl);
 
   return length;
