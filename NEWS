@@ -4,9 +4,12 @@ Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
 Version 0.2
 ===========
 
-* Added customisable cluster headers.
+* Added customisable cluster headers (-h:).
 * Split code into multiple files.
 * Got SourceForge.net account (duff.sf.net).
+* Added recursive flag (-r).
+* Added quiet flag (-q).
+* Started writing manpage.
 
 Version 0.1
 ===========

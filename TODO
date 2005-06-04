@@ -7,6 +7,7 @@ Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
 * Add random sampling of large files.
 * Add option for specifying large-file-limit.
 * Import freegetopt for non-POSIX ports.
+* Verify compatibility with trailing slashes.
 * Finish manpage.
 * etc...
 
