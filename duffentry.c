@@ -50,12 +50,15 @@
 #include <string.h>
 #endif
 
+#include "sha1.h"
 #include "duff.h"
 
+/* These flags are defined and documented in duff.c.
+ */
 extern int quiet_flag;
 extern int thorough_flag;
 
-struct Entry* make_entry(const char* path, size_t size)
+struct Entry* make_entry(const char* path, off_t size)
 {
   struct Entry* entry;
 
@@ -63,8 +66,8 @@ struct Entry* make_entry(const char* path, size_t size)
   entry->next = NULL;
   entry->path = strdup(path);
   entry->size = size;
-  entry->checksum = 0;
-  entry->status = FRESH;
+  entry->status = UNTOUCHED;
+  memset(entry->checksum, 0, SHA1_HASH_SIZE);
   
   return entry;
 }
@@ -76,8 +79,8 @@ struct Entry* copy_entry(struct Entry* entry)
   copy->next = NULL;
   copy->path = strdup(entry->path);
   copy->size = entry->size;
-  copy->checksum = entry->checksum;
   copy->status = entry->status;
+  memcpy(copy->checksum, entry->checksum, SHA1_HASH_SIZE);
   
   return copy;
 }
@@ -88,6 +91,9 @@ void free_entry(struct Entry* entry)
   free(entry);
 }
 
+/* Frees a list of entries.
+ * On exit, the specified head is set to NULL.
+ */
 void free_entry_list(struct Entry** entries)
 {
   struct Entry* entry;
@@ -100,13 +106,20 @@ void free_entry_list(struct Entry** entries)
   }
 }
 
+/* Calculates the checksum of a file, if needed.
+ * This function uses the status field to avoid doing this more than
+ * once per file per execution of duff.
+ */
 int get_entry_checksum(struct Entry* entry)
 {
-  int c;
-  long checksum = 0;
   FILE* file;
+  size_t size;
+  char buffer[8192];
+  SHA1Context context;
   
-  if (entry->status != FRESH)
+  if (entry->status == INVALID)
+    return -1;
+  if (entry->status != UNTOUCHED)
     return 0;
   
   file = fopen(entry->path, "rb");
@@ -118,43 +131,48 @@ int get_entry_checksum(struct Entry* entry)
     entry->status = INVALID;
     return -1;
   }
-  
-  while ((c = fgetc(file)) != EOF)
+
+  SHA1Init(&context);
+
+  for (;;)
   {
+    size = fread(buffer, 1, sizeof(buffer), file);
+
     if (ferror(file))
     {
       fclose(file);
   
       if (!quiet_flag)
         warning("%s: %s", entry->path, strerror(errno));
-	
+
       entry->status = INVALID;
       return -1;
     }
-    
-    /* TODO: Insert algorithm here. */
-    checksum += c;
+
+    if (size == 0)
+      break;
+
+    SHA1Update(&context, buffer, size);
   }
-  
+
   fclose(file);
   
-  entry->checksum = checksum;
-  entry->status = CHECKED;
+  SHA1Final(&context, entry->checksum);
+  entry->status = CHECKSUMMED;
   return 0;
 }
 
+/* This function defines the high-level comparison algorithm, using
+ * lower level primitives.  This is the place to change or add
+ * calls to comparison modes.  The general idea is to find proof of
+ * un-equality as soon and as quickly as possible.
+ */
 int compare_entries(struct Entry* first, struct Entry* second)
 {
   if (first->size != second->size)
     return -1;
     
-  if (get_entry_checksum(first) != 0)
-    return -1;
-
-  if (get_entry_checksum(second) != 0)
-    return -1;
-
-  if (first->checksum != second->checksum)
+  if (compare_entry_checksums(first, second) != 0)
     return -1;
 
   if (thorough_flag)
@@ -166,13 +184,38 @@ int compare_entries(struct Entry* first, struct Entry* second)
   return 0;
 }
 
+/* Compares the checksum of two files, generating them if neccessary.
+ */
+int compare_entry_checksums(struct Entry* first, struct Entry* second)
+{
+  int i;
+
+  if (get_entry_checksum(first) != 0)
+    return -1;
+
+  if (get_entry_checksum(second) != 0)
+    return -1;
+
+  for (i = 0;  i < SHA1_HASH_SIZE;  i++)
+    if (first->checksum[i] != second->checksum[i])
+      return -1;
+
+  return 0;
+}
+
+/* Performs byte-by-byte comparison of the contents of two files.
+ * This is the action we most want to avoid ever having to do.
+ * It is also completely un-optmimised.  Enjoy.
+ * NOTE: This function assumes that the files are of equal size, as
+ * there's little point in calling it otherwise.
+ */
 int compare_entry_contents(struct Entry* first, struct Entry* second)
 {
   int fc, sc, result = 0;
   FILE* first_stream = fopen(first->path, "rb");
   FILE* second_stream = fopen(second->path, "rb");
 
-  if (!first_stream || second_stream)
+  if (!first_stream || !second_stream)
   {
     if (first_stream)
       fclose(first_stream);

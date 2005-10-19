@@ -1,6 +1,6 @@
 .\" Copyright (C) Camilla Berglund
 .\"
-.Dd April 23, 2005
+.Dd October 18, 2005
 .Os
 .Dt DUFF 1
 .Sh NAME
@@ -8,12 +8,13 @@
 .Nd duplicate file finder
 .Sh SYNOPSIS
 .Nm
-.Op Fl h
-.Op Fl v
-.Nm
 .Op Fl aeqrt
 .Op Fl f Ar format
 .Ar
+.Nm
+.Op Fl h
+.Nm
+.Op Fl v
 .Sh DESCRIPTION
 The
 .Nm
@@ -22,22 +23,23 @@ utility reports any clusters of duplicates in the specified files.
 The following options are available:
 .Bl -tag -offset indent
 .It Fl a
-Include hidden files and directories.
+Include hidden files and directories when searching recursively.
 .It Fl e
 Excess mode. List all excess files; i.e. all but one of each cluster of duplicates.
+This is useful when you want to automate removal of duplicate files.
 .It Fl e Ar format
-Sets the format string for duplicate cluster headers.
+Set the format string for duplicate cluster headers.
 This header, unless the format string is empty, is printed once before each cluster of duplicate files.
 The following escape sequences are available:
-.Bl -tag
-.It
-.Cm %c
-The number of files in the cluster.
-.It
-.Cm %k
-The hexadecimal checksum of files in the cluster.
+.Bl -ohang -offset left
 .It
 .Cm %n
+The number of files in the cluster.
+.It
+.Cm %c
+The SHA1 checksum of files in the cluster.
+.It
+.Cm %i
 The index of the file cluster.
 .It
 .Cm %s
@@ -51,15 +53,19 @@ character.
 .Pp
 The default format string is:
 .Pp
-.Dl %c files in cluster %n (%s bytes, checksum %k)
+.Dl %n files in cluster %i (%s bytes, checksum %c)
 .It Fl h
 Display help information and exit.
 .It Fl q
-Quiet mode; supresses warnings and error messages.
+Quiet mode; supress warnings and error messages.
 .It Fl r
 Recursively search into all specified directories.
 .It Fl t
 Thorough mode.
+Distrust checksums as a guarantee for equality.
+In thorough mode,
+.Nm
+compares files byte by byte when their checksums match.
 .It Fl v
 Displays version information and exits.
 .El
@@ -74,4 +80,15 @@ removes all duplicate files in the current directory.
 .Sh AUTHORS
 .An "Camilla Berglund" Aq elmindreda@users.sourceforge.net
 .Sh BUGS
-Lots, probably.
+.Bl -bullet
+.It
+.Nm
+does not properly detect symlink loops. Beware of runaway
+.Nm
+session that do bad things to your system.
+.It
+.Nm
+Does not currently check for symlinks when using
+.Fl e
+This may do bad things to your data.
+.El

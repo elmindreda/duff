@@ -1,9 +1,83 @@
 duff - Duplicate file finder
-Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+============================
 
-About duff
-----------
+0. Introduction
+===============
 
 Duff is a command-line utility for identifying duplicates in a
 given set of files.
+
+Duff is licensed under the zlib/libpng license.
+
+The project website is:
+
+  http://duff.sourceforge.net/
+
+Duff resides in public CVS on cvs.sourceforge.net. The CVSROOT for
+anonymous access is:
+
+  :pserver:anonymous@cvs.sourceforge.net:/cvsroot/duff
+
+The CVS module for duff 0.x is `duff'.
+
+
+1. License and copyright
+========================
+
+Duff is copyright (c) Camilla Berglund <elmindreda@users.sourceforge.net>
+See the file `COPYING' for license details.  The license is also
+included at the top of each source file.
+
+
+2. Project news
+===============
+
+See the file `NEWS'.
+
+
+4. Building Wendy
+=================
+
+4.0 Building on Unix-like systems
+---------------------------------
+
+If you got this source tree from a CVS repository, you will need to
+bootstrap the build environment using `bootstrap.sh'.  Note that this
+script requires autoconf and automake to run.
+
+If (once) you have a configure script, go ahead and run it.  No
+additional magic should be required.
+
+Duff has been successfully built on the following Unix platforms:
+
+  Mac OS X 10.3 powerpc
+  Debian Sarge powerpc
+  Ubuntu Hoary powerpc
+  FreeBSD 4.11 i386
+
+However, it should build on most Unix platforms without modifications.
+
+4.1 Building on Windows
+-----------------------
+
+Sorry, duff has not been tested on Windows yet.
+
+
+5. Installing Wendy
+===================
+
+See the file `INSTALL'.
+
+
+6. Using Duff
+=============
+
+See the manpage duff(1).
+
+
+7. Bugs, feedback and patches
+=============================
+
+Please send any bug reports, feedback patches to:
+Camilla Berglund <elmindreda@users.sourceforge.net>
 

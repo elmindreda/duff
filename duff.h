@@ -24,9 +24,9 @@
 
 enum
 {
-  FRESH,
+  UNTOUCHED,
   INVALID,
-  CHECKED,
+  CHECKSUMMED,
   REPORTED,
 };
 
@@ -34,8 +34,8 @@ struct Entry
 {
   struct Entry* next;
   char* path;
-  size_t size;
-  long checksum;
+  off_t size;
+  uint8_t checksum[SHA1_HASH_SIZE];
   int status;
 };
 
@@ -45,7 +45,7 @@ struct Cluster
   long count;
 };
 
-struct Entry* make_entry(const char* path, size_t size);
+struct Entry* make_entry(const char* path, off_t size);
 struct Entry* copy_entry(struct Entry* entry);
 void free_entry(struct Entry* entry);
 void free_entry_list(struct Entry** entries);
@@ -56,12 +56,9 @@ int compare_entry_contents(struct Entry* first, struct Entry* second);
 void error(const char* format, ...);
 void warning(const char* format, ...);
 const char* get_mode_name(int mode);
-void version(void);
-void usage(void);
-void bugs(void);
 void print_cluster_header(const char* format,
-                          unsigned int count,
-			  unsigned int number,
-			  size_t size,
-			  unsigned int checksum);
+                          long count,
+			  long index,
+			  off_t size,
+			  const uint8_t* hash);
 

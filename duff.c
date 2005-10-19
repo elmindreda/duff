@@ -62,21 +62,46 @@
 #include <dirent.h>
 #endif
 
+#include "sha1.h"
 #include "duffstring.h"
 #include "duff.h"
 
+/* The 'all files' flag. Includes dotfiles when searching recursively.
+ */
 int all_flag = 0;
+/* The 'verbose' flag. Makes the program verbose.
+ */
 int verbose_flag = 0;
+/* The 'recursive' flag. Recurses into all specified directories.
+ */
 int recursive_flag = 0;
+/* The 'shut up' flag. Makes the program not complain about skipped
+ * non-files.
+ */
 int quiet_flag = 0;
+/* The 'excess' flag. For each duplicate cluster, reports all but one.
+ * Useful for `xargs rm'.
+ */
 int excess_flag = 0;
+/* The 'paranoid' flag. Makes the program distrust checksums, forcing
+ * byte-by-byte comparisons.
+ */
 int thorough_flag = 0;
-const char* format_flag = "%c files in cluster %n (%s bytes, checksum %k)";
+/* The 'header format' flag. Specifies the look of the cluster header.
+ * If set to the empty string, no headers are printed.
+ */
+const char* format_flag = "%n files in cluster %i (%s bytes, checksum %c)";
 
 static struct Entry* file_entries = NULL;
 static struct Cluster* file_clusters = NULL;
 static unsigned long file_count = 0;
 
+static void version(void);
+static void usage(void);
+static void bugs(void);
+
+/* Processes a path.
+ */
 void process_path(const char* path)
 {
   mode_t mode;
@@ -84,20 +109,10 @@ void process_path(const char* path)
   struct Entry* file_entry;
   DIR* dir;
   struct dirent* dir_entry;
-  char* entry_path;
+  char* child_path;
   const char* name;
 
-  name = strrchr(path, '/');
-  if (name)
-    name++;
-  else
-    name = path;
-
-  if (strcmp(name, ".") == 0)
-    return;
-
-  if (strcmp(name, "..") == 0)
-    return;
+  /* TODO: Check whether the path is a symbolic link. */
 
   if (stat(path, &sb) != 0)
   {
@@ -114,8 +129,8 @@ void process_path(const char* path)
     {
       if (file_entry = make_entry(path, sb.st_size))
       {
-	file_entry->next = file_entries;
-	file_entries = file_entry;
+        file_entry->next = file_entries;
+        file_entries = file_entry;
       }
 
       break;
@@ -125,26 +140,30 @@ void process_path(const char* path)
     {
       if (recursive_flag)
       {
-	dir = opendir(path);
-	if (!dir)
-	  return;
+        dir = opendir(path);
+        if (!dir)
+          return;
 
-	while (dir_entry = readdir(dir))
-	{
-	  if (!all_flag)
-	  {
-	    if (dir_entry->d_name[0] == '.')
-	      continue;
-	  }
+        while (dir_entry = readdir(dir))
+        {
+	  name = dir_entry->d_name;
+          if (name[0] == '.')
+          {
+            if (!all_flag)
+              continue;
 
-	  asprintf(&entry_path, "%s/%s", path, dir_entry->d_name);
-	  process_path(entry_path);
-	  free(entry_path);
-	}
+            if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
+              continue;
+          }
+
+          asprintf(&child_path, "%s/%s", path, name);
+          process_path(child_path);
+          free(child_path);
+        }
 	
-	closedir(dir);
-	dir = NULL;
-	break;
+        closedir(dir);
+        dir = NULL;
+        break;
       }
 
       /* FALLTHROUGH */
@@ -153,7 +172,7 @@ void process_path(const char* path)
     default:
     {
       if (!quiet_flag)
-	warning("%s: %s, skipping", path, get_mode_name(mode));
+        warning("%s: %s, skipping", path, get_mode_name(mode));
       break;
     }
   }
@@ -207,9 +226,41 @@ void find_clusters(void)
   */
 }
 
+static void version(void)
+{
+  fprintf(stderr, "%s\n", PACKAGE_NAME);
+  fprintf(stderr, "Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>\n");
+  fprintf(stderr, "%s contains sha1-asaddi\n", PACKAGE_NAME);
+  fprintf(stderr, "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n");
+}
+
+/* It is a good idea to keep this synchronised with the actual code.
+ */
+static void usage(void)
+{
+  fprintf(stderr, "usage: %s -h\n", PACKAGE_NAME);
+  fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
+  fprintf(stderr, "       %s [-aeqrt] [-f format] file ...\n", PACKAGE_NAME);
+  fprintf(stderr, "options:\n");
+  fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
+  fprintf(stderr, "  -e  excess files mode, print excess files\n");
+  fprintf(stderr, "  -f  header format; set format for cluster headers\n");
+  fprintf(stderr, "  -h  show this help\n");
+  fprintf(stderr, "  -q  quiet; suppress warnings and error messages\n");
+  fprintf(stderr, "  -r  recursive; search in specified directories\n");
+  fprintf(stderr, "  -t  throrough; compare files byte by byte\n");
+  fprintf(stderr, "  -v  show version information\n");
+}
+
+static void bugs(void)
+{
+  fprintf(stderr, "Report bugs to <%s>\n", PACKAGE_BUGREPORT);
+}
+
 int main(int argc, char** argv)
 {
   int i, ch, number, count = 0;
+  char* temp;
   struct Entry* base;
   struct Entry* entry;
   struct Entry* copy;
@@ -220,30 +271,30 @@ int main(int argc, char** argv)
     switch (ch)
     {
       case 'a':
-	all_flag = 1;
-	break;
+        all_flag = 1;
+        break;
       case 'v':
         version();
         exit(0);
       case 'r':
-	recursive_flag = 1;
-	break;
+        recursive_flag = 1;
+        break;
       case 'q':
-	quiet_flag = 1;
-	break;
+        quiet_flag = 1;
+        break;
       case 'e':
-	excess_flag = 1;
-	break;
+        excess_flag = 1;
+	error("option -e not yet implemented");
       case 't':
-	thorough_flag = 1;
-	break;
+        thorough_flag = 1;
+        break;
       case 'f':
-	format_flag = optarg;
-	break;
+        format_flag = optarg;
+        break;
       case 'h':
       default:
         usage();
-	bugs();
+        bugs();
         exit(0);
     }
   }
@@ -259,7 +310,21 @@ int main(int argc, char** argv)
   }
   
   for (i = 0;  i < argc;  i++)
+  {
+    if (*argv[i] == '\0')
+      continue;
+
+    /* kill trailing slashes */
+    while ((temp = strrchr(argv[i] + 1, '/')) != NULL)
+    {
+      if (*(temp + 1) != '\0')
+        break;
+
+      *temp = '\0';
+    }
+
     process_path(argv[i]);
+  }
   
   number = 1;
   
@@ -272,44 +337,35 @@ int main(int argc, char** argv)
     
     for (entry = base->next;  entry;  entry = entry->next)
     {
-      if (base->size == entry->size)
+      if (compare_entries(base, entry) == 0)
       {
-        if (get_entry_checksum(base) != 0)
-          break;
-        
-        if (get_entry_checksum(entry) != 0)
-          continue;
-        
-        if (base->checksum == entry->checksum)
-        {
-          if (base->status != REPORTED)
-          {
-            copy = copy_entry(base);
-            copy->next = duplicates;
-            duplicates = copy;
-            
-            base->status = REPORTED;
-          }
-          
-          copy = copy_entry(entry);
-          copy->next = duplicates;
-          duplicates = copy;
-          
-          entry->status = REPORTED;
-          count++;
-        }
+	if (base->status != REPORTED)
+	{
+	  copy = copy_entry(base);
+	  copy->next = duplicates;
+	  duplicates = copy;
+	  
+	  base->status = REPORTED;
+	}
+	
+	copy = copy_entry(entry);
+	copy->next = duplicates;
+	duplicates = copy;
+	
+	entry->status = REPORTED;
+	count++;
       }
     }
     
     if (duplicates)
     {
       if (*format_flag != '\0')
-	print_cluster_header(format_flag,
-	                     count,
-			     number,
-			     duplicates->size,
-			     duplicates->checksum);
-      
+        print_cluster_header(format_flag,
+                             count,
+                             number,
+                             duplicates->size,
+                             duplicates->checksum);
+
       for (entry = duplicates;  entry;  entry = entry->next)
         printf("%s\n", entry->path);
       

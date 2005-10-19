@@ -38,6 +38,10 @@
 #include <stdio.h>
 #endif
 
+#if HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
 #if HAVE_STDARG_H
 #include <stdarg.h>
 #endif
@@ -46,9 +50,12 @@
 #include <ctype.h>
 #endif
 
+#include "sha1.h"
 #include "duffstring.h"
 #include "duff.h"
 
+/* Prints a formatted message to stderr and exist with non-zero status.
+ */
 void error(const char* format, ...)
 {
   char* message;
@@ -65,6 +72,8 @@ void error(const char* format, ...)
   exit(1);
 }
 
+/* Prints a formatted message to stderr.
+ */
 void warning(const char* format, ...)
 {
   char* message;
@@ -80,6 +89,8 @@ void warning(const char* format, ...)
   free(message);
 }
 
+/* Returns a string representation of a fstat(2) file mode.
+ */
 const char* get_mode_name(int mode)
 {
   switch (mode)
@@ -97,42 +108,22 @@ const char* get_mode_name(int mode)
     case S_IFSOCK:
       return "socket";
     default:
-      return "WTF?";
+      return "unknown";
   }
 }
 
-void version(void)
-{
-  fprintf(stderr, "%s\n", PACKAGE_STRING);
-  fprintf(stderr, "Copyright (C) 2004 Camilla Berglund\n");
-}
-
-void usage(void)
-{
-  fprintf(stderr, "usage: %s -h\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s [-aeqrt] file ...\n", PACKAGE_NAME);
-  fprintf(stderr, "options:\n");
-  fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
-  fprintf(stderr, "  -e  excess files mode, print excess files\n");
-  fprintf(stderr, "  -h  show this help\n");
-  fprintf(stderr, "  -q  quiet; suppress warnings and error messages\n");
-  fprintf(stderr, "  -r  recursive; search in specified directories\n");
-  fprintf(stderr, "  -t  throrough; compare files byte by byte\n");
-  fprintf(stderr, "  -v  show version information\n");
-}
-
-void bugs(void)
-{
-  fprintf(stderr, "Report bugs to <%s>\n", PACKAGE_BUGREPORT);
-}
-
+/* Prints a duplicate cluster header to stdout.  Various escape
+ * sequences in the format string are replaced with the provided values.
+ * This should probably be a fancy, dynamically allocating string
+ * generating function, but I don't see any practical reason for that.
+ */
 void print_cluster_header(const char* format,
-                          unsigned int count,
-			  unsigned int number,
-			  size_t size,
-			  unsigned int checksum)
+                          long count,
+			  long index,
+			  off_t size,
+			  const uint8_t* checksum)
 {
+  int i;
   const char* c;
 
   for (c = format;  *c != '\0';  c++)
@@ -143,16 +134,17 @@ void print_cluster_header(const char* format,
       switch (*c)
       {
 	case 's':
-	  printf("%zu", size);
+	  printf("%lu", size);
+	  break;
+	case 'i':
+	  printf("%u", index);
 	  break;
 	case 'n':
-	  printf("%u", number);
-	  break;
-	case 'c':
 	  printf("%u", count);
 	  break;
-	case 'k':
-	  printf("0x%08lx", checksum);
+	case 'c':
+	  for (i = 0;  i < SHA1_HASH_SIZE;  i++)
+	    printf("%02x", checksum[i]);
 	  break;
 	case '%':
 	  putchar('%');

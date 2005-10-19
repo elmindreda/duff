@@ -22,6 +22,9 @@ AC_C_CONST
 AC_TYPE_MODE_T
 AC_TYPE_SIZE_T
 
+# Check for endianness.
+AC_C_BIGENDIAN([], [], [AC_MSG_ERROR([Unable to detect endianness.])])
+
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
