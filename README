@@ -7,8 +7,6 @@ duff - Duplicate file finder
 Duff is a command-line utility for identifying duplicates in a
 given set of files.
 
-Duff is licensed under the zlib/libpng license.
-
 The project website is:
 
   http://duff.sourceforge.net/
@@ -25,8 +23,15 @@ The CVS module for duff 0.x is `duff'.
 ========================
 
 Duff is copyright (c) Camilla Berglund <elmindreda@users.sourceforge.net>
+
+Duff is licensed under the zlib/libpng license.
 See the file `COPYING' for license details.  The license is also
 included at the top of each source file.
+
+Duff contains sha1-asaddi.
+
+Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>
+See the files `sha1.c' or `sha1.h' for license details.
 
 
 2. Project news
@@ -35,11 +40,8 @@ included at the top of each source file.
 See the file `NEWS'.
 
 
-4. Building Wendy
-=================
-
-4.0 Building on Unix-like systems
----------------------------------
+4. Building Duff
+================
 
 If you got this source tree from a CVS repository, you will need to
 bootstrap the build environment using `bootstrap.sh'.  Note that this
@@ -57,14 +59,9 @@ Duff has been successfully built on the following Unix platforms:
 
 However, it should build on most Unix platforms without modifications.
 
-4.1 Building on Windows
------------------------
 
-Sorry, duff has not been tested on Windows yet.
-
-
-5. Installing Wendy
-===================
+5. Installing Duff
+==================
 
 See the file `INSTALL'.
 
@@ -72,7 +69,7 @@ See the file `INSTALL'.
 6. Using Duff
 =============
 
-See the manpage duff(1).
+See the accompanying manpage duff(1).
 
 
 7. Bugs, feedback and patches
@@ -80,4 +77,11 @@ See the manpage duff(1).
 
 Please send any bug reports, feedback patches to:
 Camilla Berglund <elmindreda@users.sourceforge.net>
+
+
+8. Disambiguation
+=================
+
+This is duff, the Unix command-line utility,
+and not DUFF, the Windows program.
 

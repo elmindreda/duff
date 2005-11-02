@@ -58,6 +58,8 @@
 extern int quiet_flag;
 extern int thorough_flag;
 
+/* Allocates and initialises an entry.
+ */
 struct Entry* make_entry(const char* path, off_t size)
 {
   struct Entry* entry;
@@ -85,6 +87,8 @@ struct Entry* copy_entry(struct Entry* entry)
   return copy;
 }
 
+/* Frees an antry and any dynamically allocated members.
+ */
 void free_entry(struct Entry* entry)
 {
   free(entry->path);
@@ -107,8 +111,8 @@ void free_entry_list(struct Entry** entries)
 }
 
 /* Calculates the checksum of a file, if needed.
- * This function uses the status field to avoid doing this more than
- * once per file per execution of duff.
+ * The status field is used to avoid doing this more than once per file
+ * per execution of duff.
  */
 int get_entry_checksum(struct Entry* entry)
 {

@@ -228,7 +228,7 @@ void find_clusters(void)
 
 static void version(void)
 {
-  fprintf(stderr, "%s\n", PACKAGE_NAME);
+  fprintf(stderr, "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
   fprintf(stderr, "Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>\n");
   fprintf(stderr, "%s contains sha1-asaddi\n", PACKAGE_NAME);
   fprintf(stderr, "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n");
@@ -313,15 +313,6 @@ int main(int argc, char** argv)
   {
     if (*argv[i] == '\0')
       continue;
-
-    /* kill trailing slashes */
-    while ((temp = strrchr(argv[i] + 1, '/')) != NULL)
-    {
-      if (*(temp + 1) != '\0')
-        break;
-
-      *temp = '\0';
-    }
 
     process_path(argv[i]);
   }
