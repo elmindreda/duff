@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+ * Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -77,10 +77,10 @@
 
 /* The 'follow links' flag. Makes the program follow symbolic links.
  */
-int follow_flag = 0;
+int follow_links_flag = 0;
 /* The 'all files' flag. Includes dotfiles when searching recursively.
  */
-int all_flag = 0;
+int all_files_flag = 0;
 /* The 'verbose' flag. Makes the program verbose.
  */
 int verbose_flag = 0;
@@ -129,7 +129,9 @@ static void report_clusters(void);
  */
 static int stat_file(const char* path, struct stat* sb)
 {
-#if LSTAT_FOLLOWS_SLASHED_SYMLINK
+#if HAVE_LSTAT_EMPTY_STRING_BUG || HAVE_STAT_EMPTY_STRING_BUG
+  if (*path == '\0')
+    return -1;
 #endif
 
   if (lstat(path, sb) != 0)
@@ -142,7 +144,7 @@ static int stat_file(const char* path, struct stat* sb)
 
   if ((sb->st_mode & S_IFMT) == S_IFLNK)
   {
-    if (!follow_flag)
+    if (!follow_links_flag)
       return -1;
 
     if (stat(path, sb) != 0)
@@ -176,7 +178,7 @@ static void recurse_directory(const char* path)
     name = dir_entry->d_name;
     if (name[0] == '.')
     {
-      if (!all_flag)
+      if (!all_files_flag)
 	continue;
 
       if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
@@ -208,7 +210,7 @@ static void process_path(const char* path)
   {
     case S_IFREG:
     {
-      if ((file_entry = make_entry(path, sb.st_size)))
+      if ((file_entry = make_entry(path, &sb)))
       {
         file_entry->next = file_entries;
         file_entries = file_entry;
@@ -247,6 +249,8 @@ static void report_clusters(void)
   struct Entry* copy;
   struct Entry* duplicates = NULL;
 
+  /* TODO: Remove reported and invalidated entries. */
+
   number = 1;
   
   for (base = file_entries;  base;  base = base->next)
@@ -280,15 +284,27 @@ static void report_clusters(void)
     
     if (duplicates)
     {
-      if (*header_format != '\0')
-        print_cluster_header(header_format,
-                             count,
-                             number,
-                             duplicates->size,
-                             duplicates->checksum);
+      if (excess_flag)
+      {
+	/* Report all but the first entry in the cluster */
+	/* TODO: Prefer symlinks over actual files when -L is in force */
+	for (entry = duplicates->next;  entry;  entry = entry->next)
+	  printf("%s\n", entry->path);
+      }
+      else
+      {
+	/* Print header and report all entries in the cluster */
 
-      for (entry = duplicates;  entry;  entry = entry->next)
-        printf("%s\n", entry->path);
+	if (*header_format != '\0')
+	  print_cluster_header(header_format,
+			       count,
+			       number,
+			       duplicates->size,
+			       duplicates->checksum);
+
+	for (entry = duplicates;  entry;  entry = entry->next)
+	  printf("%s\n", entry->path);
+      }
       
       free_entry_list(&duplicates);
       number++;
@@ -301,7 +317,7 @@ static void report_clusters(void)
 static void version(void)
 {
   fprintf(stderr, "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-  fprintf(stderr, "Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>\n");
+  fprintf(stderr, "Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>\n");
   fprintf(stderr, "%s contains sha1-asaddi\n", PACKAGE_NAME);
   fprintf(stderr, "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n");
 }
@@ -347,13 +363,13 @@ int main(int argc, char** argv)
     switch (ch)
     {
       case 'L':
-	follow_flag = 1;
+	follow_links_flag = 1;
 	break;
       case 'P':
-	follow_flag = 0;
+	follow_links_flag = 0;
 	break;
       case 'a':
-        all_flag = 1;
+        all_files_flag = 1;
         break;
       case 'v':
         version();
@@ -366,7 +382,7 @@ int main(int argc, char** argv)
         break;
       case 'e':
         excess_flag = 1;
-	error("option -e not yet implemented");
+	break;
       case 't':
         thorough_flag = 1;
         break;
@@ -405,8 +421,15 @@ int main(int argc, char** argv)
   
   for (i = 0;  i < argc;  i++)
   {
-    if (*argv[i] == '\0')
-      continue;
+#if !LSTAT_FOLLOWS_SLASHED_SYMLINK
+    /* Kill trailing slashes (except in "/") */
+    while ((temp = strrchr(argv[i], '/')))
+    {
+      if (temp == argv[i] || *(temp + 1) != '\0')
+	break;
+      *temp = '\0';
+    }
+#endif
 
     process_path(argv[i]);
   }
