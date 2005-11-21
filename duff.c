@@ -26,12 +26,22 @@
 #include "config.h"
 #endif
 
+#define _GNU_SOURCE
+
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
 
 #if HAVE_SYS_STAT_H
 #include <sys/stat.h>
+#endif
+
+#if HAVE_INTTYPES_H
+#include <inttypes.h>
+#else
+#if HAVE_STDINT_H
+#include <stdint.h>
+#endif
 #endif
 
 #if HAVE_ERRNO_H
@@ -62,7 +72,6 @@
 #include <dirent.h>
 #endif
 
-#include "sha1.h"
 #include "duffstring.h"
 #include "duff.h"
 
@@ -99,18 +108,59 @@ const char* header_format = DEFAULT_HEADER_FORMAT;
  */
 off_t sample_limit = DEFAULT_SIZE_LIMIT;
 
+/* List head for collected entries.
+ */
 static struct Entry* file_entries = NULL;
-static struct Cluster* file_clusters = NULL;
-static unsigned long file_count = 0;
 
+ /* These functions are documented below, where they are defined.
+  * */
 static void version(void);
 static void usage(void);
 static void bugs(void);
 
-void process_directory(const char* path);
-void process_path(const char* path);
+/* These functions are documented below, where they are defined.
+ */
+static int stat_file(const char* path, struct stat* sb);
+static void recurse_directory(const char* path);
+static void process_path(const char* path);
+static void report_clusters(void);
 
-void process_directory(const char* path)
+/* Stat:s a file according to the specified options.
+ */
+static int stat_file(const char* path, struct stat* sb)
+{
+#if LSTAT_FOLLOWS_SLASHED_SYMLINK
+#endif
+
+  if (lstat(path, sb) != 0)
+  {
+    if (!quiet_flag)
+      warning("%s: %s", path, strerror(errno));
+
+    return -1;
+  }
+
+  if ((sb->st_mode & S_IFMT) == S_IFLNK)
+  {
+    if (!follow_flag)
+      return -1;
+
+    if (stat(path, sb) != 0)
+    {
+      if (!quiet_flag)
+	warning("%s: %s", path, strerror(errno));
+
+      return -1;
+    }
+  }
+
+  return 0;
+}
+
+/* Recurses into a directory, collecting all or all non-hidden files,
+ * according to the specified options.
+ */
+static void recurse_directory(const char* path)
 {
   DIR* dir;
   struct dirent* dir_entry;
@@ -121,7 +171,7 @@ void process_directory(const char* path)
   if (!dir)
     return;
 
-  while (dir_entry = readdir(dir))
+  while ((dir_entry = readdir(dir)))
   {
     name = dir_entry->d_name;
     if (name[0] == '.')
@@ -139,49 +189,26 @@ void process_directory(const char* path)
   }
   
   closedir(dir);
-  dir = NULL;
 }
 
-/* Processes a path.
+/* Processes a path name, whether from the command line or from
+ * directory recursion.
  */
-void process_path(const char* path)
+static void process_path(const char* path)
 {
   mode_t mode;
   struct stat sb;
   struct Entry* file_entry;
 
-  /* TODO: Check whether the path is a symbolic link. */
-
-  if (lstat(path, &sb) != 0)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", path, strerror(errno));
-
+  if (stat_file(path, &sb) != 0)
     return;
-  }
 
   mode = sb.st_mode & S_IFMT;
-  if (mode == S_IFLNK)
-  {
-    if (!follow_flag)
-      return;
-
-    if (stat(path, &sb) != 0)
-    {
-      if (!quiet_flag)
-	warning("%s: %s", path, strerror(errno));
-
-      return;
-    }
-
-    mode = sb.st_mode & S_IFMT;
-  }
-
   switch (mode)
   {
     case S_IFREG:
     {
-      if (file_entry = make_entry(path, sb.st_size))
+      if ((file_entry = make_entry(path, sb.st_size)))
       {
         file_entry->next = file_entries;
         file_entries = file_entry;
@@ -194,7 +221,7 @@ void process_path(const char* path)
     {
       if (recursive_flag)
       {
-	process_directory(path);
+	recurse_directory(path);
         break;
       }
 
@@ -210,159 +237,16 @@ void process_path(const char* path)
   }
 }
 
-void find_clusters(void)
-{
-  /*
-  struct Entry* base;
-  struct Entry* entry;
-  int count, number = 1;
-  
-  for (base = file_entries;  base;  base = base->next)
-  {
-    if (base->status == INVALID || base->status == REPORTED)
-      continue;
-
-    count = 1;
-    
-    for (entry = base->next;  entry;  entry = entry->next)
-    {
-      if (base->size == entry->size)
-      {
-        if (get_entry_checksum(base) != 0)
-          break;
-        
-        if (get_entry_checksum(entry) != 0)
-          continue;
-        
-        if (base->checksum == entry->checksum)
-        {
-          if (base->status != REPORTED)
-          {
-            copy = copy_entry(base);
-            copy->next = duplicates;
-            duplicates = copy;
-            
-            base->status = REPORTED;
-          }
-          
-          copy = copy_entry(entry);
-          copy->next = duplicates;
-          duplicates = copy;
-          
-          entry->status = REPORTED;
-          count++;
-        }
-      }
-    }
-  }
-  */
-}
-
-static void version(void)
-{
-  fprintf(stderr, "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-  fprintf(stderr, "Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>\n");
-  fprintf(stderr, "%s contains sha1-asaddi\n", PACKAGE_NAME);
-  fprintf(stderr, "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n");
-}
-
-/* It is a good idea to keep this synchronised with the actual code.
+/* Finds and reports all duplicate clusters among the collected entries.
  */
-static void usage(void)
+static void report_clusters(void)
 {
-  fprintf(stderr, "usage: %s -h\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s [-LPaeqrt] [-f format] [-l size] file ...\n", PACKAGE_NAME);
-  fprintf(stderr, "options:\n");
-  fprintf(stderr, "  -L  follow all symbolic links\n");
-  fprintf(stderr, "  -P  don't follow any symbolic links\n");
-  fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
-  fprintf(stderr, "  -e  excess files mode, print excess files\n");
-  fprintf(stderr, "  -f  header format; set format for cluster headers\n");
-  fprintf(stderr, "  -h  show this help\n");
-  fprintf(stderr, "  -l  size limit; the minimal size that activates sampling\n");
-  fprintf(stderr, "  -q  quiet; suppress warnings and error messages\n");
-  fprintf(stderr, "  -r  recursive; search in specified directories\n");
-  fprintf(stderr, "  -t  throrough; compare files byte by byte\n");
-  fprintf(stderr, "  -v  show version information\n");
-}
-
-static void bugs(void)
-{
-  fprintf(stderr, "Report bugs to <%s>\n", PACKAGE_BUGREPORT);
-}
-
-int main(int argc, char** argv)
-{
-  int i, ch, number, count = 0;
-  char* temp;
+  int number, count = 0;
   struct Entry* base;
   struct Entry* entry;
   struct Entry* copy;
   struct Entry* duplicates = NULL;
-  
-  while ((ch = getopt(argc, argv, "LPavrqhef:l:")) != -1)
-  {
-    switch (ch)
-    {
-      case 'L':
-	follow_flag = 1;
-	break;
-      case 'P':
-	follow_flag = 0;
-	break;
-      case 'a':
-        all_flag = 1;
-        break;
-      case 'v':
-        version();
-        exit(0);
-      case 'r':
-        recursive_flag = 1;
-        break;
-      case 'q':
-        quiet_flag = 1;
-        break;
-      case 'e':
-        excess_flag = 1;
-	error("option -e not yet implemented");
-      case 't':
-        thorough_flag = 1;
-        break;
-      case 'f':
-        header_format = optarg;
-        break;
-      case 'l':
-        sample_limit = (off_t) strtoull(optarg, &temp, 10);
-	if (temp == optarg || errno == ERANGE)
-	  warning("ignoring malformed size limit %s", optarg);
-	break;
-      case 'h':
-      default:
-        usage();
-        bugs();
-        exit(0);
-    }
-  }
-  
-  argc -= optind;
-  argv += optind;
 
-  if (!argc)
-  {
-    usage();
-    bugs();
-    exit(0);
-  }
-  
-  for (i = 0;  i < argc;  i++)
-  {
-    if (*argv[i] == '\0')
-      continue;
-
-    process_path(argv[i]);
-  }
-  
   number = 1;
   
   for (base = file_entries;  base;  base = base->next)
@@ -410,7 +294,126 @@ int main(int argc, char** argv)
       number++;
     }
   }
+}
+
+/* Prints version information to stderr.
+ */
+static void version(void)
+{
+  fprintf(stderr, "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
+  fprintf(stderr, "Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>\n");
+  fprintf(stderr, "%s contains sha1-asaddi\n", PACKAGE_NAME);
+  fprintf(stderr, "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n");
+}
+
+/* Prints brief help information to stderr.
+ * It is a good idea to keep this synchronised with the actual code.
+ * It is also a good idea it keep it synchronised with the manpage.
+ */
+static void usage(void)
+{
+  fprintf(stderr, "usage: %s -h\n", PACKAGE_NAME);
+  fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
+  fprintf(stderr, "       %s [-LPaeqrt] [-f format] [-l size] file ...\n", PACKAGE_NAME);
+  fprintf(stderr, "options:\n");
+  fprintf(stderr, "  -L  follow all symbolic links\n");
+  fprintf(stderr, "  -P  don't follow any symbolic links\n");
+  fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
+  fprintf(stderr, "  -e  excess files mode, print excess files\n");
+  fprintf(stderr, "  -f  header format; set format for cluster headers\n");
+  fprintf(stderr, "  -h  show this help\n");
+  fprintf(stderr, "  -l  size limit; the minimal size that activates sampling\n");
+  fprintf(stderr, "  -q  quiet; suppress warnings and error messages\n");
+  fprintf(stderr, "  -r  recursive; search in specified directories\n");
+  fprintf(stderr, "  -t  throrough; compare files byte by byte\n");
+  fprintf(stderr, "  -v  show version information\n");
+}
+
+/* Prints bug report address to stderr.
+ */
+static void bugs(void)
+{
+  fprintf(stderr, "Report bugs to <%s>\n", PACKAGE_BUGREPORT);
+}
+
+int main(int argc, char** argv)
+{
+  int i, ch;
+  char* temp;
+  off_t limit;
+  
+  while ((ch = getopt(argc, argv, "LPavrqhef:l:")) != -1)
+  {
+    switch (ch)
+    {
+      case 'L':
+	follow_flag = 1;
+	break;
+      case 'P':
+	follow_flag = 0;
+	break;
+      case 'a':
+        all_flag = 1;
+        break;
+      case 'v':
+        version();
+        exit(0);
+      case 'r':
+        recursive_flag = 1;
+        break;
+      case 'q':
+        quiet_flag = 1;
+        break;
+      case 'e':
+        excess_flag = 1;
+	error("option -e not yet implemented");
+      case 't':
+        thorough_flag = 1;
+        break;
+      case 'f':
+        header_format = optarg;
+        break;
+      case 'l':
+        limit = (off_t) strtoull(optarg, &temp, 10);
+	if (temp == optarg || errno == ERANGE || errno == EINVAL)
+	  warning("ignoring malformed size limit %s", optarg);
+	else
+	{
+	  if (limit < SAMPLE_COUNT)
+	    warning("ignoring too low size limit %lu", limit);
+	  else
+	    sample_limit = limit;
+	}
+	break;
+      case 'h':
+      default:
+        usage();
+        bugs();
+        exit(0);
+    }
+  }
+  
+  argc -= optind;
+  argv += optind;
+
+  if (!argc)
+  {
+    usage();
+    bugs();
+    exit(0);
+  }
+  
+  for (i = 0;  i < argc;  i++)
+  {
+    if (*argv[i] == '\0')
+      continue;
+
+    process_path(argv[i]);
+  }
+  
+  report_clusters();
   
   free_entry_list(&file_entries);
+  exit(0);
 }
 
