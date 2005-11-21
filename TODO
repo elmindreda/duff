@@ -1,10 +1,18 @@
 duff - Duplicate file finder
-Copyright (c) Camilla Berglund <elmindreda@users.sourceforge.net>
+Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
 
-* Change linear list into hash table or tree.
-* Add explicit clusters (struct Cluster).
-* Add option for specifying large-file-limit.
+Functionality
 * Change to getopt_long and add long options.
 * Add {hard|soft} link loop detection. 
+* Implement basic excess (-e) mode.
 * Be aware of symlinks in excess (-e) mode.
+
+Documentation
+* Add ALGORITHM section to manpage.
+* Improve formatting of manpage.
+* Add more examples to manpage.
+
+Optimisation
+* Change linear list into hash table or tree?
+* Free entries after reporting?
 
