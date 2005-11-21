@@ -1,6 +1,7 @@
-.\" Copyright (C) Camilla Berglund
+.\" Copyright (C) 2004 Camilla Berglund
+.\" Please see the file `COPYING' for license details.
 .\"
-.Dd October 18, 2005
+.Dd November 21, 2005
 .Os
 .Dt DUFF 1
 .Sh NAME
@@ -10,6 +11,7 @@
 .Nm
 .Op Fl LPaeqrt
 .Op Fl f Ar format
+.Op Fl l Ar limit
 .Ar
 .Nm
 .Op Fl h
@@ -18,7 +20,11 @@
 .Sh DESCRIPTION
 The
 .Nm
-utility reports any clusters of duplicates in the specified files.
+utility reports any clusters of duplicates in the specified files and/or directories.
+For each cluster of duplicate files,
+.Nm
+prints a customizable header on one line,
+and then the names of all the files in the cluster, each on one line.
 .Pp
 The following options are available:
 .Bl -tag -offset indent
@@ -33,8 +39,9 @@ Include hidden files and directories when searching recursively.
 Excess mode. List all excess files; i.e. all but one of each cluster of duplicates.
 This is useful when you want to automate removal of duplicate files.
 .It Fl f Ar format
-Set the format string for duplicate cluster headers.
-This header, unless the format string is empty, is printed once before each cluster of duplicate files.
+Set the format of the cluster header.
+If the header is set to the empty string, no header line is printed.
+.Pp
 The following escape sequences are available:
 .Bl -ohang -offset left
 .It
@@ -45,7 +52,7 @@ The number of files in the cluster.
 The SHA1 checksum of files in the cluster.
 .It
 .Cm %i
-The index of the file cluster.
+The one-based index of the file cluster.
 .It
 .Cm %s
 The size, in bytes, of a file in the cluster.
@@ -61,6 +68,13 @@ The default format string is:
 .Dl %n files in cluster %i (%s bytes, checksum %c)
 .It Fl h
 Display help information and exit.
+.It Fl l Ar limit
+The minimum size of files to be sampled.
+If the size of files in a cluster is equal or greater than the specified limit,
+.Nm
+will sample a few bytes from each file, before calculating a full checksum.
+This is an optimization for larger files.
+The default limit is 1MB (1048576 bytes).
 .It Fl q
 Quiet mode; supress warnings and error messages.
 .It Fl r
@@ -92,12 +106,12 @@ lists all duplicate files in the directory foo and its subdirectories.
 .Bl -bullet
 .It
 .Nm
-does not properly detect symlink loops. Beware of runaway
-.Nm
-session that do bad things to your system.
+does not currently detect symlink loops when using
+.Fl L
+(follow links). This may do bad things to your system.
 .It
 .Nm
-Does not currently check for symlinks when using
+does not currently check for symlinks when using
 .Fl e
-This may do bad things to your data.
+(excess mode). This may do bad things to your data.
 .El
