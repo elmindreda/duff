@@ -36,8 +36,16 @@ duffentry.c: compare_entries()
   The main comparison function for entries.  Start there if you wish to
   hack the comparison algorithm.
 
-duff.c: process_path(), recurse_directory() and stat_file()
+duffentry.c: compare_entry_*() and get_entry_*()
+  Compares and collects various entry attributes, respectively.  Start
+  here if you wish to modify one of the existing comparison methods.
+
+duff.c: process_path() and recurse_directory()
   The main functions for collecting files and making entries.  Start
   there if you wish to hack the traversal algorithm.
 
+duff.c: report_clusters()
+  Finds and reports the clusters of duplicate files in the list of
+  entries, or collected files.  Start here if you wish to optimise
+  list traversal or alter normal program output.
 
