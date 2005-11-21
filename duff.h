@@ -22,6 +22,8 @@
  *     distribution.
  */
 
+#define SAMPLE_COUNT 10
+
 enum
 {
   UNTOUCHED,
@@ -35,7 +37,8 @@ struct Entry
   struct Entry* next;
   char* path;
   off_t size;
-  uint8_t checksum[SHA1_HASH_SIZE];
+  uint8_t* checksum;
+  uint8_t* samples;
   int status;
 };
 

@@ -2,10 +2,15 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([duff], [0.2], [elmindreda@users.sourceforge.net])
+AC_INIT([duff], [0.3], [elmindreda@users.sourceforge.net])
 AC_CONFIG_SRCDIR([duff.c])
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([config.h])
+
+AC_DEFINE([DEFAULT_SIZE_LIMIT], [1048576], \
+  [The default size limit for sampling.])
+AC_DEFINE([DEFAULT_HEADER_FORMAT], ["%n files in cluster %i (%s bytes, checksum %c)"], \
+  [The default cluster header format.])
 
 # Checks for programs.
 AC_PROG_CC
@@ -15,23 +20,26 @@ AC_PROG_CC
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS([errno.h stdio.h stdarg.h string.h unistd.h])
+AC_CHECK_HEADERS([errno.h stdio.h stdarg.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
+AC_C_INLINE
 AC_TYPE_MODE_T
 AC_TYPE_SIZE_T
+AC_TYPE_OFF_T
 
-# Check for endianness.
+# Check for endianness (for sha1-asaddi).
 AC_C_BIGENDIAN([], [], [AC_MSG_ERROR([Unable to detect endianness.])])
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
 AC_FUNC_STAT
+AC_FUNC_LSTAT
 AC_FUNC_CLOSEDIR_VOID
-AC_CHECK_FUNCS([strdup strerror], [], [AC_MSG_ERROR([Function not found])])
-AC_CHECK_FUNCS([asprintf vasprintf strdup])
+AC_CHECK_FUNCS([strdup strerror memset], [], [AC_MSG_ERROR([Function not found])])
+AC_CHECK_FUNCS([asprintf vasprintf])
 
 AC_OUTPUT(Makefile)
 

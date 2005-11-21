@@ -66,6 +66,9 @@
 #include "duffstring.h"
 #include "duff.h"
 
+/* The 'follow links' flag. Makes the program follow symbolic links.
+ */
+int follow_flag = 0;
 /* The 'all files' flag. Includes dotfiles when searching recursively.
  */
 int all_flag = 0;
@@ -87,10 +90,14 @@ int excess_flag = 0;
  * byte-by-byte comparisons.
  */
 int thorough_flag = 0;
-/* The 'header format' flag. Specifies the look of the cluster header.
+/* The 'header format' value. Specifies the look of the cluster header.
  * If set to the empty string, no headers are printed.
  */
-const char* format_flag = "%n files in cluster %i (%s bytes, checksum %c)";
+const char* header_format = DEFAULT_HEADER_FORMAT;
+/* The 'sample limit' value. Specifies the minimal size of files to be
+ * compared with the sampling method.
+ */
+off_t sample_limit = DEFAULT_SIZE_LIMIT;
 
 static struct Entry* file_entries = NULL;
 static struct Cluster* file_clusters = NULL;
@@ -100,6 +107,41 @@ static void version(void);
 static void usage(void);
 static void bugs(void);
 
+void process_directory(const char* path);
+void process_path(const char* path);
+
+void process_directory(const char* path)
+{
+  DIR* dir;
+  struct dirent* dir_entry;
+  char* child_path;
+  const char* name;
+
+  dir = opendir(path);
+  if (!dir)
+    return;
+
+  while (dir_entry = readdir(dir))
+  {
+    name = dir_entry->d_name;
+    if (name[0] == '.')
+    {
+      if (!all_flag)
+	continue;
+
+      if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
+	continue;
+    }
+
+    asprintf(&child_path, "%s/%s", path, name);
+    process_path(child_path);
+    free(child_path);
+  }
+  
+  closedir(dir);
+  dir = NULL;
+}
+
 /* Processes a path.
  */
 void process_path(const char* path)
@@ -107,14 +149,10 @@ void process_path(const char* path)
   mode_t mode;
   struct stat sb;
   struct Entry* file_entry;
-  DIR* dir;
-  struct dirent* dir_entry;
-  char* child_path;
-  const char* name;
 
   /* TODO: Check whether the path is a symbolic link. */
 
-  if (stat(path, &sb) != 0)
+  if (lstat(path, &sb) != 0)
   {
     if (!quiet_flag)
       warning("%s: %s", path, strerror(errno));
@@ -123,6 +161,22 @@ void process_path(const char* path)
   }
 
   mode = sb.st_mode & S_IFMT;
+  if (mode == S_IFLNK)
+  {
+    if (!follow_flag)
+      return;
+
+    if (stat(path, &sb) != 0)
+    {
+      if (!quiet_flag)
+	warning("%s: %s", path, strerror(errno));
+
+      return;
+    }
+
+    mode = sb.st_mode & S_IFMT;
+  }
+
   switch (mode)
   {
     case S_IFREG:
@@ -140,29 +194,7 @@ void process_path(const char* path)
     {
       if (recursive_flag)
       {
-        dir = opendir(path);
-        if (!dir)
-          return;
-
-        while (dir_entry = readdir(dir))
-        {
-	  name = dir_entry->d_name;
-          if (name[0] == '.')
-          {
-            if (!all_flag)
-              continue;
-
-            if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
-              continue;
-          }
-
-          asprintf(&child_path, "%s/%s", path, name);
-          process_path(child_path);
-          free(child_path);
-        }
-	
-        closedir(dir);
-        dir = NULL;
+	process_directory(path);
         break;
       }
 
@@ -240,12 +272,15 @@ static void usage(void)
 {
   fprintf(stderr, "usage: %s -h\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s [-aeqrt] [-f format] file ...\n", PACKAGE_NAME);
+  fprintf(stderr, "       %s [-LPaeqrt] [-f format] [-l size] file ...\n", PACKAGE_NAME);
   fprintf(stderr, "options:\n");
+  fprintf(stderr, "  -L  follow all symbolic links\n");
+  fprintf(stderr, "  -P  don't follow any symbolic links\n");
   fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
   fprintf(stderr, "  -e  excess files mode, print excess files\n");
   fprintf(stderr, "  -f  header format; set format for cluster headers\n");
   fprintf(stderr, "  -h  show this help\n");
+  fprintf(stderr, "  -l  size limit; the minimal size that activates sampling\n");
   fprintf(stderr, "  -q  quiet; suppress warnings and error messages\n");
   fprintf(stderr, "  -r  recursive; search in specified directories\n");
   fprintf(stderr, "  -t  throrough; compare files byte by byte\n");
@@ -266,10 +301,16 @@ int main(int argc, char** argv)
   struct Entry* copy;
   struct Entry* duplicates = NULL;
   
-  while ((ch = getopt(argc, argv, "avrqhef:")) != -1)
+  while ((ch = getopt(argc, argv, "LPavrqhef:l:")) != -1)
   {
     switch (ch)
     {
+      case 'L':
+	follow_flag = 1;
+	break;
+      case 'P':
+	follow_flag = 0;
+	break;
       case 'a':
         all_flag = 1;
         break;
@@ -289,8 +330,13 @@ int main(int argc, char** argv)
         thorough_flag = 1;
         break;
       case 'f':
-        format_flag = optarg;
+        header_format = optarg;
         break;
+      case 'l':
+        sample_limit = (off_t) strtoull(optarg, &temp, 10);
+	if (temp == optarg || errno == ERANGE)
+	  warning("ignoring malformed size limit %s", optarg);
+	break;
       case 'h':
       default:
         usage();
@@ -350,8 +396,8 @@ int main(int argc, char** argv)
     
     if (duplicates)
     {
-      if (*format_flag != '\0')
-        print_cluster_header(format_flag,
+      if (*header_format != '\0')
+        print_cluster_header(header_format,
                              count,
                              number,
                              duplicates->size,

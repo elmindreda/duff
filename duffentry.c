@@ -57,6 +57,7 @@
  */
 extern int quiet_flag;
 extern int thorough_flag;
+extern off_t sample_limit;
 
 /* Allocates and initialises an entry.
  */
@@ -69,11 +70,14 @@ struct Entry* make_entry(const char* path, off_t size)
   entry->path = strdup(path);
   entry->size = size;
   entry->status = UNTOUCHED;
-  memset(entry->checksum, 0, SHA1_HASH_SIZE);
+  entry->checksum = NULL;
+  entry->samples = NULL;
   
   return entry;
 }
 
+/* Makes a deep copy of an entry.
+ */
 struct Entry* copy_entry(struct Entry* entry)
 {
   struct Entry* copy = (struct Entry*) malloc(sizeof(struct Entry));
@@ -82,7 +86,22 @@ struct Entry* copy_entry(struct Entry* entry)
   copy->path = strdup(entry->path);
   copy->size = entry->size;
   copy->status = entry->status;
-  memcpy(copy->checksum, entry->checksum, SHA1_HASH_SIZE);
+
+  if (entry->checksum)
+  {
+    copy->checksum = (uint8_t*) malloc(SHA1_HASH_SIZE);
+    memcpy(copy->checksum, entry->checksum, SHA1_HASH_SIZE);
+  }
+  else
+    copy->checksum = NULL;
+
+  if (entry->samples)
+  {
+    copy->samples = (uint8_t*) malloc(SAMPLE_COUNT);
+    memcpy(copy->samples, entry->samples, SAMPLE_COUNT);
+  }
+  else
+    copy->samples = NULL;
   
   return copy;
 }
@@ -91,6 +110,8 @@ struct Entry* copy_entry(struct Entry* entry)
  */
 void free_entry(struct Entry* entry)
 {
+  free(entry->samples);
+  free(entry->checksum);
   free(entry->path);
   free(entry);
 }
@@ -110,9 +131,54 @@ void free_entry_list(struct Entry** entries)
   }
 }
 
+/* Retrieves samples for the specified entry.
+ */
+int get_entry_samples(struct Entry* entry)
+{
+  int i;
+  FILE* file;
+  uint8_t* samples;
+  
+  if (entry->status == INVALID)
+    return -1;
+  if (entry->samples)
+    return 0;
+
+  file = fopen(entry->path, "rb");
+  if (!file)
+  {
+    if (!quiet_flag)
+      warning("%s: %s", entry->path, strerror(errno));
+      
+    entry->status = INVALID;
+    return -1;
+  }
+
+  samples = (uint8_t*) malloc(SAMPLE_COUNT);
+  
+  for (i = 0;  i < SAMPLE_COUNT;  i++)
+  {
+    fseek(file, i * entry->size / 10, SEEK_SET);
+    fread(samples + i, 1, 1, file);
+
+    if (ferror(file))
+    {
+      if (!quiet_flag)
+        warning("%s: %s", entry->path, strerror(errno));
+
+      free(samples);
+      fclose(file);
+      return -1;
+    }
+  }
+
+  entry->samples = samples;
+
+  fclose(file);
+  return 0;
+}
+
 /* Calculates the checksum of a file, if needed.
- * The status field is used to avoid doing this more than once per file
- * per execution of duff.
  */
 int get_entry_checksum(struct Entry* entry)
 {
@@ -123,7 +189,7 @@ int get_entry_checksum(struct Entry* entry)
   
   if (entry->status == INVALID)
     return -1;
-  if (entry->status != UNTOUCHED)
+  if (entry->checksum)
     return 0;
   
   file = fopen(entry->path, "rb");
@@ -160,6 +226,8 @@ int get_entry_checksum(struct Entry* entry)
   }
 
   fclose(file);
+
+  entry->checksum = (uint8_t*) malloc(SHA1_HASH_SIZE);
   
   SHA1Final(&context, entry->checksum);
   entry->status = CHECKSUMMED;
@@ -178,6 +246,12 @@ int compare_entries(struct Entry* first, struct Entry* second)
     
   if (compare_entry_checksums(first, second) != 0)
     return -1;
+
+  if (first->size >= sample_limit)
+  {
+    if (compare_entry_samples(first, second) != 0)
+      return -1;
+  }
 
   if (thorough_flag)
   {
@@ -202,6 +276,25 @@ int compare_entry_checksums(struct Entry* first, struct Entry* second)
 
   for (i = 0;  i < SHA1_HASH_SIZE;  i++)
     if (first->checksum[i] != second->checksum[i])
+      return -1;
+
+  return 0;
+}
+
+/* Compares the samples of two files, retrieving them if neccessary.
+ */
+int compare_entry_samples(struct Entry* first, struct Entry* second)
+{
+  int i;
+
+  if (get_entry_samples(first) != 0)
+    return -1;
+
+  if (get_entry_samples(second) != 0)
+    return -1;
+
+  for (i = 0;  i < SAMPLE_COUNT;  i++)
+    if (first->samples[i] != second->samples[i])
       return -1;
 
   return 0;

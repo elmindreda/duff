@@ -8,7 +8,7 @@
 .Nd duplicate file finder
 .Sh SYNOPSIS
 .Nm
-.Op Fl aeqrt
+.Op Fl LPaeqrt
 .Op Fl f Ar format
 .Ar
 .Nm
@@ -22,12 +22,17 @@ utility reports any clusters of duplicates in the specified files.
 .Pp
 The following options are available:
 .Bl -tag -offset indent
+.It Fl L
+Follow all symbolic links.
+.It Fl P
+Don't follow any symbolic links.
+This is the default.
 .It Fl a
 Include hidden files and directories when searching recursively.
 .It Fl e
 Excess mode. List all excess files; i.e. all but one of each cluster of duplicates.
 This is useful when you want to automate removal of duplicate files.
-.It Fl e Ar format
+.It Fl f Ar format
 Set the format string for duplicate cluster headers.
 This header, unless the format string is empty, is printed once before each cluster of duplicate files.
 The following escape sequences are available:
@@ -67,7 +72,7 @@ In thorough mode,
 .Nm
 compares files byte by byte when their checksums match.
 .It Fl v
-Displays version information and exits.
+Display version information and exit.
 .El
 .Sh EXAMPLES
 The command:
@@ -75,6 +80,10 @@ The command:
 .Pp
 removes all duplicate files in the current directory.
 .Pp
+The command:
+.Dl duff -r foo/
+.Pp
+lists all duplicate files in the directory foo and its subdirectories.
 .Sh DIAGNOSTICS
 .Ex -std
 .Sh AUTHORS

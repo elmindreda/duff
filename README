@@ -11,7 +11,7 @@ The project website is:
 
   http://duff.sourceforge.net/
 
-Duff resides in public CVS on cvs.sourceforge.net. The CVSROOT for
+Duff resides in public CVS on cvs.sourceforge.net.  The CVSROOT for
 anonymous access is:
 
   :pserver:anonymous@cvs.sourceforge.net:/cvsroot/duff
@@ -75,13 +75,13 @@ See the accompanying manpage duff(1).
 7. Bugs, feedback and patches
 =============================
 
-Please send any bug reports, feedback patches to:
+Please send bug reports, feedback, patches and cookies to:
 Camilla Berglund <elmindreda@users.sourceforge.net>
 
 
 8. Disambiguation
 =================
 
-This is duff, the Unix command-line utility,
-and not DUFF, the Windows program.
+This is duff, the Unix command-line utility, and not DUFF, the Windows
+program.  If you wish to find duplicate files on Windows, use DUFF.
 

@@ -1,13 +1,10 @@
 duff - Duplicate file finder
-Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+Copyright (c) Camilla Berglund <elmindreda@users.sourceforge.net>
 
-* Implement proper hash function (CRC32 or MD5).
-* Change linear list into hash table.
+* Change linear list into hash table or tree.
 * Add explicit clusters (struct Cluster).
-* Add random sampling of large files.
 * Add option for specifying large-file-limit.
-* Import freegetopt for non-POSIX ports.
-* Verify compatibility with trailing slashes.
-* Finish manpage.
-* etc...
+* Change to getopt_long and add long options.
+* Add {hard|soft} link loop detection. 
+* Be aware of symlinks in excess (-e) mode.
 

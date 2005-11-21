@@ -1,10 +1,17 @@
 duff - Duplicate file finder
 Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
 
+Version 0.3
+===========
+
+* Added explicit link handling options (-L,-P).
+* Added sha1-asaddi for SHA1 hash calculation.
+* Completed basic manpage.
+
 Version 0.2
 ===========
 
-* Added customisable cluster headers (-h:).
+* Added customisable cluster headers (-f).
 * Split code into multiple files.
 * Got SourceForge.net account (duff.sf.net).
 * Added recursive flag (-r).
