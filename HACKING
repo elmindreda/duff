@@ -1,0 +1,43 @@
+Brief hacking guide to Duff
+===========================
+
+Important files
+===============
+
+duff.c
+  Program main, information printing and primary driver logic.
+
+duffentry.c
+  Functionality for dealing with 'entries', i.e. collected files.
+
+duffstring.c
+  Replacement implementations of various libc string functions.
+
+duffutil.c
+  Error reporting and various other small utilities.
+
+sha1.c
+  Implements SHA1 checksum calculation.
+
+duff.h
+  Main header file.
+
+duffstring.h
+  Header for replacement libc function implementations.
+
+sha1.h
+  Header for SHA1 code.
+
+
+Important functions
+===================
+
+duffentry.c: compare_entries()
+  The main comparison function for entries.  Start there if you wish to
+  hack the comparison algorithm.
+
+duff.c: process_path(), recurse_directory() and stat_file()
+  The main functions for collecting files and making entries.  Start
+  there if you wish to hack the traversal algorithm.
+
+
