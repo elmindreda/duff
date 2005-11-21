@@ -22,13 +22,10 @@
  *     distribution.
  */
 
-#define SAMPLE_COUNT 10
-
 enum
 {
   UNTOUCHED,
   INVALID,
-  CHECKSUMMED,
   REPORTED,
 };
 
@@ -52,16 +49,14 @@ struct Entry* make_entry(const char* path, off_t size);
 struct Entry* copy_entry(struct Entry* entry);
 void free_entry(struct Entry* entry);
 void free_entry_list(struct Entry** entries);
-int get_entry_checksum(struct Entry* entry);
 int compare_entries(struct Entry* first, struct Entry* second);
-int compare_entry_contents(struct Entry* first, struct Entry* second);
 
 void error(const char* format, ...);
 void warning(const char* format, ...);
 const char* get_mode_name(int mode);
 void print_cluster_header(const char* format,
-                          long count,
-			  long index,
+                          unsigned int count,
+			  unsigned int index,
 			  off_t size,
 			  const uint8_t* hash);
 
