@@ -22,7 +22,7 @@ The CVS module for duff 0.x is `duff'.
 1. License and copyright
 ========================
 
-Duff is copyright (c) Camilla Berglund <elmindreda@users.sourceforge.net>
+Duff is copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
 
 Duff is licensed under the zlib/libpng license.
 See the file `COPYING' for license details.  The license is also
@@ -56,6 +56,8 @@ Duff has been successfully built on the following Unix platforms:
   Debian Sarge powerpc
   Ubuntu Hoary powerpc
   FreeBSD 4.11 i386
+  Solaris sparc64
+  Debian Woody alpha
 
 However, it should build on most Unix platforms without modifications.
 
