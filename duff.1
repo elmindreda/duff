@@ -1,4 +1,4 @@
-.\" Copyright (C) 2004 Camilla Berglund
+.\" Copyright (C) 2005 Camilla Berglund
 .\" Please see the file `COPYING' for license details.
 .\"
 .Dd November 21, 2005
@@ -111,7 +111,9 @@ does not currently detect symlink loops when using
 (follow links). This may do bad things to your system.
 .It
 .Nm
-does not currently check for symlinks when using
+does not currently intelligently handle symlinks when using
 .Fl e
-(excess mode). This may do bad things to your data.
+(excess mode) with
+.Fl L
+(follow links). This may do very bad things to your data.
 .El

@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+ * Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -73,14 +73,14 @@ static int compare_entry_contents(struct Entry* first, struct Entry* second);
 
 /* Allocates and initialises an entry.
  */
-struct Entry* make_entry(const char* path, off_t size)
+struct Entry* make_entry(const char* path, const struct stat* sb)
 {
   struct Entry* entry;
 
   entry = (struct Entry*) malloc(sizeof(struct Entry));
   entry->next = NULL;
   entry->path = strdup(path);
-  entry->size = size;
+  entry->size = sb->st_size;
   entry->status = UNTOUCHED;
   entry->checksum = NULL;
   entry->samples = NULL;

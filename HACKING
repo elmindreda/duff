@@ -1,6 +1,18 @@
 Brief hacking guide to Duff
 ===========================
 
+Basic nomenclature
+==================
+
+Entry n.
+  A file, specified on the command line or found via directory recursion,
+  included in the set of files checked for duplicates.
+
+Cluster n.
+  A collection of entries which represent files with equal contents, i.e. a
+  collection of duplicate files.
+
+
 Important files
 ===============
 
@@ -10,42 +22,36 @@ duff.c
 duffentry.c
   Functionality for dealing with 'entries', i.e. collected files.
 
-duffstring.c
+duffstring.c duffstring.h
   Replacement implementations of various libc string functions.
 
 duffutil.c
-  Error reporting and various other small utilities.
-
-sha1.c
-  Implements SHA1 checksum calculation.
+  Error reporting and various other utility functions.
 
 duff.h
   Main header file.
 
-duffstring.h
-  Header for replacement libc function implementations.
-
-sha1.h
-  Header for SHA1 code.
+sha1.c sha1.h
+  Implements SHA1 checksum calculation.
 
 
 Important functions
 ===================
 
 duffentry.c: compare_entries()
-  The main comparison function for entries.  Start there if you wish to
-  hack the comparison algorithm.
+  The main comparison function for entries.  Start there if you wish to hack
+  the comparison algorithm.
 
 duffentry.c: compare_entry_*() and get_entry_*()
-  Compares and collects various entry attributes, respectively.  Start
-  here if you wish to modify one of the existing comparison methods.
+  Compares and collects various entry attributes, respectively.  Start here if
+  you wish to modify one of the existing comparison methods.
 
 duff.c: process_path() and recurse_directory()
-  The main functions for collecting files and making entries.  Start
-  there if you wish to hack the traversal algorithm.
+  The main functions for collecting files and making entries.  Start there if
+  you wish to hack the traversal algorithm.
 
 duff.c: report_clusters()
-  Finds and reports the clusters of duplicate files in the list of
-  entries, or collected files.  Start here if you wish to optimise
-  list traversal or alter normal program output.
+  Finds and reports the clusters of duplicate files in the list of entries, or
+  collected files.  Start here if you wish to optimise list traversal or alter
+  normal program output.
 

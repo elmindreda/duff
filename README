@@ -4,15 +4,16 @@ duff - Duplicate file finder
 0. Introduction
 ===============
 
-Duff is a command-line utility for identifying duplicates in a
-given set of files.
+Duff is a command-line utility for identifying duplicates in a given set of
+files.  It attempts to be usably fast, and uses SHA1 checksums as a part of
+the comparisons.
 
-The project website is:
+The project website is here:
 
   http://duff.sourceforge.net/
 
-Duff resides in public CVS on cvs.sourceforge.net.  The CVSROOT for
-anonymous access is:
+Duff resides in public CVS on cvs.sourceforge.net.  The CVSROOT for anonymous,
+read-only access is:
 
   :pserver:anonymous@cvs.sourceforge.net:/cvsroot/duff
 
@@ -22,14 +23,12 @@ The CVS module for duff 0.x is `duff'.
 1. License and copyright
 ========================
 
-Duff is copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+Duff is copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
 
-Duff is licensed under the zlib/libpng license.
-See the file `COPYING' for license details.  The license is also
-included at the top of each source file.
+Duff is licensed under the zlib/libpng license.  See the file `COPYING' for
+license details.  The license is also included at the top of each source file.
 
 Duff contains sha1-asaddi.
-
 Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>
 See the files `sha1.c' or `sha1.h' for license details.
 
@@ -43,23 +42,24 @@ See the file `NEWS'.
 4. Building Duff
 ================
 
-If you got this source tree from a CVS repository, you will need to
-bootstrap the build environment using `bootstrap.sh'.  Note that this
-script requires autoconf and automake to run.
+If you got this source tree from a CVS repository, you will need to bootstrap
+the build environment using `bootstrap.sh'.  Note that this script requires
+autoconf and automake to run.
 
-If (once) you have a configure script, go ahead and run it.  No
-additional magic should be required.
+If (once) you have a `configure' script, go ahead and run it.  No additional
+magic should be required.
 
-Duff has been successfully built on the following Unix platforms:
+Duff has been successfully built on the following systems:
 
   Mac OS X 10.3 powerpc
+  Mac OS X 10.4 powerpc
   Debian Sarge powerpc
   Ubuntu Hoary powerpc
   FreeBSD 4.11 i386
-  Solaris sparc64
+  SunOS 5.9 sparc64
   Debian Woody alpha
 
-However, it should build on most Unix platforms without modifications.
+However, it should build on most Unix systems without modifications.
 
 
 5. Installing Duff
@@ -74,16 +74,22 @@ See the file `INSTALL'.
 See the accompanying manpage duff(1).
 
 
-7. Bugs, feedback and patches
+7. Hacking Duff
+===============
+
+See the file `HACKING'.
+
+
+8. Bugs, feedback and patches
 =============================
 
 Please send bug reports, feedback, patches and cookies to:
 Camilla Berglund <elmindreda@users.sourceforge.net>
 
 
-8. Disambiguation
+9. Disambiguation
 =================
 
-This is duff, the Unix command-line utility, and not DUFF, the Windows
-program.  If you wish to find duplicate files on Windows, use DUFF.
+This is duff, the Unix command-line utility, and not DUFF, the Windows program.
+If you wish to find duplicate files on Windows, use DUFF.
 

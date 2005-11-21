@@ -1,18 +1,20 @@
 duff - Duplicate file finder
-Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
 
 Functionality
 * Change to getopt_long and add long options.
 * Add {hard|soft} link loop detection. 
-* Implement basic excess (-e) mode.
 * Be aware of symlinks in excess (-e) mode.
+* Add stdin file argument reading (-s).
 
 Documentation
-* Add ALGORITHM section to manpage.
+* Add ALGORITHM section (or similar) to manpage.
 * Improve formatting of manpage.
 * Add more examples to manpage.
 
 Optimisation
 * Change linear list into hash table or tree?
 * Free entries after reporting?
+* Sort entries after collection pass (qsort).
+* Do smart stuff to make things go faster.
 

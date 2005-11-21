@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2004 Camilla Berglund <elmindreda@users.sourceforge.net>
+ * Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -39,13 +39,7 @@ struct Entry
   int status;
 };
 
-struct Cluster
-{
-  struct Entry* head;
-  long count;
-};
-
-struct Entry* make_entry(const char* path, off_t size);
+struct Entry* make_entry(const char* path, const struct stat* sb);
 struct Entry* copy_entry(struct Entry* entry);
 void free_entry(struct Entry* entry);
 void free_entry_list(struct Entry** entries);
