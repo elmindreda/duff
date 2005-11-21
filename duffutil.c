@@ -26,6 +26,8 @@
 #include "config.h"
 #endif
 
+#define _GNU_SOURCE
+
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
@@ -97,6 +99,8 @@ const char* get_mode_name(int mode)
   {
     case S_IFREG:
       return "file";
+    case S_IFLNK:
+      return "symbolic link";
     case S_IFIFO:
       return "named pipe";
     case S_IFCHR:
@@ -118,8 +122,8 @@ const char* get_mode_name(int mode)
  * generating function, but I don't see any practical reason for that.
  */
 void print_cluster_header(const char* format,
-                          long count,
-			  long index,
+                          unsigned int count,
+			  unsigned int index,
 			  off_t size,
 			  const uint8_t* checksum)
 {

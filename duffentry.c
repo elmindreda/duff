@@ -50,6 +50,10 @@
 #include <string.h>
 #endif
 
+#if HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
 #include "sha1.h"
 #include "duff.h"
 
@@ -58,6 +62,14 @@
 extern int quiet_flag;
 extern int thorough_flag;
 extern off_t sample_limit;
+
+/* These functions are documented below, where they are defined.
+ */
+static int get_entry_samples(struct Entry* entry);
+static int get_entry_checksum(struct Entry* entry);
+static int compare_entry_checksums(struct Entry* first, struct Entry* second);
+static int compare_entry_samples(struct Entry* first, struct Entry* second);
+static int compare_entry_contents(struct Entry* first, struct Entry* second);
 
 /* Allocates and initialises an entry.
  */
@@ -133,7 +145,7 @@ void free_entry_list(struct Entry** entries)
 
 /* Retrieves samples for the specified entry.
  */
-int get_entry_samples(struct Entry* entry)
+static int get_entry_samples(struct Entry* entry)
 {
   int i;
   FILE* file;
@@ -180,7 +192,7 @@ int get_entry_samples(struct Entry* entry)
 
 /* Calculates the checksum of a file, if needed.
  */
-int get_entry_checksum(struct Entry* entry)
+static int get_entry_checksum(struct Entry* entry)
 {
   FILE* file;
   size_t size;
@@ -230,7 +242,6 @@ int get_entry_checksum(struct Entry* entry)
   entry->checksum = (uint8_t*) malloc(SHA1_HASH_SIZE);
   
   SHA1Final(&context, entry->checksum);
-  entry->status = CHECKSUMMED;
   return 0;
 }
 
@@ -264,7 +275,7 @@ int compare_entries(struct Entry* first, struct Entry* second)
 
 /* Compares the checksum of two files, generating them if neccessary.
  */
-int compare_entry_checksums(struct Entry* first, struct Entry* second)
+static int compare_entry_checksums(struct Entry* first, struct Entry* second)
 {
   int i;
 
@@ -283,7 +294,7 @@ int compare_entry_checksums(struct Entry* first, struct Entry* second)
 
 /* Compares the samples of two files, retrieving them if neccessary.
  */
-int compare_entry_samples(struct Entry* first, struct Entry* second)
+static int compare_entry_samples(struct Entry* first, struct Entry* second)
 {
   int i;
 
@@ -306,7 +317,7 @@ int compare_entry_samples(struct Entry* first, struct Entry* second)
  * NOTE: This function assumes that the files are of equal size, as
  * there's little point in calling it otherwise.
  */
-int compare_entry_contents(struct Entry* first, struct Entry* second)
+static int compare_entry_contents(struct Entry* first, struct Entry* second)
 {
   int fc, sc, result = 0;
   FILE* first_stream = fopen(first->path, "rb");
