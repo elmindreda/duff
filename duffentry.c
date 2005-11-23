@@ -118,7 +118,7 @@ struct Entry* copy_entry(struct Entry* entry)
   return copy;
 }
 
-/* Frees an antry and any dynamically allocated members.
+/* Frees an entry and any dynamically allocated members.
  */
 void free_entry(struct Entry* entry)
 {
@@ -143,7 +143,7 @@ void free_entry_list(struct Entry** entries)
   }
 }
 
-/* Retrieves samples for the specified entry.
+/* Retrieves samples from a file, if needed.
  */
 static int get_entry_samples(struct Entry* entry)
 {
@@ -266,14 +266,14 @@ int compare_entries(struct Entry* first, struct Entry* second)
 
   if (thorough_flag)
   {
-    if (compare_entry_contents(first, second))
+    if (compare_entry_contents(first, second) != 0)
       return -1;
   }
 
   return 0;
 }
 
-/* Compares the checksum of two files, generating them if neccessary.
+/* Compares the checksums of two files, generating them if neccessary.
  */
 static int compare_entry_checksums(struct Entry* first, struct Entry* second)
 {

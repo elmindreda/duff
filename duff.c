@@ -243,7 +243,7 @@ static void process_path(const char* path)
  */
 static void report_clusters(void)
 {
-  int number, count = 0;
+  int number = 1, count = 0;
   struct Entry* base;
   struct Entry* entry;
   struct Entry* copy;
@@ -251,8 +251,6 @@ static void report_clusters(void)
 
   /* TODO: Remove reported and invalidated entries. */
 
-  number = 1;
-  
   for (base = file_entries;  base;  base = base->next)
   {
     if (base->status == INVALID || base->status == REPORTED)
@@ -281,7 +279,7 @@ static void report_clusters(void)
 	count++;
       }
     }
-    
+     
     if (duplicates)
     {
       if (excess_flag)
@@ -341,7 +339,7 @@ static void usage(void)
   fprintf(stderr, "  -l  size limit; the minimal size that activates sampling\n");
   fprintf(stderr, "  -q  quiet; suppress warnings and error messages\n");
   fprintf(stderr, "  -r  recursive; search in specified directories\n");
-  fprintf(stderr, "  -t  throrough; compare files byte by byte\n");
+  fprintf(stderr, "  -t  thorough; compare files byte by byte\n");
   fprintf(stderr, "  -v  show version information\n");
 }
 
