@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([duff], [0.3], [elmindreda@users.sourceforge.net])
+AC_INIT([duff], [0.3.1], [elmindreda@users.sourceforge.net])
 AC_CONFIG_SRCDIR([duff.c])
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([config.h])
