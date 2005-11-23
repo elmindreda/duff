@@ -15,6 +15,5 @@ Documentation
 Optimisation
 * Change linear list into hash table or tree?
 * Free entries after reporting?
-* Sort entries after collection pass (qsort).
 * Do smart stuff to make things go faster.
 
