@@ -1,0 +1,9 @@
+Change log for duff
+===================
+
+2005-11-23
+ * duff.c: Fixed typo in help for -t option (credits to bitninja).
+
+2005-11-24
+ * duff.c: Added missing 't' to the getopt string (credits to Levitte).
+
