@@ -331,7 +331,7 @@ static void usage(void)
   fprintf(stderr, "       %s [-LPaeqrt] [-f format] [-l size] file ...\n", PACKAGE_NAME);
   fprintf(stderr, "options:\n");
   fprintf(stderr, "  -L  follow all symbolic links\n");
-  fprintf(stderr, "  -P  don't follow any symbolic links\n");
+  fprintf(stderr, "  -P  do not follow any symbolic links\n");
   fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
   fprintf(stderr, "  -e  excess files mode, print excess files\n");
   fprintf(stderr, "  -f  header format; set format for cluster headers\n");
@@ -356,7 +356,7 @@ int main(int argc, char** argv)
   char* temp;
   off_t limit;
   
-  while ((ch = getopt(argc, argv, "LPavrqhef:l:")) != -1)
+  while ((ch = getopt(argc, argv, "LPavrqhetf:l:")) != -1)
   {
     switch (ch)
     {
