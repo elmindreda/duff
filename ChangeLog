@@ -1,9 +1,20 @@
 Change log for duff
 ===================
 
+Started as of version 0.3.1.
+
 2005-11-23
  * duff.c: Fixed typo in help for -t option (credits to bitninja).
 
 2005-11-24
  * duff.c: Added missing 't' to the getopt string (credits to Levitte).
+ * duffentry.c: Fixed bug in ordering of comparison phases.
+
+2005-11-26
+ * duff.c: Added -z option for ignoring empty files.
+ * duff.c: Moved primary driver logic into duffdriver.c.
+ * duffdriver.c: Created new file for primary driver logic.
+
+2005-11-27
+ * duffdriver.c: Added freeing of entries to report_clusters.
 
