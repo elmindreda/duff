@@ -54,3 +54,6 @@ void print_cluster_header(const char* format,
 			  off_t size,
 			  const uint8_t* hash);
 
+void process_path(const char* path);
+void report_clusters(void);
+
