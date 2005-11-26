@@ -254,15 +254,18 @@ int compare_entries(struct Entry* first, struct Entry* second)
 {
   if (first->size != second->size)
     return -1;
-    
-  if (compare_entry_checksums(first, second) != 0)
-    return -1;
 
+  if (first->size == 0)
+    return -1;
+    
   if (first->size >= sample_limit)
   {
     if (compare_entry_samples(first, second) != 0)
       return -1;
   }
+
+  if (compare_entry_checksums(first, second) != 0)
+    return -1;
 
   if (thorough_flag)
   {
