@@ -255,12 +255,6 @@ void report_clusters(void)
     if (base->status == INVALID || base->status == REPORTED)
       continue;
 
-    if (ignore_empty_flag)
-    {
-      if (base->size == 0)
-	continue;
-    }
-
     count = 1;
     
     for (entry = base->next;  entry;  entry = entry->next)
