@@ -1,7 +1,7 @@
 
 bin_PROGRAMS = duff
 
-duff_SOURCES = duff.c duffentry.c duffstring.c duffutil.c sha1.c
+duff_SOURCES = duff.c duffdriver.c duffentry.c duffstring.c duffutil.c sha1.c
 
 noinst_HEADERS = duff.h duffstring.h sha1.h
 
