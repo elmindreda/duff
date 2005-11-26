@@ -60,16 +60,8 @@
 #include <string.h>
 #endif
 
-#if HAVE_STDARG_H
-#include <stdarg.h>
-#endif
-
 #if HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#if HAVE_DIRENT_H
-#include <dirent.h>
 #endif
 
 #include "duffstring.h"
@@ -99,6 +91,10 @@ int excess_flag = 0;
  * byte-by-byte comparisons.
  */
 int thorough_flag = 0;
+/* The ignore empty files' flag. Makes the program not report empty
+ * files as duplicates.
+ */
+int ignore_empty_flag = 0;
 /* The 'header format' value. Specifies the look of the cluster header.
  * If set to the empty string, no headers are printed.
  */
@@ -108,207 +104,11 @@ const char* header_format = DEFAULT_HEADER_FORMAT;
  */
 off_t sample_limit = DEFAULT_SIZE_LIMIT;
 
-/* List head for collected entries.
+/* These functions are documented below, where they are defined.
  */
-static struct Entry* file_entries = NULL;
-
- /* These functions are documented below, where they are defined.
-  * */
 static void version(void);
 static void usage(void);
 static void bugs(void);
-
-/* These functions are documented below, where they are defined.
- */
-static int stat_file(const char* path, struct stat* sb);
-static void recurse_directory(const char* path);
-static void process_path(const char* path);
-static void report_clusters(void);
-
-/* Stat:s a file according to the specified options.
- */
-static int stat_file(const char* path, struct stat* sb)
-{
-#if HAVE_LSTAT_EMPTY_STRING_BUG || HAVE_STAT_EMPTY_STRING_BUG
-  if (*path == '\0')
-    return -1;
-#endif
-
-  if (lstat(path, sb) != 0)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", path, strerror(errno));
-
-    return -1;
-  }
-
-  if ((sb->st_mode & S_IFMT) == S_IFLNK)
-  {
-    if (!follow_links_flag)
-      return -1;
-
-    if (stat(path, sb) != 0)
-    {
-      if (!quiet_flag)
-	warning("%s: %s", path, strerror(errno));
-
-      return -1;
-    }
-  }
-
-  return 0;
-}
-
-/* Recurses into a directory, collecting all or all non-hidden files,
- * according to the specified options.
- */
-static void recurse_directory(const char* path)
-{
-  DIR* dir;
-  struct dirent* dir_entry;
-  char* child_path;
-  const char* name;
-
-  dir = opendir(path);
-  if (!dir)
-    return;
-
-  while ((dir_entry = readdir(dir)))
-  {
-    name = dir_entry->d_name;
-    if (name[0] == '.')
-    {
-      if (!all_files_flag)
-	continue;
-
-      if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
-	continue;
-    }
-
-    asprintf(&child_path, "%s/%s", path, name);
-    process_path(child_path);
-    free(child_path);
-  }
-  
-  closedir(dir);
-}
-
-/* Processes a path name, whether from the command line or from
- * directory recursion.
- */
-static void process_path(const char* path)
-{
-  mode_t mode;
-  struct stat sb;
-  struct Entry* file_entry;
-
-  if (stat_file(path, &sb) != 0)
-    return;
-
-  mode = sb.st_mode & S_IFMT;
-  switch (mode)
-  {
-    case S_IFREG:
-    {
-      if ((file_entry = make_entry(path, &sb)))
-      {
-        file_entry->next = file_entries;
-        file_entries = file_entry;
-      }
-
-      break;
-    }
-
-    case S_IFDIR:
-    {
-      if (recursive_flag)
-      {
-	recurse_directory(path);
-        break;
-      }
-
-      /* FALLTHROUGH */
-    }
-
-    default:
-    {
-      if (!quiet_flag)
-        warning("%s: %s, skipping", path, get_mode_name(mode));
-      break;
-    }
-  }
-}
-
-/* Finds and reports all duplicate clusters among the collected entries.
- */
-static void report_clusters(void)
-{
-  int number = 1, count = 0;
-  struct Entry* base;
-  struct Entry* entry;
-  struct Entry* copy;
-  struct Entry* duplicates = NULL;
-
-  /* TODO: Remove reported and invalidated entries. */
-
-  for (base = file_entries;  base;  base = base->next)
-  {
-    if (base->status == INVALID || base->status == REPORTED)
-      continue;
-
-    count = 1;
-    
-    for (entry = base->next;  entry;  entry = entry->next)
-    {
-      if (compare_entries(base, entry) == 0)
-      {
-	if (base->status != REPORTED)
-	{
-	  copy = copy_entry(base);
-	  copy->next = duplicates;
-	  duplicates = copy;
-	  
-	  base->status = REPORTED;
-	}
-	
-	copy = copy_entry(entry);
-	copy->next = duplicates;
-	duplicates = copy;
-	
-	entry->status = REPORTED;
-	count++;
-      }
-    }
-     
-    if (duplicates)
-    {
-      if (excess_flag)
-      {
-	/* Report all but the first entry in the cluster */
-	/* TODO: Prefer symlinks over actual files when -L is in force */
-	for (entry = duplicates->next;  entry;  entry = entry->next)
-	  printf("%s\n", entry->path);
-      }
-      else
-      {
-	/* Print header and report all entries in the cluster */
-
-	if (*header_format != '\0')
-	  print_cluster_header(header_format,
-			       count,
-			       number,
-			       duplicates->size,
-			       duplicates->checksum);
-
-	for (entry = duplicates;  entry;  entry = entry->next)
-	  printf("%s\n", entry->path);
-      }
-      
-      free_entry_list(&duplicates);
-      number++;
-    }
-  }
-}
 
 /* Prints version information to stderr.
  */
@@ -341,6 +141,7 @@ static void usage(void)
   fprintf(stderr, "  -r  recursive; search in specified directories\n");
   fprintf(stderr, "  -t  thorough; compare files byte by byte\n");
   fprintf(stderr, "  -v  show version information\n");
+  fprintf(stderr, "  -z  do not report empty files\n");
 }
 
 /* Prints bug report address to stderr.
@@ -350,13 +151,16 @@ static void bugs(void)
   fprintf(stderr, "Report bugs to <%s>\n", PACKAGE_BUGREPORT);
 }
 
+/* I don't know what this function does.
+ * I just put it in because it looks cool.
+ */
 int main(int argc, char** argv)
 {
   int i, ch;
   char* temp;
   off_t limit;
   
-  while ((ch = getopt(argc, argv, "LPavrqhetf:l:")) != -1)
+  while ((ch = getopt(argc, argv, "LPavrzqhetf:l:")) != -1)
   {
     switch (ch)
     {
@@ -399,6 +203,9 @@ int main(int argc, char** argv)
 	    sample_limit = limit;
 	}
 	break;
+      case 'z':
+	ignore_empty_flag = 1;
+	break;
       case 'h':
       default:
         usage();
@@ -434,7 +241,6 @@ int main(int argc, char** argv)
   
   report_clusters();
   
-  free_entry_list(&file_entries);
   exit(0);
 }
 
