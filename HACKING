@@ -17,7 +17,10 @@ Important files
 ===============
 
 duff.c
-  Program main, information printing and primary driver logic.
+  Program main, information printing and option handling.
+  
+duffdriver.c
+  Primary program logic; entry collection and cluster reporting.
 
 duffentry.c
   Functionality for dealing with 'entries', i.e. collected files.
@@ -46,11 +49,11 @@ duffentry.c: compare_entry_*() and get_entry_*()
   Compares and collects various entry attributes, respectively.  Start here if
   you wish to modify one of the existing comparison methods.
 
-duff.c: process_path() and recurse_directory()
+duffdriver.c: process_path() and recurse_directory()
   The main functions for collecting files and making entries.  Start there if
   you wish to hack the traversal algorithm.
 
-duff.c: report_clusters()
+duffdriver.c: report_clusters()
   Finds and reports the clusters of duplicate files in the list of entries, or
   collected files.  Start here if you wish to optimise list traversal or alter
   normal program output.

@@ -1,6 +1,13 @@
 duff - Duplicate file finder
 Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
 
+Version 0.3.1
+=============
+
+* Added option to ignore empty files (-z).
+* Fixed a number of bugs.
+* Minor restructuring of code.
+
 Version 0.3
 ===========
 
