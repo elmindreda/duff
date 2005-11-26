@@ -74,9 +74,10 @@ If the size of files in a cluster is equal or greater than the specified limit,
 .Nm
 will sample a few bytes from each file, before calculating a full checksum.
 This is an optimization for larger files.
-The default limit is 1MB (1048576 bytes).
+The default limit is 1048576 bytes.
 .It Fl q
-Quiet mode; supress warnings and error messages.
+Quiet mode.
+Supress warnings and error messages.
 .It Fl r
 Recursively search into all specified directories.
 .It Fl t
@@ -87,6 +88,8 @@ In thorough mode,
 compares files byte by byte when their checksums match.
 .It Fl v
 Display version information and exit.
+.It Fl z
+Do not report a cluster of files with zero size.
 .El
 .Sh EXAMPLES
 The command:
