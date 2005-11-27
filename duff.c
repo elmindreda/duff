@@ -132,7 +132,7 @@ static void usage(void)
 {
   fprintf(stderr, "usage: %s -h\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s [-LPaeqrt] [-f format] [-l size] file ...\n", PACKAGE_NAME);
+  fprintf(stderr, "       %s [-LPaeqrt] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
   fprintf(stderr, "options:\n");
   fprintf(stderr, "  -L  follow all symbolic links\n");
   fprintf(stderr, "  -P  do not follow any symbolic links\n");
@@ -244,7 +244,7 @@ int main(int argc, char** argv)
     /* Read file names from stdin */
     while (fgets(path, sizeof(path), stdin))
     {
-      if ((temp = strrchr(path, '\n')))
+      if ((temp = strchr(path, '\n')))
 	*temp = '\0';
 
       process_path(path);
@@ -253,7 +253,6 @@ int main(int argc, char** argv)
 	break;
     }
   }
-  
   
   report_clusters();
   
