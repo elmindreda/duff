@@ -18,4 +18,5 @@ Started as of version 0.3.1.
 2005-11-27
  * duffdriver.c: Added freeing of entries to report_clusters.
  * duffentry.c: Moved code for -z option into compare_entries.
+ * duff.c: Added file name reading from stdin.
 

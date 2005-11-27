@@ -36,6 +36,10 @@
 #include <sys/stat.h>
 #endif
 
+#if HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
+
 #if HAVE_INTTYPES_H
 #include <inttypes.h>
 #else
@@ -159,6 +163,7 @@ int main(int argc, char** argv)
   int i, ch;
   char* temp;
   off_t limit;
+  char path[PATH_MAX];
   
   while ((ch = getopt(argc, argv, "LPavrzqhetf:l:")) != -1)
   {
@@ -217,27 +222,38 @@ int main(int argc, char** argv)
   argc -= optind;
   argv += optind;
 
-  if (!argc)
+  if (argc)
   {
-    usage();
-    bugs();
-    exit(0);
-  }
-  
-  for (i = 0;  i < argc;  i++)
-  {
-#if !LSTAT_FOLLOWS_SLASHED_SYMLINK
-    /* Kill trailing slashes (except in "/") */
-    while ((temp = strrchr(argv[i], '/')))
+    for (i = 0;  i < argc;  i++)
     {
-      if (temp == argv[i] || *(temp + 1) != '\0')
-	break;
-      *temp = '\0';
-    }
+#if !LSTAT_FOLLOWS_SLASHED_SYMLINK
+      /* Kill trailing slashes (except in "/") */
+      while ((temp = strrchr(argv[i], '/')))
+      {
+	if (temp == argv[i] || *(temp + 1) != '\0')
+	  break;
+	*temp = '\0';
+      }
 #endif
 
-    process_path(argv[i]);
+      process_path(argv[i]);
+    }
   }
+  else
+  {
+    /* Read file names from stdin */
+    while (fgets(path, sizeof(path), stdin))
+    {
+      if ((temp = strrchr(path, '\n')))
+	*temp = '\0';
+
+      process_path(path);
+
+      if (ferror(stdin) || feof(stdin))
+	break;
+    }
+  }
+  
   
   report_clusters();
   

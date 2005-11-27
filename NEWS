@@ -1,6 +1,11 @@
 duff - Duplicate file finder
 Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
 
+Version 0.3.2
+=============
+
+* Added file name reading from stdin.
+
 Version 0.3.1
 =============
 

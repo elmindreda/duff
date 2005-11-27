@@ -61,6 +61,7 @@
  */
 extern int quiet_flag;
 extern int thorough_flag;
+extern int ignore_empty_flag;
 extern off_t sample_limit;
 
 /* These functions are documented below, where they are defined.

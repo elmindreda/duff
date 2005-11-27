@@ -12,7 +12,7 @@
 .Op Fl LPaeqrt
 .Op Fl f Ar format
 .Op Fl l Ar limit
-.Ar
+.Op Ar
 .Nm
 .Op Fl h
 .Nm
@@ -26,10 +26,17 @@ For each cluster of duplicate files,
 prints a customizable header on one line,
 and then the names of all the files in the cluster, each on one line.
 .Pp
+If no files are specified as arguments,
+.Nm
+reads file names from stdin.
+.Pp
 The following options are available:
 .Bl -tag -offset indent
 .It Fl L
 Follow all symbolic links.
+Note that
+.Nm
+still does not support loop detection.
 .It Fl P
 Don't follow any symbolic links.
 This is the default.
@@ -80,6 +87,9 @@ Quiet mode.
 Supress warnings and error messages.
 .It Fl r
 Recursively search into all specified directories.
+Note that
+.Nm
+still does not support loop detection.
 .It Fl t
 Thorough mode.
 Distrust checksums as a guarantee for equality.
@@ -89,9 +99,11 @@ compares files byte by byte when their checksums match.
 .It Fl v
 Display version information and exit.
 .It Fl z
-Do not report a cluster of files with zero size.
+Do not consider files with zero size to be equal.
+This option suppresses reporting a cluster of empty files.
 .El
 .Sh EXAMPLES
+.\" TODO: Fix the formatting of the example commands.
 The command:
 .Dl duff -e * | xargs rm
 .Pp
@@ -101,6 +113,11 @@ The command:
 .Dl duff -r foo/
 .Pp
 lists all duplicate files in the directory foo and its subdirectories.
+.Pp
+The command:
+.Dl find \& . -name '*.h' | duff
+.Pp
+lists all duplicate header files in the current directory and its subdirectories.
 .Sh DIAGNOSTICS
 .Ex -std
 .Sh AUTHORS

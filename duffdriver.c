@@ -78,7 +78,6 @@ extern int all_files_flag;
 extern int recursive_flag;
 extern int quiet_flag;
 extern int excess_flag;
-extern int ignore_empty_flag;
 extern const char* header_format;
 
 /* List head for collected entries.
