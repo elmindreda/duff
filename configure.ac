@@ -22,7 +22,7 @@ AC_PROG_CC
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS([sys/param.h ctype.h errno.h stdio.h stdarg.h])
+AC_CHECK_HEADERS([sys/param.h ctype.h errno.h limits.h stdio.h stdarg.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

@@ -60,6 +60,10 @@
 #include <string.h>
 #endif
 
+#if HAVE_STDARG_H
+#include <stdarg.h>
+#endif
+
 #if HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
