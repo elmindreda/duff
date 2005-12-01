@@ -249,7 +249,7 @@ int main(int argc, char** argv)
 
       process_path(path);
 
-      if (ferror(stdin) || feof(stdin))
+      if (feof(stdin) || ferror(stdin))
 	break;
     }
   }
