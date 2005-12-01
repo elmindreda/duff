@@ -1,0 +1,20 @@
+Release checklist for duff
+==========================
+
+ * Make changes in the code.
+ * Comment all new symbols.
+ * Test the changes.
+ * Update NEWS.
+ * Update ChangeLog.
+ * Update HACKING.
+ * Update README.
+ * Update TODO.
+ * Update duff.1.
+ * Commit changes to CVS.
+ * Tag release in CVS.
+ * Build release file.
+ * Upload release file to SF.net.
+ * Make release on SF.net.
+ * Make release on Freshmeat.
+ * Update project homepage.
+
