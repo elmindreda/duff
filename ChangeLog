@@ -20,3 +20,6 @@ Started as of version 0.3.1.
  * duffentry.c: Moved code for -z option into compare_entries.
  * duff.c: Added file name reading from stdin.
 
+2005-12-01
+ * duffutil.c: Fixed bug when printing off_t values on Mac OS X.
+
