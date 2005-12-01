@@ -83,11 +83,15 @@ extern const char* header_format;
 /* List head for collected entries.
  */
 static struct Entry* file_entries = NULL;
+/* List head for traversed directories.
+ */
+static struct Directory* directories = NULL;
 
 /* These functions are documented below, where they are defined.
  */
 static int stat_file(const char* path, struct stat* sb);
-static void recurse_directory(const char* path);
+static int has_recursed_directory(dev_t device, ino_t inode);
+static void recurse_directory(const char* path, const struct stat* sb);
 static void report_cluster(struct Entry* duplicates,
                            unsigned int number,
 			   unsigned int count);
@@ -100,6 +104,8 @@ static int stat_file(const char* path, struct stat* sb)
   if (*path == '\0')
     return -1;
 #endif
+
+  /* TODO: Avoid duplicate stat */
 
   if (lstat(path, sb) != 0)
   {
@@ -126,15 +132,52 @@ static int stat_file(const char* path, struct stat* sb)
   return 0;
 }
 
+/* Returns true if the directory has already been recursed into.
+ * NOTE: This implementation is hideous.
+ */
+static int has_recursed_directory(dev_t device, ino_t inode)
+{
+  struct Directory* dir;
+
+  /* TODO: Implement a more efficient data structure */
+
+  for (dir = directories;  dir;  dir = dir->next)
+  {
+    if (dir->device == device && dir->inode == inode)
+      return 1;
+  }
+
+  return 0;
+}
+
+/* Records the specified directory as recursed.
+ * NOTE: This implementation is hideous.
+ */
+static void record_directory(dev_t device, ino_t inode)
+{
+  struct Directory* dir;
+
+  dir = (struct Directory*) malloc(sizeof(struct Directory));
+  dir->device = device;
+  dir->inode = inode;
+  dir->next = directories;
+  directories = dir;
+}
+
 /* Recurses into a directory, collecting all or all non-hidden files,
  * according to the specified options.
  */
-static void recurse_directory(const char* path)
+static void recurse_directory(const char* path, const struct stat* sb)
 {
   DIR* dir;
   struct dirent* dir_entry;
   char* child_path;
   const char* name;
+
+  if (has_recursed_directory(sb->st_dev, sb->st_ino))
+    return;
+
+  record_directory(sb->st_dev, sb->st_ino);
 
   dir = opendir(path);
   if (!dir)
@@ -177,6 +220,8 @@ void process_path(const char* path)
   {
     case S_IFREG:
     {
+      /* TODO: Check for duplicate arguments */
+
       if ((file_entry = make_entry(path, &sb)))
       {
         file_entry->next = file_entries;
@@ -190,7 +235,7 @@ void process_path(const char* path)
     {
       if (recursive_flag)
       {
-	recurse_directory(path);
+	recurse_directory(path, &sb);
         break;
       }
 
@@ -216,8 +261,9 @@ static void report_cluster(struct Entry* duplicates,
 
   if (excess_flag)
   {
-    /* Report all but the first entry in the cluster */
     /* TODO: Prefer symlinks over actual files when -L is in force */
+
+    /* Report all but the first entry in the cluster */
     for (entry = duplicates->next;  entry;  entry = entry->next)
       printf("%s\n", entry->path);
   }
@@ -248,6 +294,7 @@ void report_clusters(void)
   struct Entry* duplicates = NULL;
 
   /* TODO: Remove reported and invalidated entries. */
+  /* TODO: Implement a more efficient data structure */
 
   for (base = file_entries;  base;  base = base->next)
   {

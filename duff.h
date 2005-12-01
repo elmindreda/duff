@@ -34,17 +34,27 @@ struct Entry
   struct Entry* next;
   char* path;
   off_t size;
+  mode_t mode;
   uint8_t* checksum;
   uint8_t* samples;
   int status;
 };
 
+struct Directory
+{
+  struct Directory* next;
+  dev_t device;
+  ino_t inode;
+};
+
+/* These live in duffentry.c */
 struct Entry* make_entry(const char* path, const struct stat* sb);
 struct Entry* copy_entry(struct Entry* entry);
 void free_entry(struct Entry* entry);
 void free_entry_list(struct Entry** entries);
 int compare_entries(struct Entry* first, struct Entry* second);
 
+/* These live in duffutil.c */
 void error(const char* format, ...);
 void warning(const char* format, ...);
 const char* get_mode_name(int mode);
@@ -52,8 +62,9 @@ void print_cluster_header(const char* format,
                           unsigned int count,
 			  unsigned int index,
 			  off_t size,
-			  const uint8_t* hash);
+			  const uint8_t* checksum);
 
+/* These live in duffdriver.c */
 void process_path(const char* path);
 void report_clusters(void);
 
