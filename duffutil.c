@@ -138,7 +138,7 @@ void print_cluster_header(const char* format,
       switch (*c)
       {
 	case 's':
-	  printf("%lu", size);
+	  printf("%llu", (unsigned long long int) size);
 	  break;
 	case 'i':
 	  printf("%u", index);
