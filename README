@@ -51,12 +51,13 @@ magic should be required.
 
 Duff has been successfully built on the following systems:
 
-  Mac OS X 10.3 powerpc
+  Arch Linux x86
   Debian Sarge powerpc
-  FreeBSD 4.11 i386
-  SunOS 5.9 sparc64
   Debian Woody alpha
-  Arch Linux
+  FreeBSD 4.11 x86
+  FreeBSD 5.4 x86
+  Mac OS X 10.3 powerpc
+  SunOS 5.9 sparc64
 
 However, it should build on most Unix systems without modifications.
 
