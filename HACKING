@@ -58,3 +58,7 @@ duffdriver.c: report_clusters()
   collected files.  Start here if you wish to optimise list traversal or alter
   normal program output.
 
+duffdriver.c: has_recursed_directory() and record_directory()
+  Records traversed directories (in a very primitive way).  Start here if you
+  wish to modify the 'loop detection' algorithm.
+
