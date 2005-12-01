@@ -9,7 +9,7 @@
 .Nd duplicate file finder
 .Sh SYNOPSIS
 .Nm
-.Op Fl LPaeqrt
+.Op Fl LPaeqrtz
 .Op Fl f Ar format
 .Op Fl l Ar limit
 .Op Ar
@@ -34,11 +34,14 @@ The following options are available:
 .Bl -tag -offset indent
 .It Fl L
 Follow all symbolic links.
-Note that
-.Nm
-still does not support loop detection.
+This overrides any previous
+.Fl P
+option.
 .It Fl P
 Don't follow any symbolic links.
+This overrides any previous
+.Fl L
+option.
 This is the default.
 .It Fl a
 Include hidden files and directories when searching recursively.
@@ -87,9 +90,6 @@ Quiet mode.
 Supress warnings and error messages.
 .It Fl r
 Recursively search into all specified directories.
-Note that
-.Nm
-still does not support loop detection.
 .It Fl t
 Thorough mode.
 Distrust checksums as a guarantee for equality.
@@ -123,17 +123,10 @@ lists all duplicate header files in the current directory and its subdirectories
 .Sh AUTHORS
 .An "Camilla Berglund" Aq elmindreda@users.sourceforge.net
 .Sh BUGS
-.Bl -bullet
-.It
-.Nm
-does not currently detect symlink loops when using
-.Fl L
-(follow links). This may do bad things to your system.
-.It
 .Nm
 does not currently intelligently handle symlinks when using
 .Fl e
 (excess mode) with
 .Fl L
-(follow links). This may do very bad things to your data.
-.El
+(follow links).
+This may do very bad things to your data.
