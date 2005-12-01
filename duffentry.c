@@ -82,6 +82,7 @@ struct Entry* make_entry(const char* path, const struct stat* sb)
   entry->next = NULL;
   entry->path = strdup(path);
   entry->size = sb->st_size;
+  entry->mode = sb->st_mode;
   entry->status = UNTOUCHED;
   entry->checksum = NULL;
   entry->samples = NULL;
@@ -220,7 +221,6 @@ static int get_entry_checksum(struct Entry* entry)
   for (;;)
   {
     size = fread(buffer, 1, sizeof(buffer), file);
-
     if (ferror(file))
     {
       fclose(file);
@@ -241,7 +241,6 @@ static int get_entry_checksum(struct Entry* entry)
   fclose(file);
 
   entry->checksum = (uint8_t*) malloc(SHA1_HASH_SIZE);
-  
   SHA1Final(&context, entry->checksum);
   return 0;
 }
@@ -258,6 +257,7 @@ int compare_entries(struct Entry* first, struct Entry* second)
 
   if (ignore_empty_flag)
   {
+    /* Empty files not considered equal today */
     if (first->size == 0)
       return -1;
   }
@@ -268,6 +268,7 @@ int compare_entries(struct Entry* first, struct Entry* second)
       return -1;
   }
 
+  /* TODO: Skip checksumming if potential cluster only has two entries */
   if (compare_entry_checksums(first, second) != 0)
     return -1;
 
