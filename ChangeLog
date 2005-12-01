@@ -3,23 +3,32 @@ Change log for duff
 
 Started as of version 0.3.1.
 
-2005-11-23
- * duff.c: Fixed typo in help for -t option (credits to bitninja).
+2005-12-01
+ * duffutil.c: Fixed bug when printing off_t values on Mac OS X.
 
-2005-11-24
- * duff.c: Added missing 't' to the getopt string (credits to Levitte).
- * duffentry.c: Fixed bug in ordering of comparison phases.
+2005-11-28
+ * duff.1: Updated to reflect changes in the code.
+ * duffdriver.c: Added primitive directory loop detection, with functions
+                 has_recursed_directory and record_directory.
+ * duffutil.c: Added hash function for device/inode pair.
+ * duffdriver.c: Added several additional TODO items.
+ * duff.h: Added struct Directory for recording of recursed directories.
+
+2005-11-27
+ * duffdriver.c: Added freeing of entries to report_clusters.
+ * duffentry.c: Moved code for -z option into compare_entries.
+ * duff.1: Updated to reflect changes in the code.
+ * duff.c: Added file name reading from stdin.
 
 2005-11-26
  * duff.c: Added -z option for ignoring empty files.
  * duff.c: Moved primary driver logic into duffdriver.c.
  * duffdriver.c: Created new file for primary driver logic.
 
-2005-11-27
- * duffdriver.c: Added freeing of entries to report_clusters.
- * duffentry.c: Moved code for -z option into compare_entries.
- * duff.c: Added file name reading from stdin.
+2005-11-24
+ * duff.c: Added missing 't' to the getopt string (credits to Levitte).
+ * duffentry.c: Fixed bug in ordering of comparison phases.
 
-2005-12-01
- * duffutil.c: Fixed bug when printing off_t values on Mac OS X.
+2005-11-23
+ * duff.c: Fixed typo in help for -t option (credits to bitninja).
 
