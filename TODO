@@ -5,7 +5,7 @@ Functionality
 * Change to getopt_long and add long options.
 * Add {hard|soft} link loop detection. 
 * Be aware of symlinks in excess (-e) mode.
-* Add stdin file argument reading (-s).
+* Detect duplicate file arguments.
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage.
