@@ -5,6 +5,8 @@ Started as of version 0.3.1.
 
 2005-12-01
  * duffutil.c: Fixed bug when printing off_t values on Mac OS X.
+ * duffdriver.c: Added headers for building on Solaris.
+ * duff.c: Added headers for building on Solaris.
 
 2005-11-28
  * duff.1: Updated to reflect changes in the code.
