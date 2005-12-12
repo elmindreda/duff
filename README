@@ -39,6 +39,42 @@ See the files `sha1.c' or `sha1.h' for license details.
 See the file `NEWS'.
 
 
+3. Frequently asked questions
+=============================
+
+Q: Hey, that is O(n^2) right?
+A: Well, yes, but it's still fast enough in most cases.
+
+   I won't even pretend to call this a benchmark, but duff running cold on a
+   directory tree with 2000+ images (190MB) found the 13 duplicate clusters in
+   4 seconds, and this on my ageing laptop.
+
+Q: How does it work, then?
+A: The basic idea (as of version 0.3) is:
+
+   * Only compare files if they're of equal size.
+   * Compare a few random bytes before checksumming large files.
+   * Compare checksums before actual contents.
+   * Don't compare actual contents unless explicitly asked.
+
+Q: How do you calculate the checksum?
+A: It is a regular SHA1 message digest, calculated using sha1-asaddi.
+
+Q: What is it good for?
+A: Getting a list of, and then usually removing, duplicates in a given set of
+   files.  Some people find this ability useful. If you don't, feel free not to
+   use duff.
+
+Q: Is duff named after Tom Duff?
+A: As much as I like Duff's device, no, it isn't.  Duff stands for DUplicate
+   File Finder.
+
+Q: Shouldn't duff also do `x'?
+A: I don't know, but you're welcome to write a patch to make it do `x', or send
+   me an email explaining why you think duff should do `x'.  If I like your
+   patch or email, a future version of duff will probably do `x'.
+
+
 4. Building Duff
 ================
 
@@ -46,17 +82,17 @@ If you got this source tree from a CVS repository, you will need to bootstrap
 the build environment using `bootstrap.sh'.  Note that this script requires
 autoconf and automake to run.
 
-If (once) you have a `configure' script, go ahead and run it.  No additional
-magic should be required.
+If (or once) you have a `configure' script, go ahead and run it.  No additional
+magic should be required.  If it is, then that's a bug and should be reported.
 
 Duff has been successfully built on the following systems:
 
   Arch Linux x86
-  Debian Sarge powerpc
+  Debian Etch powerpc
   Debian Woody alpha
   FreeBSD 4.11 x86
   FreeBSD 5.4 x86
-  Mac OS X 10.3 powerpc
+  Darwin 7.9.0 powerpc
   SunOS 5.9 sparc64
 
 However, it should build on most Unix systems without modifications.
