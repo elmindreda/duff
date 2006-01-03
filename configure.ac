@@ -2,9 +2,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([duff], [0.3.2], [elmindreda@users.sourceforge.net])
+AC_INIT([duff], [0.4], [elmindreda@users.sourceforge.net])
 AC_CONFIG_SRCDIR([duff.c])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([check-news])
 AM_CONFIG_HEADER([config.h])
 
 AC_DEFINE([SAMPLE_COUNT], [10], \
@@ -22,7 +22,7 @@ AC_PROG_CC
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS([sys/param.h ctype.h errno.h limits.h stdio.h stdarg.h])
+AC_CHECK_HEADERS([assert.h sys/param.h ctype.h errno.h limits.h stdio.h stdarg.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -40,7 +40,8 @@ AC_FUNC_MALLOC
 AC_FUNC_STAT
 AC_FUNC_LSTAT
 AC_FUNC_CLOSEDIR_VOID
-AC_CHECK_FUNCS([strdup strerror memset], [], [AC_MSG_ERROR([Function not found])])
+AC_CHECK_FUNCS([strdup strerror memset strchr strrchr strtoull], \
+  [], [AC_MSG_ERROR([Function not found])])
 AC_CHECK_FUNCS([asprintf vasprintf])
 
 AC_OUTPUT(Makefile)
