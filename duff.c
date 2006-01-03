@@ -95,6 +95,10 @@ int recursive_flag = 0;
  * non-files.
  */
 int quiet_flag = 0;
+/* The 'physical mode' flag. Makes the program consider entries being
+ * physical files instead of hard links.
+ */
+int physical_flag = 0;
 /* The 'excess' flag. For each duplicate cluster, reports all but one.
  * Useful for `xargs rm'.
  */
@@ -150,8 +154,9 @@ static void usage(void)
   fprintf(stderr, "  -h  show this help\n");
   fprintf(stderr, "  -l  size limit; the minimal size that activates sampling\n");
   fprintf(stderr, "  -q  quiet; suppress warnings and error messages\n");
+  fprintf(stderr, "  -p  physical mode; do not report multiple links\n");
   fprintf(stderr, "  -r  recursive; search in specified directories\n");
-  fprintf(stderr, "  -t  thorough; compare files byte by byte\n");
+  fprintf(stderr, "  -t  thorough; force byte-by-byte comparison of files\n");
   fprintf(stderr, "  -v  show version information\n");
   fprintf(stderr, "  -z  do not report empty files\n");
 }
@@ -173,7 +178,7 @@ int main(int argc, char** argv)
   off_t limit;
   char path[PATH_MAX];
   
-  while ((ch = getopt(argc, argv, "LPavrzqhetf:l:")) != -1)
+  while ((ch = getopt(argc, argv, "LPavrzqphetf:l:")) != -1)
   {
     switch (ch)
     {
@@ -195,6 +200,9 @@ int main(int argc, char** argv)
       case 'q':
         quiet_flag = 1;
         break;
+      case 'p':
+	physical_flag = 1;
+	break;
       case 'e':
         excess_flag = 1;
 	break;

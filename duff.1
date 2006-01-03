@@ -9,7 +9,7 @@
 .Nd duplicate file finder
 .Sh SYNOPSIS
 .Nm
-.Op Fl LPaeqrtz
+.Op Fl LPaeqprtz
 .Op Fl f Ar format
 .Op Fl l Ar limit
 .Op Ar
@@ -88,6 +88,12 @@ The default limit is 1048576 bytes.
 .It Fl q
 Quiet mode.
 Supress warnings and error messages.
+.It Fl p
+Physical mode.
+Make
+.Nm
+consider physical files instead of links.
+If specified, multiple links to the same physical file will not be reported as duplicates.
 .It Fl r
 Recursively search into all specified directories.
 .It Fl t
