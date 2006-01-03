@@ -54,6 +54,10 @@
 #include <stdlib.h>
 #endif
 
+#if HAVE_ASSERT_H
+#include <assert.h>
+#endif
+
 #include "sha1.h"
 #include "duff.h"
 
@@ -79,10 +83,13 @@ struct Entry* make_entry(const char* path, const struct stat* sb)
   struct Entry* entry;
 
   entry = (struct Entry*) malloc(sizeof(struct Entry));
+  entry->prev = NULL;
   entry->next = NULL;
   entry->path = strdup(path);
   entry->size = sb->st_size;
   entry->mode = sb->st_mode;
+  entry->device = sb->st_dev;
+  entry->inode = sb->st_ino;
   entry->status = UNTOUCHED;
   entry->checksum = NULL;
   entry->samples = NULL;
@@ -96,6 +103,7 @@ struct Entry* copy_entry(struct Entry* entry)
 {
   struct Entry* copy = (struct Entry*) malloc(sizeof(struct Entry));
   
+  copy->prev = NULL;
   copy->next = NULL;
   copy->path = strdup(entry->path);
   copy->size = entry->size;
@@ -120,10 +128,46 @@ struct Entry* copy_entry(struct Entry* entry)
   return copy;
 }
 
+/* Inserts an entry as the first item in a list.
+ * Note that the entry must be detached from any previous list.
+ */
+void link_entry(struct Entry** head, struct Entry* entry)
+{
+  assert(entry->prev == NULL);
+  assert(entry->next == NULL);
+
+  entry->prev = NULL;
+  entry->next = *head;
+
+  if (*head != NULL)
+    (*head)->prev = entry;
+
+  *head = entry;
+}
+
+/* Removes an entry from a list.
+ * Note that the entry must be a member of the list.
+ */
+void unlink_entry(struct Entry** head, struct Entry* entry)
+{
+  if (entry->prev != NULL)
+    entry->prev->next = entry->next;
+  else
+    *head = entry->next;
+
+  if (entry->next != NULL)
+    entry->next->prev = entry->prev;
+
+  entry->prev = entry->next = NULL;
+}
+
 /* Frees an entry and any dynamically allocated members.
  */
 void free_entry(struct Entry* entry)
 {
+  assert(entry->prev == NULL);
+  assert(entry->next == NULL);
+
   free(entry->samples);
   free(entry->checksum);
   free(entry->path);
@@ -140,7 +184,7 @@ void free_entry_list(struct Entry** entries)
   while (*entries)
   {
     entry = *entries;
-    *entries = entry->next;
+    unlink_entry(entries, entry);
     free_entry(entry);
   }
 }
@@ -268,7 +312,8 @@ int compare_entries(struct Entry* first, struct Entry* second)
       return -1;
   }
 
-  /* TODO: Skip checksumming if potential cluster only has two entries */
+  /* TODO: Skip checksumming if potential cluster only has two entries 
+   *       (Requires knowledge from higher level. */
   if (compare_entry_checksums(first, second) != 0)
     return -1;
 

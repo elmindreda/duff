@@ -29,17 +29,6 @@ enum
   REPORTED,
 };
 
-struct Entry
-{
-  struct Entry* next;
-  char* path;
-  off_t size;
-  mode_t mode;
-  uint8_t* checksum;
-  uint8_t* samples;
-  int status;
-};
-
 struct Directory
 {
   struct Directory* next;
@@ -47,9 +36,25 @@ struct Directory
   ino_t inode;
 };
 
+struct Entry
+{
+  struct Entry* prev;
+  struct Entry* next;
+  char* path;
+  off_t size;
+  mode_t mode;
+  dev_t device;
+  ino_t inode;
+  uint8_t* checksum;
+  uint8_t* samples;
+  int status;
+};
+
 /* These live in duffentry.c */
 struct Entry* make_entry(const char* path, const struct stat* sb);
 struct Entry* copy_entry(struct Entry* entry);
+void link_entry(struct Entry** head, struct Entry* entry);
+void unlink_entry(struct Entry** head, struct Entry* entry);
 void free_entry(struct Entry* entry);
 void free_entry_list(struct Entry** entries);
 int compare_entries(struct Entry* first, struct Entry* second);

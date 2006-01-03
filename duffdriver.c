@@ -81,6 +81,7 @@ extern int follow_links_flag;
 extern int all_files_flag;
 extern int recursive_flag;
 extern int quiet_flag;
+extern int physical_flag;
 extern int excess_flag;
 extern const char* header_format;
 
@@ -109,21 +110,8 @@ static int stat_file(const char* path, struct stat* sb)
     return -1;
 #endif
 
-  /* TODO: Avoid duplicate stat */
-
-  if (lstat(path, sb) != 0)
+  if (follow_links_flag)
   {
-    if (!quiet_flag)
-      warning("%s: %s", path, strerror(errno));
-
-    return -1;
-  }
-
-  if ((sb->st_mode & S_IFMT) == S_IFLNK)
-  {
-    if (!follow_links_flag)
-      return -1;
-
     if (stat(path, sb) != 0)
     {
       if (!quiet_flag)
@@ -131,6 +119,19 @@ static int stat_file(const char* path, struct stat* sb)
 
       return -1;
     }
+  }
+  else
+  {
+    if (lstat(path, sb) != 0)
+    {
+      if (!quiet_flag)
+	warning("%s: %s", path, strerror(errno));
+
+      return -1;
+    }
+
+    if ((sb->st_mode & S_IFMT) == S_IFLNK)
+      return -1;
   }
 
   return 0;
@@ -214,7 +215,7 @@ void process_path(const char* path)
 {
   mode_t mode;
   struct stat sb;
-  struct Entry* file_entry;
+  struct Entry* entry;
 
   if (stat_file(path, &sb) != 0)
     return;
@@ -224,13 +225,21 @@ void process_path(const char* path)
   {
     case S_IFREG:
     {
-      /* TODO: Check for duplicate arguments */
+      /* NOTE: Check for duplicate arguments? */
 
-      if ((file_entry = make_entry(path, &sb)))
+      if (physical_flag)
       {
-        file_entry->next = file_entries;
-        file_entries = file_entry;
+	/* TODO: Make this less suboptimal */
+
+	for (entry = file_entries;  entry;  entry = entry->next)
+	{
+	  if (entry->device == sb.st_dev && entry->inode == sb.st_ino)
+	    return;
+	}
       }
+
+      if ((entry = make_entry(path, &sb)) != NULL)
+	link_entry(&file_entries, entry);
 
       break;
     }
@@ -293,36 +302,38 @@ void report_clusters(void)
 {
   int number = 1, count = 0;
   struct Entry* base;
+  struct Entry* base_next;
   struct Entry* entry;
-  struct Entry* copy;
+  struct Entry* entry_next;
   struct Entry* duplicates = NULL;
 
-  /* TODO: Remove reported and invalidated entries. */
   /* TODO: Implement a more efficient data structure */
 
-  for (base = file_entries;  base;  base = base->next)
+  for (base = file_entries;  base;  base = base_next)
   {
+    base_next = base->next;
+
     if (base->status == INVALID || base->status == REPORTED)
       continue;
 
     count = 1;
     
-    for (entry = base->next;  entry;  entry = entry->next)
+    for (entry = base->next;  entry;  entry = entry_next)
     {
+      entry_next = entry->next;
+
       if (compare_entries(base, entry) == 0)
       {
 	if (base->status != REPORTED)
 	{
-	  copy = copy_entry(base);
-	  copy->next = duplicates;
-	  duplicates = copy;
+	  unlink_entry(&file_entries, base);
+	  link_entry(&duplicates, base);
 	  
 	  base->status = REPORTED;
 	}
 	
-	copy = copy_entry(entry);
-	copy->next = duplicates;
-	duplicates = copy;
+	unlink_entry(&file_entries, entry);
+	link_entry(&duplicates, entry);
 	
 	entry->status = REPORTED;
 	count++;
