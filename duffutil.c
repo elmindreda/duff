@@ -171,3 +171,24 @@ void print_cluster_header(const char* format,
   putchar('\n');
 }
 
+/* Produces an 8 bit hash from a device/inode pair.
+ */
+uint8_t make_hash(dev_t device, ino_t inode)
+{
+  uint8_t hash = 0xaa;
+
+  while (device)
+  {
+    hash ^= (uint8_t) device;
+    device >>= 8;
+  }
+
+  while (inode)
+  {
+    hash ^= (uint8_t) inode;
+    inode >>= 8;
+  }
+
+  return hash;
+}
+
