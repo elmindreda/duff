@@ -1,25 +1,30 @@
 duff - Duplicate file finder
 Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
 
-Version 0.3.2
-=============
+Note that this file only lists user-visible changes.
+
+Version 0.4
+===========
 
 * Added file name reading from stdin.
+* Added primitive directory loop detection.
+* Added FAQ section to README file.
+* Compatibility with more systems.
+* Added physical mode flag (-p).
 
 Version 0.3.1
 =============
 
-* Added option to ignore empty files (-z).
+* Added flag to ignore empty files (-z).
 * Fixed a number of bugs.
-* Minor restructuring of code.
 
 Version 0.3
 ===========
 
-* Added explicit link handling options (-L,-P).
+* Added explicit link handling flags (-L,-P).
 * Added sha1-asaddi for SHA1 hash calculation.
 * Completed basic manpage.
-* Added sample size limit option (-l).
+* Added sample size limit flag (-l).
 * Added very brief hacking guide.
 * Compatibility, portability, refactoring, cleanup.
 * Added basic (non symlink-aware) excess mode (-e).

@@ -10,11 +10,13 @@ Release checklist for duff
  * Update README.
  * Update TODO.
  * Update duff.1.
+ * Build release file.
  * Commit changes to CVS.
  * Tag release in CVS.
- * Build release file.
  * Upload release file to SF.net.
  * Make release on SF.net.
  * Make release on Freshmeat.
  * Update project homepage.
+ * Update version number.
+ * Commit updated version number.
 

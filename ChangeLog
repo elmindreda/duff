@@ -3,10 +3,23 @@ Change log for duff
 
 Started as of version 0.3.1.
 
+2006-02-03
+ * duff.h: Added inode and device fields to struct Entry.
+ * duff.h: Added backlink to struct Entry.
+ * duffentry.c: Added link_entry and unlink_entry.
+ * duffentry.c: Added storing of device and inode fields.
+ * duffdriver.c: Moved to using doubly-linked entries.
+ * duff.c: Added -p option for physical mode (credits to Snow).
+ * duffdriver.c: Implemented physical mode.
+
+2005-12-14
+ * duffdriver.c: Eliminated duplicate stat call for -L option.
+ * duffdriver.c: Added inital sketch for symlink-aware -e option.
+
 2005-12-01
  * duffutil.c: Fixed bug when printing off_t values on Mac OS X.
- * duffdriver.c: Added headers for building on Solaris.
- * duff.c: Added headers for building on Solaris.
+ * duffdriver.c: Added includes for building on Solaris.
+ * duff.c: Added includes for building on Solaris.
 
 2005-11-28
  * duff.1: Updated to reflect changes in the code.
