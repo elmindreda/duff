@@ -316,7 +316,7 @@ void report_clusters(void)
     if (base->status == INVALID || base->status == REPORTED)
       continue;
 
-    count = 1;
+    count = 0;
     
     for (entry = base->next;  entry;  entry = entry_next)
     {
@@ -330,8 +330,13 @@ void report_clusters(void)
 	  link_entry(&duplicates, base);
 	  
 	  base->status = REPORTED;
+	  count++;
 	}
 	
+	/* TODO: Make nicer */
+	if (base_next == entry)
+	  base_next = base_next->next;
+
 	unlink_entry(&file_entries, entry);
 	link_entry(&duplicates, entry);
 	

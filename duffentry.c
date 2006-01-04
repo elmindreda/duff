@@ -108,6 +108,9 @@ struct Entry* copy_entry(struct Entry* entry)
   copy->path = strdup(entry->path);
   copy->size = entry->size;
   copy->status = entry->status;
+  copy->mode = entry->mode;
+  copy->device = entry->device;
+  copy->inode = entry->inode;
 
   if (entry->checksum)
   {
@@ -313,7 +316,7 @@ int compare_entries(struct Entry* first, struct Entry* second)
   }
 
   /* TODO: Skip checksumming if potential cluster only has two entries 
-   *       (Requires knowledge from higher level. */
+   * NOTE: Requires knowledge from higher level */
   if (compare_entry_checksums(first, second) != 0)
     return -1;
 
