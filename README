@@ -85,7 +85,15 @@ autoconf and automake to run.
 If (or once) you have a `configure' script, go ahead and run it.  No additional
 magic should be required.  If it is, then that's a bug and should be reported.
 
-Duff has been successfully built on the following systems:
+This release of duff has been successfully built on the following systems:
+
+  Debian Etch powerpc
+  Debian Woody alpha
+  FreeBSD 4.11 x86
+  FreeBSD 5.4 x86
+  SunOS 5.9 sparc64
+
+Earlier releases have been successfully built on the following systems:
 
   Arch Linux x86
   Debian Etch powerpc
@@ -121,6 +129,9 @@ See the file `HACKING'.
 
 Please send bug reports, feedback, patches and cookies to:
 Camilla Berglund <elmindreda@users.sourceforge.net>
+
+For more involved discussions, please join the mailing list:
+http://lists.sourceforge.net/lists/listinfo/duff-devel
 
 
 9. Disambiguation

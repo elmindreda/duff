@@ -1,7 +1,8 @@
-.\" Copyright (C) 2005 Camilla Berglund
+.\" Copyright (c) Camilla Berglund <elmindreda@users.sourceforge.net>
+.\" This document is licensed under the zlib/libpng license.
 .\" Please see the file `COPYING' for license details.
 .\"
-.Dd November 21, 2005
+.Dd January 7, 2006
 .Os
 .Dt DUFF 1
 .Sh NAME
@@ -9,7 +10,7 @@
 .Nd duplicate file finder
 .Sh SYNOPSIS
 .Nm
-.Op Fl LPaeqprtz
+.Op Fl HLPaeqprtz
 .Op Fl f Ar format
 .Op Fl l Ar limit
 .Op Ar
@@ -30,19 +31,41 @@ If no files are specified as arguments,
 .Nm
 reads file names from stdin.
 .Pp
+Note that as of version 0.4,
+.Nm
+ignores symbolic links to files, and the
+.Fl H , L
+and
+.Fl P
+options apply only to directories.
+.Pp
 The following options are available:
-.Bl -tag -offset indent
+.Bl -tag -width indent
+.It Fl H
+Follow symbolic links listed on the command line.
+This overrides any previous
+.Fl H
+or
+.Fl P
+option.
+Note that this only applies to directories, as symbolic links to files are never followed.
 .It Fl L
 Follow all symbolic links.
 This overrides any previous
+.Fl H
+or
 .Fl P
 option.
+Note that this only applies to directories, as symbolic links to files are never followed.
 .It Fl P
 Don't follow any symbolic links.
 This overrides any previous
+.Fl H
+or
 .Fl L
 option.
 This is the default.
+Note that this only applies to directories, as symbolic links to files are never followed.
 .It Fl a
 Include hidden files and directories when searching recursively.
 .It Fl e
@@ -92,8 +115,8 @@ Supress warnings and error messages.
 Physical mode.
 Make
 .Nm
-consider physical files instead of links.
-If specified, multiple links to the same physical file will not be reported as duplicates.
+consider physical files instead of hard links.
+If specified, multiple hard links to the same physical file will not be reported as duplicates.
 .It Fl r
 Recursively search into all specified directories.
 .It Fl t
@@ -111,7 +134,7 @@ This option suppresses reporting a cluster of empty files.
 .Sh EXAMPLES
 .\" TODO: Fix the formatting of the example commands.
 The command:
-.Dl duff -e * | xargs rm
+.Dl duff -e * \&| xargs rm
 .Pp
 removes all duplicate files in the current directory.
 .Pp
@@ -121,18 +144,17 @@ The command:
 lists all duplicate files in the directory foo and its subdirectories.
 .Pp
 The command:
-.Dl find \& . -name '*.h' | duff
+.Dl find \&. -name '*.h' \&| duff
 .Pp
 lists all duplicate header files in the current directory and its subdirectories.
 .Sh DIAGNOSTICS
 .Ex -std
+.Sh "SEE ALSO"
+.Xr find 1 ,
+.Xr xargs 1
 .Sh AUTHORS
 .An "Camilla Berglund" Aq elmindreda@users.sourceforge.net
 .Sh BUGS
 .Nm
-does not currently intelligently handle symlinks when using
-.Fl e
-(excess mode) with
-.Fl L
-(follow links).
-This may do very bad things to your data.
+no longer considers symbolic links to files potential duplicates, and will not report them as such.
+This may break scripts relying on this functionality.

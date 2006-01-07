@@ -3,9 +3,8 @@ Copyright (c) 2005 Camilla Berglund
 
 Functionality
 * Change to getopt_long and add long options.
-* Be aware of symlinks in excess mode.
 * Detect duplicate file arguments?
-* Detect duplicate directory subtrees.
+* Detect duplicate directory subtrees?
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage.

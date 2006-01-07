@@ -11,6 +11,9 @@ Version 0.4
 * Added FAQ section to README file.
 * Compatibility with more systems.
 * Added physical mode flag (-p).
+* Added argument symbolic link flag (-H).
+* Removed collection of symbolic links to files.
+* Fixed a number of bugs.
 
 Version 0.3.1
 =============
