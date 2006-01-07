@@ -142,9 +142,9 @@ static void version(void)
  */
 static void usage(void)
 {
-  fprintf(stderr, "usage: %s -h\n", PACKAGE_NAME);
+  fprintf(stderr, "usage: %s [-HLPaepqrt] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
+  fprintf(stderr, "       %s -h\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s [-LPaeqrt] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
   fprintf(stderr, "options:\n");
   fprintf(stderr, "  -H  follow symbolic links on the command line\n");
   fprintf(stderr, "  -L  follow all symbolic links\n");
@@ -208,11 +208,11 @@ int main(int argc, char** argv)
       case 'l':
         limit = (off_t) strtoull(optarg, &temp, 10);
 	if (temp == optarg || errno == ERANGE || errno == EINVAL)
-	  warning("ignoring malformed size limit %s", optarg);
+	  warning("malformed size limit %s; ignoring", optarg);
 	else
 	{
 	  if (limit < SAMPLE_COUNT)
-	    warning("ignoring too low size limit %lu", limit);
+	    warning("sample limit must be at least %u; ignoring", SAMPLE_COUNT);
 	  else
 	    sample_limit = limit;
 	}
