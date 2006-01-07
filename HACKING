@@ -12,6 +12,9 @@ Cluster n.
   A collection of entries which represent files with equal contents, i.e. a
   collection of duplicate files.
 
+Directory n.
+  A physical directory (inode, not link) which has been searched for entries.
+
 
 Important files
 ===============

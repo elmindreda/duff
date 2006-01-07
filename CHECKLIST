@@ -9,7 +9,7 @@ Release checklist for duff
  * Update HACKING.
  * Update README.
  * Update TODO.
- * Update duff.1.
+ * Update duff.1 (including date).
  * Build release file.
  * Commit changes to CVS.
  * Tag release in CVS.

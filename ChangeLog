@@ -3,10 +3,25 @@ Change log for duff
 
 Started as of version 0.3.1.
 
-2006-02-03
+2006-01-07
+ * duff.h: Added enum for symlink dereferencing modes.
+ * duffentry.c: Fixed bug in get_entry_samples (credits to Alexander Bostrom).
+ * duffdriver.c: Added recursion depth tracking.
+ * duffdriver.c: Removed collection of symlinks to files.
+ * duffdriver.c: Made stat_file aware of symlink dereferencing modes.
+ * duff.c: Added -H option for following only symlinks listed as arguments.
+ * duff.c: Reordered options for better clarity.
+
+2006-01-04
+ * duffentry.c: Removed code for -z option.
+ * duffdriver.c: Do not collect empty files when using -z option.
+ * duffdriver.c: Fixed unlink bug in report_clusters.
+ * duffdriver.c: All entries are now freed by the cluster search phase.
+
+2006-01-03
  * duff.h: Added inode and device fields to struct Entry.
  * duff.h: Added backlink to struct Entry.
- * duffentry.c: Added link_entry and unlink_entry.
+ * duffentry.c: Added functions link_entry and unlink_entry.
  * duffentry.c: Added storing of device and inode fields.
  * duffdriver.c: Moved to using doubly-linked entries.
  * duff.c: Added -p option for physical mode (credits to Snow).
@@ -41,7 +56,7 @@ Started as of version 0.3.1.
  * duffdriver.c: Created new file for primary driver logic.
 
 2005-11-24
- * duff.c: Added missing 't' to the getopt string (credits to Levitte).
+ * duff.c: Added missing 't' to the getopt string (credits to Richard Levitte).
  * duffentry.c: Fixed bug in ordering of comparison phases.
 
 2005-11-23
