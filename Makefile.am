@@ -7,5 +7,7 @@ noinst_HEADERS = duff.h duffstring.h sha1.h
 
 dist_man1_MANS = duff.1
 
+dist_pkgdata_DATA = join-duplicates.sh
+
 EXTRA_DIST = HACKING README.SHA
 
