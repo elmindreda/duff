@@ -81,7 +81,7 @@
 
 /* The 'follow links' flag. Makes the program follow symbolic links.
  */
-int follow_links_mode = 0;
+int follow_links_mode = NO_SYMLINKS;
 /* The 'all files' flag. Includes dotfiles when searching recursively.
  */
 int all_files_flag = 0;
