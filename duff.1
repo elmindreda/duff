@@ -33,11 +33,12 @@ reads file names from stdin.
 .Pp
 Note that as of version 0.4,
 .Nm
-ignores symbolic links to files, and the
+ignores symbolic links to files, as that behavior was conceptually broken.
+Therefore, the
 .Fl H , L
 and
 .Fl P
-options apply only to directories.
+options now apply only to directories.
 .Pp
 The following options are available:
 .Bl -tag -width indent
@@ -76,21 +77,16 @@ Set the format of the cluster header.
 If the header is set to the empty string, no header line is printed.
 .Pp
 The following escape sequences are available:
-.Bl -ohang -offset left
-.It
-.Cm %n
+.Bl -hang -offset left
+.It Cm %n
 The number of files in the cluster.
-.It
-.Cm %c
+.It Cm %c
 The SHA1 checksum of files in the cluster.
-.It
-.Cm %i
+.It Cm %i
 The one-based index of the file cluster.
-.It
-.Cm %s
+.It Cm %s
 The size, in bytes, of a file in the cluster.
-.It
-.Cm %%
+.It Cm %%
 A
 .Sq %
 character.
