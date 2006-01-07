@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
+ * Copyright (c) 2006 Camilla Berglund <elmindreda@users.sourceforge.net>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -22,6 +22,8 @@
  *     distribution.
  */
 
+/* Status modes for entries.
+ */
 enum
 {
   UNTOUCHED,
@@ -30,6 +32,8 @@ enum
   REPORTED,
 };
 
+/* Symlink dereferencing modes.
+ */
 enum
 {
   ALL_SYMLINKS,
@@ -37,6 +41,8 @@ enum
   ARG_SYMLINKS,
 };
 
+/* Represents a traversed directory.
+ */
 struct Directory
 {
   struct Directory* next;
@@ -44,6 +50,8 @@ struct Directory
   ino_t inode;
 };
 
+/* Represents a collected file and potential duplicate.
+ */
 struct Entry
 {
   struct Entry* prev;
