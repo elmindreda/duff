@@ -23,7 +23,7 @@ The CVS module for duff 0.x is `duff'.
 1. License and copyright
 ========================
 
-Duff is copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
+Duff is copyright (c) 2006 Camilla Berglund <elmindreda@users.sourceforge.net>
 
 Duff is licensed under the zlib/libpng license.  See the file `COPYING' for
 license details.  The license is also included at the top of each source file.
