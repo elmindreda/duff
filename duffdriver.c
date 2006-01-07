@@ -77,9 +77,10 @@
 
 /* These flags are defined and documented in duff.c.
  */
-extern int follow_links_flag;
+extern int follow_links_mode;
 extern int all_files_flag;
 extern int recursive_flag;
+extern int ignore_empty_flag;
 extern int quiet_flag;
 extern int physical_flag;
 extern int excess_flag;
@@ -94,43 +95,49 @@ static struct Directory* directories = NULL;
 
 /* These functions are documented below, where they are defined.
  */
-static int stat_file(const char* path, struct stat* sb);
+static int stat_file(const char* path, struct stat* sb, int depth);
 static int has_recursed_directory(dev_t device, ino_t inode);
-static void recurse_directory(const char* path, const struct stat* sb);
+static void recurse_directory(const char* path,
+                              const struct stat* sb,
+			      int depth);
 static void report_cluster(struct Entry* duplicates,
                            unsigned int number,
 			   unsigned int count);
 
 /* Stat:s a file according to the specified options.
  */
-static int stat_file(const char* path, struct stat* sb)
+static int stat_file(const char* path, struct stat* sb, int depth)
 {
 #if HAVE_LSTAT_EMPTY_STRING_BUG || HAVE_STAT_EMPTY_STRING_BUG
   if (*path == '\0')
     return -1;
 #endif
 
-  if (follow_links_flag)
+  if (lstat(path, sb) != 0)
   {
-    if (stat(path, sb) != 0)
-    {
-      if (!quiet_flag)
-	warning("%s: %s", path, strerror(errno));
+    if (!quiet_flag)
+      warning("%s: %s", path, strerror(errno));
 
-      return -1;
-    }
+    return -1;
   }
-  else
+
+  if ((sb->st_mode & S_IFMT) == S_IFLNK)
   {
-    if (lstat(path, sb) != 0)
+    if (follow_links_mode == ALL_SYMLINKS ||
+        depth == 0 && follow_links_mode == ARG_SYMLINKS)
     {
-      if (!quiet_flag)
-	warning("%s: %s", path, strerror(errno));
+      if (stat(path, sb) != 0)
+      {
+	if (!quiet_flag)
+	  warning("%s: %s", path, strerror(errno));
 
-      return -1;
+	return -1;
+      }
+
+      if ((sb->st_mode & S_IFMT) != S_IFDIR)
+	return -1;
     }
-
-    if ((sb->st_mode & S_IFMT) == S_IFLNK)
+    else
       return -1;
   }
 
@@ -172,7 +179,9 @@ static void record_directory(dev_t device, ino_t inode)
 /* Recurses into a directory, collecting all or all non-hidden files,
  * according to the specified options.
  */
-static void recurse_directory(const char* path, const struct stat* sb)
+static void recurse_directory(const char* path,
+                              const struct stat* sb,
+			      int depth)
 {
   DIR* dir;
   struct dirent* dir_entry;
@@ -186,7 +195,12 @@ static void recurse_directory(const char* path, const struct stat* sb)
 
   dir = opendir(path);
   if (!dir)
+  {
+    if (!quiet_flag)
+      warning("%s: %s", path, strerror(errno));
+
     return;
+  }
 
   while ((dir_entry = readdir(dir)))
   {
@@ -201,7 +215,7 @@ static void recurse_directory(const char* path, const struct stat* sb)
     }
 
     asprintf(&child_path, "%s/%s", path, name);
-    process_path(child_path);
+    process_path(child_path, depth);
     free(child_path);
   }
   
@@ -211,13 +225,13 @@ static void recurse_directory(const char* path, const struct stat* sb)
 /* Processes a path name, whether from the command line or from
  * directory recursion.
  */
-void process_path(const char* path)
+void process_path(const char* path, int depth)
 {
   mode_t mode;
   struct stat sb;
   struct Entry* entry;
 
-  if (stat_file(path, &sb) != 0)
+  if (stat_file(path, &sb, depth) != 0)
     return;
 
   mode = sb.st_mode & S_IFMT;
@@ -225,6 +239,21 @@ void process_path(const char* path)
   {
     case S_IFREG:
     {
+      if (access(path, R_OK) != 0)
+      {
+	if (!quiet_flag)
+	  warning("%s: %s", path, strerror(errno));
+
+	return;
+      }
+
+      if (ignore_empty_flag)
+      {
+	/* Don't even collect empty files */
+	if (sb.st_size == 0)
+	  return;
+      }
+
       /* NOTE: Check for duplicate arguments? */
 
       if (physical_flag)
@@ -248,7 +277,7 @@ void process_path(const char* path)
     {
       if (recursive_flag)
       {
-	recurse_directory(path, &sb);
+	recurse_directory(path, &sb, depth + 1);
         break;
       }
 
@@ -274,11 +303,12 @@ static void report_cluster(struct Entry* duplicates,
 
   if (excess_flag)
   {
-    /* TODO: Prefer symlinks over actual files when -L is in force */
-
     /* Report all but the first entry in the cluster */
     for (entry = duplicates->next;  entry;  entry = entry->next)
+    {
       printf("%s\n", entry->path);
+      entry->status = REPORTED;
+    }
   }
   else
   {
@@ -292,7 +322,10 @@ static void report_cluster(struct Entry* duplicates,
 			   duplicates->checksum);
 
     for (entry = duplicates;  entry;  entry = entry->next)
+    {
       printf("%s\n", entry->path);
+      entry->status = REPORTED;
+    }
   }
 }
 
@@ -302,18 +335,15 @@ void report_clusters(void)
 {
   int number = 1, count = 0;
   struct Entry* base;
-  struct Entry* base_next;
   struct Entry* entry;
   struct Entry* entry_next;
   struct Entry* duplicates = NULL;
 
   /* TODO: Implement a more efficient data structure */
 
-  for (base = file_entries;  base;  base = base_next)
+  while ((base = file_entries) != NULL)
   {
-    base_next = base->next;
-
-    if (base->status == INVALID || base->status == REPORTED)
+    if (base->status == INVALID)
       continue;
 
     count = 0;
@@ -324,23 +354,19 @@ void report_clusters(void)
 
       if (compare_entries(base, entry) == 0)
       {
-	if (base->status != REPORTED)
+	if (duplicates == NULL)
 	{
 	  unlink_entry(&file_entries, base);
 	  link_entry(&duplicates, base);
 	  
-	  base->status = REPORTED;
+	  base->status = DUPLICATE;
 	  count++;
 	}
 	
-	/* TODO: Make nicer */
-	if (base_next == entry)
-	  base_next = base_next->next;
-
 	unlink_entry(&file_entries, entry);
 	link_entry(&duplicates, entry);
 	
-	entry->status = REPORTED;
+	entry->status = DUPLICATE;
 	count++;
       }
     }
@@ -351,9 +377,11 @@ void report_clusters(void)
       free_entry_list(&duplicates);
       number++;
     }
+    else
+    {
+      unlink_entry(&file_entries, base);
+      free_entry(base);
+    }
   }
-
-  /* TODO: Put this somewhere sensible */
-  free_entry_list(&file_entries);
 }
 

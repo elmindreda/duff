@@ -65,7 +65,6 @@
  */
 extern int quiet_flag;
 extern int thorough_flag;
-extern int ignore_empty_flag;
 extern off_t sample_limit;
 
 /* These functions are documented below, where they are defined.
@@ -87,7 +86,6 @@ struct Entry* make_entry(const char* path, const struct stat* sb)
   entry->next = NULL;
   entry->path = strdup(path);
   entry->size = sb->st_size;
-  entry->mode = sb->st_mode;
   entry->device = sb->st_dev;
   entry->inode = sb->st_ino;
   entry->status = UNTOUCHED;
@@ -107,10 +105,9 @@ struct Entry* copy_entry(struct Entry* entry)
   copy->next = NULL;
   copy->path = strdup(entry->path);
   copy->size = entry->size;
-  copy->status = entry->status;
-  copy->mode = entry->mode;
   copy->device = entry->device;
   copy->inode = entry->inode;
+  copy->status = entry->status;
 
   if (entry->checksum)
   {
@@ -219,7 +216,7 @@ static int get_entry_samples(struct Entry* entry)
   
   for (i = 0;  i < SAMPLE_COUNT;  i++)
   {
-    fseek(file, i * entry->size / 10, SEEK_SET);
+    fseek(file, i * entry->size / SAMPLE_COUNT, SEEK_SET);
     fread(samples + i, 1, 1, file);
 
     if (ferror(file))
@@ -302,13 +299,6 @@ int compare_entries(struct Entry* first, struct Entry* second)
   if (first->size != second->size)
     return -1;
 
-  if (ignore_empty_flag)
-  {
-    /* Empty files not considered equal today */
-    if (first->size == 0)
-      return -1;
-  }
-    
   if (first->size >= sample_limit)
   {
     if (compare_entry_samples(first, second) != 0)

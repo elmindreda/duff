@@ -26,7 +26,15 @@ enum
 {
   UNTOUCHED,
   INVALID,
+  DUPLICATE,
   REPORTED,
+};
+
+enum
+{
+  ALL_SYMLINKS,
+  NO_SYMLINKS,
+  ARG_SYMLINKS,
 };
 
 struct Directory
@@ -42,12 +50,11 @@ struct Entry
   struct Entry* next;
   char* path;
   off_t size;
-  mode_t mode;
   dev_t device;
   ino_t inode;
+  int status;
   uint8_t* checksum;
   uint8_t* samples;
-  int status;
 };
 
 /* These live in duffentry.c */
@@ -70,6 +77,6 @@ void print_cluster_header(const char* format,
 			  const uint8_t* checksum);
 
 /* These live in duffdriver.c */
-void process_path(const char* path);
+void process_path(const char* path, int depth);
 void report_clusters(void);
 

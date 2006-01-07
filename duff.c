@@ -81,7 +81,7 @@
 
 /* The 'follow links' flag. Makes the program follow symbolic links.
  */
-int follow_links_flag = 0;
+int follow_links_mode = 0;
 /* The 'all files' flag. Includes dotfiles when searching recursively.
  */
 int all_files_flag = 0;
@@ -146,6 +146,7 @@ static void usage(void)
   fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
   fprintf(stderr, "       %s [-LPaeqrt] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
   fprintf(stderr, "options:\n");
+  fprintf(stderr, "  -H  follow symbolic links on the command line\n");
   fprintf(stderr, "  -L  follow all symbolic links\n");
   fprintf(stderr, "  -P  do not follow any symbolic links\n");
   fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
@@ -178,40 +179,32 @@ int main(int argc, char** argv)
   off_t limit;
   char path[PATH_MAX];
   
-  while ((ch = getopt(argc, argv, "LPavrzqphetf:l:")) != -1)
+  while ((ch = getopt(argc, argv, "HLPaef:hl:pqrtvz")) != -1)
   {
     switch (ch)
     {
+      case 'H':
+	follow_links_mode = ARG_SYMLINKS;
+	break;
       case 'L':
-	follow_links_flag = 1;
+	follow_links_mode = ALL_SYMLINKS;
 	break;
       case 'P':
-	follow_links_flag = 0;
+	follow_links_mode = NO_SYMLINKS;
 	break;
       case 'a':
         all_files_flag = 1;
         break;
-      case 'v':
-        version();
-        exit(0);
-      case 'r':
-        recursive_flag = 1;
-        break;
-      case 'q':
-        quiet_flag = 1;
-        break;
-      case 'p':
-	physical_flag = 1;
-	break;
       case 'e':
         excess_flag = 1;
 	break;
-      case 't':
-        thorough_flag = 1;
-        break;
       case 'f':
         header_format = optarg;
         break;
+      case 'h':
+        usage();
+        bugs();
+        exit(0);
       case 'l':
         limit = (off_t) strtoull(optarg, &temp, 10);
 	if (temp == optarg || errno == ERANGE || errno == EINVAL)
@@ -224,14 +217,28 @@ int main(int argc, char** argv)
 	    sample_limit = limit;
 	}
 	break;
+      case 'p':
+	physical_flag = 1;
+	break;
+      case 'q':
+        quiet_flag = 1;
+        break;
+      case 'r':
+        recursive_flag = 1;
+        break;
+      case 't':
+        thorough_flag = 1;
+        break;
+      case 'v':
+        version();
+        exit(0);
       case 'z':
 	ignore_empty_flag = 1;
 	break;
-      case 'h':
       default:
         usage();
         bugs();
-        exit(0);
+        exit(1);
     }
   }
   
@@ -252,7 +259,7 @@ int main(int argc, char** argv)
       }
 #endif
 
-      process_path(argv[i]);
+      process_path(argv[i], 0);
     }
   }
   else
@@ -263,7 +270,7 @@ int main(int argc, char** argv)
       if ((temp = strchr(path, '\n')))
 	*temp = '\0';
 
-      process_path(path);
+      process_path(path, 0);
 
       if (feof(stdin) || ferror(stdin))
 	break;
