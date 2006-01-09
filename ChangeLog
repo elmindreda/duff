@@ -3,62 +3,100 @@ Change log for duff
 
 Started as of version 0.3.1.
 
-2006-01-07
+2006-01-09  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.h (copy_entry): Removed unused function.
+ * duffentry.c (copy_entry): Removed unused function.
+
+ * duffdriver.c (process_path): Only check access for non-empty files.
+ * duffentry.c (get_entry_samples)
+   (get_entry_checksum): Only open and read from non-empty files.
+
+ * join-duplicates.sh: Removed logging, added some error checking and mktemp.
+
+2006-01-08
+
+ * join-duplicates.sh: Added file.
+
+2006-01-07  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duffentry.c (get_entry_samples): Fixed seek bug (credits to Alexander Bostrom).
+
+ * duffdriver.c (stat_file): Removed collection of symlinks to files.
+
  * duff.h: Added enum for symlink dereferencing modes.
- * duffentry.c: Fixed bug in get_entry_samples (credits to Alexander Bostrom).
- * duffdriver.c: Added recursion depth tracking.
- * duffdriver.c: Removed collection of symlinks to files.
- * duffdriver.c: Made stat_file aware of symlink dereferencing modes.
- * duff.c: Added -H option for following only symlinks listed as arguments.
- * duff.c: Reordered options for better clarity.
+ * duffdriver.c (stat_file): Implemented symlink dereferencing modes.
+ * duffdriver.c (process_path, recurse_directory)
+   (stat_file): Added recursion depth tracking.
+ * duff.c (main, usage): Added -H option for following only symlinks listed as arguments.
 
-2006-01-04
- * duffentry.c: Removed code for -z option.
- * duffdriver.c: Do not collect empty files when using -z option.
- * duffdriver.c: Fixed unlink bug in report_clusters.
- * duffdriver.c: All entries are now freed by the cluster search phase.
+ * duff.c (main): Reordered options for better clarity.
 
-2006-01-03
- * duff.h: Added inode and device fields to struct Entry.
+ * duff.c (main): Improved warnings for -l option.
+
+2006-01-04  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duffentry.c (compare_entries): Removed code for -z option.
+ * duffdriver.c (stat_file): Do not collect empty files when using -z option.
+
+ * duffdriver.c (report_clusters): Fixed unlink bug.
+ * duffdriver.c (report_clusters): All entries are now freed by the cluster search phase.
+
+2006-01-03  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.h: Added inode and device fields to struct Entry (credits to Snow).
+ * duffdriver.c (process_path): Implemented physical mode (credits to Snow).
+ * duff.c (main, usage): Added -p option for physical mode.
+
  * duff.h: Added backlink to struct Entry.
- * duffentry.c: Added functions link_entry and unlink_entry.
- * duffentry.c: Added storing of device and inode fields.
+ * duffentry.c (unlink_entry, link_entry): Added functions.
+ * duffentry.c (make_entry): Added storing of device and inode fields.
  * duffdriver.c: Moved to using doubly-linked entries.
- * duff.c: Added -p option for physical mode (credits to Snow).
- * duffdriver.c: Implemented physical mode.
 
-2005-12-14
- * duffdriver.c: Eliminated duplicate stat call for -L option.
- * duffdriver.c: Added inital sketch for symlink-aware -e option.
+2005-12-14  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
-2005-12-01
- * duffutil.c: Fixed bug when printing off_t values on Mac OS X.
+ * duffdriver.c (stat_file): Eliminated duplicate stat call for -L option.
+
+ * duffdriver.c (stat_file): Added inital sketch for symlink-aware -e option.
+
+2005-12-01  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duffutil.c (print_cluster_header): Fixed bug when printing off_t values on Mac OS X.
+
  * duffdriver.c: Added includes for building on Solaris.
  * duff.c: Added includes for building on Solaris.
 
-2005-11-28
- * duff.1: Updated to reflect changes in the code.
- * duffdriver.c: Added primitive directory loop detection, with functions
-                 has_recursed_directory and record_directory.
+2005-11-28  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duffdriver.c (has_recursed_directory)
+   (record_directory): Added primitive directory loop detection.
  * duffutil.c: Added hash function for device/inode pair.
- * duffdriver.c: Added several additional TODO items.
  * duff.h: Added struct Directory for recording of recursed directories.
 
-2005-11-27
- * duffdriver.c: Added freeing of entries to report_clusters.
- * duffentry.c: Moved code for -z option into compare_entries.
- * duff.1: Updated to reflect changes in the code.
- * duff.c: Added file name reading from stdin.
+ * duffdriver.c: Added several additional TODO items.
 
-2005-11-26
- * duff.c: Added -z option for ignoring empty files.
+2005-11-27  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duffdriver.c (report_clusters): Added freeing of entries.
+
+ * duffentry.c (compare_entries): Added code for -z option.
+
+ * duff.c (main): Added file name reading from stdin.
+
+2005-11-26  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.c (main, usage): Added -z option for ignoring empty files.
+
  * duff.c: Moved primary driver logic into duffdriver.c.
  * duffdriver.c: Created new file for primary driver logic.
 
-2005-11-24
- * duff.c: Added missing 't' to the getopt string (credits to Richard Levitte).
- * duffentry.c: Fixed bug in ordering of comparison phases.
+2005-11-24  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
-2005-11-23
- * duff.c: Fixed typo in help for -t option (credits to bitninja).
+ * duff.c: Added missing 't' to the getopt string (credits to Richard Levitte).
+
+ * duffentry.c (compare_entries): Fixed bug in ordering of phases.
+
+2005-11-23  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.c (usage): Fixed typo in -t option (credits to Patrik Jarnefelt).
 
