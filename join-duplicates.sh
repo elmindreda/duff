@@ -10,46 +10,33 @@
 # to a single physical file, thus saving disk space.  Use with care.
 #
 
-if [ -z "$1" ]; then
+if [ "$1" == '' ]; then
   echo "usage: `basename $0` directory"
   exit 1
 fi
 
-echo "## `date`" >> dupe.log
-
-duff -r '-f#' -z -P -p "$1" |
+duff -r '-f#' -z -p -P "$1" |
 (
-  while read line 
+  while read file 
   do
-    if [ "$line" == '#' ]; then
+    if [ "$file" == '#' ]; then
       first=''
     else
       if [ "$first" == '' ]; then
-        first="$line"
+        first="$file"
       else
-	temp=`mktemp -p \`dirname $line\``
+	temp=`mktemp -p \`dirname $file\``
 
-	#echo "$line" > dupe.name
-	#echo "$first $line" >> dupe.log
-
-	mv "$line" "$temp" && \
-	ln "$first" "$line" && \
+	mv "$file" "$temp" && \
+	ln "$first" "$file" && \
+	touch --reference="$temp" "$file" && \
 	rm "$temp"
 
-	if [ $? != "0" ]; then
-	  echo "`basename $0`: failed to link $line to $first (may exist as $temp)"
+	if [ $? != 0 ]; then
+	  echo "`basename $0`: $file: failed to join with $first"
+	  echo "`basename $0`: $file: may exist as $temp"
 	  exit 1
 	fi
-
-	touch --reference="$temp" "$line"
-      
-        # Why do this?
-	if [ "$temp" -nt "$first" ]; then
-	  chmod --reference="$temp" "$first";
-	  chown --reference="$temp" "$first";
-	fi
-
-	#rm dupe.name
       fi
     fi
   done
