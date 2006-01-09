@@ -95,39 +95,6 @@ struct Entry* make_entry(const char* path, const struct stat* sb)
   return entry;
 }
 
-/* Makes a deep copy of an entry.
- */
-struct Entry* copy_entry(struct Entry* entry)
-{
-  struct Entry* copy = (struct Entry*) malloc(sizeof(struct Entry));
-  
-  copy->prev = NULL;
-  copy->next = NULL;
-  copy->path = strdup(entry->path);
-  copy->size = entry->size;
-  copy->device = entry->device;
-  copy->inode = entry->inode;
-  copy->status = entry->status;
-
-  if (entry->checksum)
-  {
-    copy->checksum = (uint8_t*) malloc(SHA1_HASH_SIZE);
-    memcpy(copy->checksum, entry->checksum, SHA1_HASH_SIZE);
-  }
-  else
-    copy->checksum = NULL;
-
-  if (entry->samples)
-  {
-    copy->samples = (uint8_t*) malloc(SAMPLE_COUNT);
-    memcpy(copy->samples, entry->samples, SAMPLE_COUNT);
-  }
-  else
-    copy->samples = NULL;
-  
-  return copy;
-}
-
 /* Inserts an entry as the first item in a list.
  * Note that the entry must be detached from any previous list.
  */
@@ -250,39 +217,42 @@ static int get_entry_checksum(struct Entry* entry)
   if (entry->checksum)
     return 0;
   
-  file = fopen(entry->path, "rb");
-  if (!file)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", entry->path, strerror(errno));
-    
-    entry->status = INVALID;
-    return -1;
-  }
-
   SHA1Init(&context);
 
-  for (;;)
+  if (entry->size > 0)
   {
-    size = fread(buffer, 1, sizeof(buffer), file);
-    if (ferror(file))
+    file = fopen(entry->path, "rb");
+    if (!file)
     {
-      fclose(file);
-  
       if (!quiet_flag)
-        warning("%s: %s", entry->path, strerror(errno));
-
+	warning("%s: %s", entry->path, strerror(errno));
+      
       entry->status = INVALID;
       return -1;
     }
 
-    if (size == 0)
-      break;
+    for (;;)
+    {
+      size = fread(buffer, 1, sizeof(buffer), file);
+      if (ferror(file))
+      {
+	fclose(file);
+    
+	if (!quiet_flag)
+	  warning("%s: %s", entry->path, strerror(errno));
 
-    SHA1Update(&context, buffer, size);
+	entry->status = INVALID;
+	return -1;
+      }
+
+      if (size == 0)
+	break;
+
+      SHA1Update(&context, buffer, size);
+    }
+
+    fclose(file);
   }
-
-  fclose(file);
 
   entry->checksum = (uint8_t*) malloc(SHA1_HASH_SIZE);
   SHA1Final(&context, entry->checksum);
@@ -305,7 +275,7 @@ int compare_entries(struct Entry* first, struct Entry* second)
       return -1;
   }
 
-  /* TODO: Skip checksumming if potential cluster only has two entries 
+  /* NOTE: Skip checksumming if potential cluster only has two entries?
    * NOTE: Requires knowledge from higher level */
   if (compare_entry_checksums(first, second) != 0)
     return -1;
@@ -362,12 +332,19 @@ static int compare_entry_samples(struct Entry* first, struct Entry* second)
  * It is also completely un-optmimised.  Enjoy.
  * NOTE: This function assumes that the files are of equal size, as
  * there's little point in calling it otherwise.
+ * TODO: Use a read buffer.
  */
 static int compare_entry_contents(struct Entry* first, struct Entry* second)
 {
   int fc, sc, result = 0;
-  FILE* first_stream = fopen(first->path, "rb");
-  FILE* second_stream = fopen(second->path, "rb");
+  FILE* first_stream;
+  FILE* second_stream;
+  
+  if (first->size == 0)
+    return 0;
+
+  first_stream = fopen(first->path, "rb");
+  second_stream = fopen(second->path, "rb");
 
   if (!first_stream || !second_stream)
   {
