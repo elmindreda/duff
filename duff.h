@@ -26,9 +26,17 @@
  */
 enum
 {
+  /* The file is collected but its data hasn't been touched.
+   */
   UNTOUCHED,
+  /* An error ocurred when reading from the file.
+   */
   INVALID,
+  /* The file is a member of a cluster of duplicates.
+   */
   DUPLICATE,
+  /* The file has been reported as a duplicate.
+   */
   REPORTED,
 };
 
@@ -36,8 +44,14 @@ enum
  */
 enum
 {
-  ALL_SYMLINKS,
+  /* Do not dereference any directory symlinks.
+   */
   NO_SYMLINKS,
+  /* Dereference all directory symlinks encountered.
+   */
+  ALL_SYMLINKS,
+  /* Dereference only those directory symlinks listed on the command line.
+   */
   ARG_SYMLINKS,
 };
 
@@ -67,7 +81,6 @@ struct Entry
 
 /* These live in duffentry.c */
 struct Entry* make_entry(const char* path, const struct stat* sb);
-struct Entry* copy_entry(struct Entry* entry);
 void link_entry(struct Entry** head, struct Entry* entry);
 void unlink_entry(struct Entry** head, struct Entry* entry);
 void free_entry(struct Entry* entry);
