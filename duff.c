@@ -79,7 +79,8 @@
 #include "duffstring.h"
 #include "duff.h"
 
-/* The 'follow links' flag. Makes the program follow symbolic links.
+/* The 'symlink dereference' mode.  Controls the handling of symlinks to
+ * directories.  The different modes are defined in duff.h.
  */
 int follow_links_mode = NO_SYMLINKS;
 /* The 'all files' flag. Includes dotfiles when searching recursively.
