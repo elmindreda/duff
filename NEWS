@@ -12,7 +12,10 @@ Version 0.4
 * Compatibility with more systems.
 * Added physical mode flag (-p).
 * Added argument symbolic link flag (-H).
+* Improved warnings for sample limit flag (-l).
 * Removed collection of symbolic links to files.
+* Added reporting of empty, access-protected files.
+* Updated and improved manpage.
 * Fixed a number of bugs.
 
 Version 0.3.1

@@ -19,6 +19,19 @@ read-only access is:
 
 The CVS module for duff 0.x is `duff'.
 
+The version numbering scheme for duff is as follows:
+
+ * The first number is the major version.  This will be updated upon what the
+   author considers a round of feature completion.  The only feature currently
+   missing for the next major release is i18n.
+
+ * The second number is the minor version number.  This is updated for releases
+   that include minor new features, or features that do not change the
+   functionality of the program.
+
+ * The third number, if present, is the bugfix release number.  This indicates
+   a release which only fixes bugs present in a previous major or minor release.
+
 
 1. License and copyright
 ========================
@@ -39,43 +52,7 @@ See the files `sha1.c' or `sha1.h' for license details.
 See the file `NEWS'.
 
 
-3. Frequently asked questions
-=============================
-
-Q: Hey, that is O(n^2) right?
-A: Well, yes, but it's still fast enough in most cases.
-
-   I won't even pretend to call this a benchmark, but duff running cold on a
-   directory tree with 2000+ images (190MB) found the 13 duplicate clusters in
-   4 seconds, and this on my ageing laptop.
-
-Q: How does it work, then?
-A: The basic idea (as of version 0.3) is:
-
-   * Only compare files if they're of equal size.
-   * Compare a few random bytes before checksumming large files.
-   * Compare checksums before actual contents.
-   * Don't compare actual contents unless explicitly asked.
-
-Q: How do you calculate the checksum?
-A: It is a regular SHA1 message digest, calculated using sha1-asaddi.
-
-Q: What is it good for?
-A: Getting a list of, and then usually removing, duplicates in a given set of
-   files.  Some people find this ability useful. If you don't, feel free not to
-   use duff.
-
-Q: Is duff named after Tom Duff?
-A: As much as I like Duff's device, no, it isn't.  Duff stands for DUplicate
-   File Finder.
-
-Q: Shouldn't duff also do `x'?
-A: I don't know, but you're welcome to write a patch to make it do `x', or send
-   me an email explaining why you think duff should do `x'.  If I like your
-   patch or email, a future version of duff will probably do `x'.
-
-
-4. Building Duff
+3. Building Duff
 ================
 
 If you got this source tree from a CVS repository, you will need to bootstrap
@@ -87,41 +64,88 @@ magic should be required.  If it is, then that's a bug and should be reported.
 
 This release of duff has been successfully built on the following systems:
 
+  Darwin 7.9.0 powerpc
   Debian Etch powerpc
-  Debian Woody alpha
+  Debian Sarge alpha
   FreeBSD 4.11 x86
   FreeBSD 5.4 x86
   SunOS 5.9 sparc64
+  Ubuntu Breezy x86
 
 Earlier releases have been successfully built on the following systems:
 
   Arch Linux x86
+  Darwin 7.9.0 powerpc
   Debian Etch powerpc
-  Debian Woody alpha
+  Debian Sarge alpha
   FreeBSD 4.11 x86
   FreeBSD 5.4 x86
-  Darwin 7.9.0 powerpc
   SunOS 5.9 sparc64
 
 However, it should build on most Unix systems without modifications.
 
 
-5. Installing Duff
+4. Installing Duff
 ==================
 
 See the file `INSTALL'.
 
 
-6. Using Duff
+5. Using Duff
 =============
 
 See the accompanying manpage duff(1).
 
+To read the manpage before installation, use the following command:
 
-7. Hacking Duff
+  groff -mdoc -Tascii duff.1 | less -R
+
+
+6. Hacking Duff
 ===============
 
 See the file `HACKING'.
+
+
+7. Frequently asked questions
+=============================
+
+Q: Hey, that is O(n^2) right?
+A: Well, sort of.  Lots of very intelligent people keep telling me it's
+   O(n log n), and present complex solutions that, when implemented, don't give
+   any significant advantage in real world use.  Thus, my particular
+   implementation is still O(n^2).
+
+   I won't even pretend to call this a benchmark, but duff running cold on a
+   directory tree with over 2000 images (190MB) found the 13 duplicate clusters
+   in 4 seconds, and this on my ageing laptop.
+
+Q: How does it work, then?
+A: The basic idea (as of version 0.3) is:
+
+   * Only compare files if they're of equal size.
+   * Compare a few bytes before checksumming large files.
+   * Compare checksums before actual contents.
+   * Don't compare actual contents unless explicitly asked.
+
+Q: How do you calculate the checksum?
+A: It is a regular SHA1 message digest, calculated using sha1-asaddi.
+
+Q: What is it good for?
+A: Getting a list of, and then usually removing or joining, duplicates in a
+   given set of files.  Note that duff itself never modifies any files, but it's
+   designed to play nice with tools that do.
+
+Q: Is duff named after Tom Duff?
+A: As much as I like Duff's device, no, it isn't.  Duff stands for DUplicate
+   File Finder.
+
+   (No, it's not named after the beer, either.)
+
+Q: Shouldn't duff also do `x'?
+A: I don't know, but you're welcome to write a patch to make it do `x', or send
+   me an email explaining why you think duff should do `x'.  If I like your
+   patch or email, a future version of duff will probably do `x'.
 
 
 8. Bugs, feedback and patches
@@ -139,4 +163,17 @@ http://lists.sourceforge.net/lists/listinfo/duff-devel
 
 This is duff, the Unix command-line utility, and not DUFF, the Windows program.
 If you wish to find duplicate files on Windows, use DUFF.
+
+
+10. Release history
+===================
+
+Version 0.1 was never released anywhere.
+
+Version 0.2 was the first release named duff.  It was only released to a few
+individuals, during the first half of 2005.
+
+Version 0.3 was the first official release, on November 22, 2005.
+
+Version 0.3.1 was a bugfix release, on November 27, 2005.
 

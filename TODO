@@ -5,6 +5,7 @@ Functionality
 * Change to getopt_long and add long options.
 * Detect duplicate file arguments?
 * Detect duplicate directory subtrees?
+* Implement i18n through gettext.
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage.
