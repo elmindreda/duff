@@ -239,19 +239,20 @@ void process_path(const char* path, int depth)
   {
     case S_IFREG:
     {
-      if (access(path, R_OK) != 0)
+      if (sb.st_size == 0)
       {
-	if (!quiet_flag)
-	  warning("%s: %s", path, strerror(errno));
-
-	return;
-      }
-
-      if (ignore_empty_flag)
-      {
-	/* Don't even collect empty files */
-	if (sb.st_size == 0)
+	if (ignore_empty_flag)
 	  return;
+      }
+      else
+      {
+	if (access(path, R_OK) != 0)
+	{
+	  if (!quiet_flag)
+	    warning("%s: %s", path, strerror(errno));
+
+	  return;
+	}
       }
 
       /* NOTE: Check for duplicate arguments? */
