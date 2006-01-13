@@ -3,6 +3,10 @@ Change log for duff
 
 Started as of version 0.3.1.
 
+2006-01-11  Camilla Berglund  <elmindreda@users.sourceforge.net> 
+
+ * duffdriver.c (stat_file): Added parenthesis to remove warning.
+
 2006-01-09  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
  * duff.h (copy_entry): Removed unused function.
@@ -14,9 +18,9 @@ Started as of version 0.3.1.
 
  * join-duplicates.sh: Removed logging, added some error checking and mktemp.
 
-2006-01-08
+2006-01-08  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
- * join-duplicates.sh: Added file.
+ * join-duplicates.sh: Added file (credits to "Snow").
 
 2006-01-07  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
@@ -44,8 +48,8 @@ Started as of version 0.3.1.
 
 2006-01-03  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
- * duff.h: Added inode and device fields to struct Entry (credits to Snow).
- * duffdriver.c (process_path): Implemented physical mode (credits to Snow).
+ * duff.h: Added inode and device fields to struct Entry (credits to "Snow").
+ * duffdriver.c (process_path): Implemented physical mode (credits to "Snow").
  * duff.c (main, usage): Added -p option for physical mode.
 
  * duff.h: Added backlink to struct Entry.

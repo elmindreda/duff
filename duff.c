@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2006 Camilla Berglund <elmindreda@users.sourceforge.net>
+ * Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -83,40 +83,40 @@
  * directories.  The different modes are defined in duff.h.
  */
 int follow_links_mode = NO_SYMLINKS;
-/* The 'all files' flag. Includes dotfiles when searching recursively.
+/* The 'all files' flag.  Includes dotfiles when searching recursively.
  */
 int all_files_flag = 0;
-/* The 'verbose' flag. Makes the program verbose.
+/* The 'verbose' flag.  Makes the program verbose.
  */
 int verbose_flag = 0;
-/* The 'recursive' flag. Recurses into all specified directories.
+/* The 'recursive' flag.  Recurses into all specified directories.
  */
 int recursive_flag = 0;
-/* The 'shut up' flag. Makes the program not complain about skipped
+/* The 'shut up' flag.  Makes the program not complain about skipped
  * non-files.
  */
 int quiet_flag = 0;
-/* The 'physical mode' flag. Makes the program consider entries being
+/* The 'physical mode' flag.  Makes the program consider entries being
  * physical files instead of hard links.
  */
 int physical_flag = 0;
-/* The 'excess' flag. For each duplicate cluster, reports all but one.
+/* The 'excess' flag.  For each duplicate cluster, reports all but one.
  * Useful for `xargs rm'.
  */
 int excess_flag = 0;
-/* The 'paranoid' flag. Makes the program distrust checksums, forcing
+/* The 'paranoid' flag.  Makes the program distrust checksums, forcing
  * byte-by-byte comparisons.
  */
 int thorough_flag = 0;
-/* The ignore empty files' flag. Makes the program not report empty
+/* The ignore empty files' flag.  Makes the program not report empty
  * files as duplicates.
  */
 int ignore_empty_flag = 0;
-/* The 'header format' value. Specifies the look of the cluster header.
+/* The 'header format' value.  Specifies the look of the cluster header.
  * If set to the empty string, no headers are printed.
  */
 const char* header_format = DEFAULT_HEADER_FORMAT;
-/* The 'sample limit' value. Specifies the minimal size of files to be
+/* The 'sample limit' value.  Specifies the minimal size of files to be
  * compared with the sampling method.
  */
 off_t sample_limit = DEFAULT_SIZE_LIMIT;
@@ -138,8 +138,8 @@ static void version(void)
 }
 
 /* Prints brief help information to stderr.
- * It is a good idea to keep this synchronised with the actual code.
- * It is also a good idea it keep it synchronised with the manpage.
+ * Note that it is a good idea to keep this synchronised with the actual code.
+ * Note that it is also a good idea it keep it synchronised with the manpage.
  */
 static void usage(void)
 {

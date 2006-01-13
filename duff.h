@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2006 Camilla Berglund <elmindreda@users.sourceforge.net>
+ * Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -79,7 +79,7 @@ struct Entry
   uint8_t* samples;
 };
 
-/* These live in duffentry.c */
+/* These are defined and documented in duffentry.c */
 struct Entry* make_entry(const char* path, const struct stat* sb);
 void link_entry(struct Entry** head, struct Entry* entry);
 void unlink_entry(struct Entry** head, struct Entry* entry);
@@ -87,7 +87,7 @@ void free_entry(struct Entry* entry);
 void free_entry_list(struct Entry** entries);
 int compare_entries(struct Entry* first, struct Entry* second);
 
-/* These live in duffutil.c */
+/* These are defined and documented in duffutil.c */
 void error(const char* format, ...);
 void warning(const char* format, ...);
 const char* get_mode_name(int mode);
@@ -97,7 +97,7 @@ void print_cluster_header(const char* format,
 			  off_t size,
 			  const uint8_t* checksum);
 
-/* These live in duffdriver.c */
+/* These are defined and documented in duffdriver.c */
 void process_path(const char* path, int depth);
 void report_clusters(void);
 
