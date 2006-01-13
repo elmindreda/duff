@@ -15,6 +15,9 @@ Release checklist for duff
  * Tag release in CVS.
  * Upload release file to SF.net.
  * Make release on SF.net.
+ * Update SF.net trove categorisation.
+ * Post SF.net news item.
+ * Post announcement to duff-devel.
  * Make release on Freshmeat.
  * Update project homepage.
  * Update version number.
