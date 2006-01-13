@@ -1,1 +1,17 @@
-Camilla Berglund <elmindreda@users.sourceforge.net>
+Main files
+==========
+
+Camilla Berglund <elmindreda@users.sourceforge.net> wrote the first
+version of duff, and is currently the main author.
+
+Ideas, suggestions, spelling corrections and bug fixes have been
+contributed by various people, and they are noted in the appropriate
+entries of the `ChangeLog' file.
+
+
+Supporting files
+================
+
+The `join-duplicates.sh' script was originally written by a person
+who so far is only known to me as "Snow".
+
