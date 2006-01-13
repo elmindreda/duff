@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2006 Camilla Berglund <elmindreda@users.sourceforge.net>
+ * Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -124,7 +124,7 @@ static int stat_file(const char* path, struct stat* sb, int depth)
   if ((sb->st_mode & S_IFMT) == S_IFLNK)
   {
     if (follow_links_mode == ALL_SYMLINKS ||
-        depth == 0 && follow_links_mode == ARG_SYMLINKS)
+        (depth == 0 && follow_links_mode == ARG_SYMLINKS))
     {
       if (stat(path, sb) != 0)
       {
