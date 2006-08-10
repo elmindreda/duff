@@ -101,7 +101,7 @@ Display help information and exit.
 The minimum size of files to be sampled.
 If the size of files in a cluster is equal or greater than the specified limit,
 .Nm
-will sample a few bytes from each file, before calculating a full checksum.
+will sample and compare a few bytes from each file before calculating a full checksum.
 This is an optimization for larger files.
 The default limit is 1048576 bytes.
 .It Fl q
