@@ -2,7 +2,7 @@
 #
 # Example script for duff(1).
 #
-# Copyright (c) 2005 "Snow"
+# Copyright (c) 2005 Ross Newell
 #
 # Modified Jan 7, 2006 by Camilla Berglund <elmindreda@users.sourceforge.net>
 #

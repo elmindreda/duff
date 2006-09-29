@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([duff], [0.4.1], [elmindreda@users.sourceforge.net])
+AC_INIT([duff], [0.5.0], [elmindreda@users.sourceforge.net])
 AC_CONFIG_SRCDIR([duff.c])
 AM_INIT_AUTOMAKE([check-news dist-bzip2])
 AM_CONFIG_HEADER([config.h])
@@ -41,7 +41,6 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
 AC_FUNC_STAT
 AC_FUNC_LSTAT
-AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 AC_FUNC_CLOSEDIR_VOID
 AC_CHECK_FUNCS([strdup strerror memset strchr strrchr strtoull], \
   [], [AC_MSG_ERROR([Function not found])])

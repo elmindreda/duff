@@ -26,7 +26,7 @@ duffdriver.c
   Primary program logic; entry collection and cluster reporting.
 
 duffentry.c
-  Functionality for dealing with 'entries', i.e. collected files.
+  Functions for working with entries.
 
 duffstring.c duffstring.h
   Replacement implementations of various libc string functions.

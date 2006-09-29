@@ -92,6 +92,10 @@ int verbose_flag = 0;
 /* The 'recursive' flag.  Recurses into all specified directories.
  */
 int recursive_flag = 0;
+/*! The 'null termination' flag.  Reads and writes null-terminated file
+ *  names.
+ */
+int null_terminate_flag = 0;
 /* The 'shut up' flag.  Makes the program not complain about skipped
  * non-files.
  */
@@ -143,13 +147,14 @@ static void version(void)
  */
 static void usage(void)
 {
-  fprintf(stderr, "usage: %s [-HLPaepqrt] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
+  fprintf(stderr, "usage: %s [-0HLPaepqrt] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -h\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
   fprintf(stderr, "options:\n");
+  fprintf(stderr, "  -0  read and write file names terminated by a null character\n");
   fprintf(stderr, "  -H  follow symbolic links on the command line\n");
   fprintf(stderr, "  -L  follow all symbolic links\n");
-  fprintf(stderr, "  -P  do not follow any symbolic links\n");
+  fprintf(stderr, "  -P  do not follow any symbolic links (default)\n");
   fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
   fprintf(stderr, "  -e  excess files mode, print excess files\n");
   fprintf(stderr, "  -f  header format; set format for cluster headers\n");
@@ -170,6 +175,33 @@ static void bugs(void)
   fprintf(stderr, "Report bugs to <%s>\n", PACKAGE_BUGREPORT);
 }
 
+/* Reads a path name from stdin, according to the specified flags.
+ */
+static int read_path(char* path, size_t size)
+{
+  int c, i = 0;
+
+  if (null_terminate_flag)
+  {
+    while (i < size)
+    {
+      if ((c = fgetc(stdin)) == EOF)
+	return -1;
+
+      path[i++] = (char) c;
+      if (c == '\0')
+	break;
+    }
+  }
+  else
+  {
+    if (!fgets(path, size, stdin))
+      return -1;
+  }
+
+  return 0;
+}
+
 /* I don't know what this function does.
  * I just put it in because it looks cool.
  */
@@ -180,10 +212,13 @@ int main(int argc, char** argv)
   off_t limit;
   char path[PATH_MAX];
   
-  while ((ch = getopt(argc, argv, "HLPaef:hl:pqrtvz")) != -1)
+  while ((ch = getopt(argc, argv, "0HLPaef:hl:pqrtvz")) != -1)
   {
     switch (ch)
     {
+      case '0':
+	null_terminate_flag = 1;
+	break;
       case 'H':
 	follow_links_mode = ARG_SYMLINKS;
 	break;
@@ -250,6 +285,7 @@ int main(int argc, char** argv)
   {
     for (i = 0;  i < argc;  i++)
     {
+/* TODO: Correct proper behavior. */
 #if !LSTAT_FOLLOWS_SLASHED_SYMLINK
       /* Kill trailing slashes (except in "/") */
       while ((temp = strrchr(argv[i], '/')))
@@ -266,15 +302,12 @@ int main(int argc, char** argv)
   else
   {
     /* Read file names from stdin */
-    while (fgets(path, sizeof(path), stdin))
+    while (read_path(path, sizeof(path)) == 0)
     {
       if ((temp = strchr(path, '\n')))
 	*temp = '\0';
 
       process_path(path, 0);
-
-      if (feof(stdin) || ferror(stdin))
-	break;
     }
   }
   

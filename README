@@ -71,6 +71,7 @@ This release of duff has been successfully built on the following systems:
   FreeBSD 4.11 x86
   FreeBSD 5.4 x86
   NetBSD 1.6.1 sparc
+  Red Hat Enterprise 4.0 x86
   SunOS 5.9 sparc64
   Ubuntu Breezy x86
 

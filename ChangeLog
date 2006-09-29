@@ -3,7 +3,14 @@ Change log for duff
 
 Started as of version 0.3.1.
 
-2006-01-11  Camilla Berglund  <elmindreda@users.sourceforge.net> 
+2006-09-29  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.c (main) (usage): Added -0 option (credits to Clemens Lucas Fries).
+ * duff.c (read_path): Added function.
+ * duffdriver.c (report_clusters): Added -0 option (credits to Clemens Lucas Fries).
+ * duffutil.c (print_cluster_header): Removed newline termination.
+
+2006-01-11  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
  * duffdriver.c (stat_file): Added parenthesis to remove warning.
 
@@ -20,7 +27,7 @@ Started as of version 0.3.1.
 
 2006-01-08  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
- * join-duplicates.sh: Added file (credits to "Snow").
+ * join-duplicates.sh: Added file (credits to Ross Newell).
 
 2006-01-07  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
@@ -48,8 +55,8 @@ Started as of version 0.3.1.
 
 2006-01-03  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
- * duff.h: Added inode and device fields to struct Entry (credits to "Snow").
- * duffdriver.c (process_path): Implemented physical mode (credits to "Snow").
+ * duff.h: Added inode and device fields to struct Entry (credits to Ross Newell).
+ * duffdriver.c (process_path): Implemented physical mode (credits to Ross Newell).
  * duff.c (main, usage): Added -p option for physical mode.
 
  * duff.h: Added backlink to struct Entry.

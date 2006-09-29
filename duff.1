@@ -10,7 +10,7 @@
 .Nd duplicate file finder
 .Sh SYNOPSIS
 .Nm
-.Op Fl HLPaeqprtz
+.Op Fl 0HLPaeqprtz
 .Op Fl f Ar format
 .Op Fl l Ar limit
 .Op Ar
@@ -21,11 +21,13 @@
 .Sh DESCRIPTION
 The
 .Nm
-utility reports any clusters of duplicates in the specified files and/or directories.
-For each cluster of duplicate files,
+utility reports clusters of duplicates in the specified files and/or directories.
+In the default mode,
 .Nm
-prints a customizable header on one line,
-and then the names of all the files in the cluster, each on one line.
+prints a customizable header, followed by the names of all the files in the cluster.
+In excess mode,
+.Nm
+does not print a header, but instead for each cluster prints the names of all but the first of the files it includes.
 .Pp
 If no files are specified as arguments,
 .Nm
@@ -42,6 +44,11 @@ options now apply only to directories.
 .Pp
 The following options are available:
 .Bl -tag -width indent
+.It Fl 0
+If reading file names from stdin, assume they are null-terminated, instead of separated by newlines.
+Also, when printing file names and cluster headers, terminate them with null characters instead of newlines.
+.Pp
+This is useful for file names containing whitespace or other non-standard characters.
 .It Fl H
 Follow symbolic links listed on the command line.
 This overrides any previous
@@ -70,7 +77,7 @@ Note that this only applies to directories, as symbolic links to files are never
 .It Fl a
 Include hidden files and directories when searching recursively.
 .It Fl e
-Excess mode. List all excess files; i.e. all but one of each cluster of duplicates.
+Excess mode. List all excess files; i.e. all but the first one encountered of each cluster of duplicates.
 This is useful when you want to automate removal of duplicate files.
 .It Fl f Ar format
 Set the format of the cluster header.
@@ -140,9 +147,9 @@ The command:
 lists all duplicate files in the directory foo and its subdirectories.
 .Pp
 The command:
-.Dl find \&. -name '*.h' \&| duff
+.Dl find \&. -name '*.h' -print0 \&| duff -0
 .Pp
-lists all duplicate header files in the current directory and its subdirectories.
+lists all duplicate header files in the current directory and its subdirectories, correctly handling file names containing whitespace.
 .Sh DIAGNOSTICS
 .Ex -std
 .Sh "SEE ALSO"

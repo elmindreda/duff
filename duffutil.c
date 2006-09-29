@@ -118,8 +118,8 @@ const char* get_mode_name(int mode)
 
 /* Prints a duplicate cluster header to stdout.  Various escape
  * sequences in the format string are replaced with the provided values.
- * This should probably be a fancy, dynamically allocating string
- * generating function, but I don't see any practical reason for that.
+ * Note that this function does not terminate the output with any
+ * special character.
  */
 void print_cluster_header(const char* format,
                           unsigned int count,
@@ -167,7 +167,5 @@ void print_cluster_header(const char* format,
     else
       putchar(*c);
   }
-  
-  putchar('\n');
 }
 

@@ -8,7 +8,7 @@ Duff contains and uses the SHA1 message digest code from the sha-asaddi
 package, which was written by Allan Saddi <allan@saddi.com>.  See the
 files `sha1.c' or `sha1.h' for copyright and license details.
 
-Ideas, suggestions, spelling corrections and bug fixes have been
+Ideas, suggestions, spelling corrections and bug reports have been
 contributed by various people, and they are noted in the appropriate
 entries of the `ChangeLog' file.
 
@@ -16,6 +16,5 @@ entries of the `ChangeLog' file.
 Supporting files
 ================
 
-The `join-duplicates.sh' script was originally written by a person
-who so far is only known to me as "Snow".
+The `join-duplicates.sh' script was originally written by Ross Newell.
 

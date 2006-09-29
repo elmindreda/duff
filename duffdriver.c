@@ -69,7 +69,20 @@
 #endif
 
 #if HAVE_DIRENT_H
-#include <dirent.h>
+  #include <dirent.h>
+  #define NAMLEN(dirent) strlen((dirent)->d_name)
+#else
+  #define dirent direct
+  #define NAMLEN(dirent) (dirent)->d_namlen
+#if HAVE_SYS_NDIR_H
+  #include <sys/ndir.h>
+  #endif
+    #if HAVE_SYS_DIR_H
+      #include <sys/dir.h>
+    #endif
+  #if HAVE_NDIR_H
+    #include <ndir.h>
+  #endif
 #endif
 
 #include "duffstring.h"
@@ -79,6 +92,7 @@
  */
 extern int follow_links_mode;
 extern int all_files_flag;
+extern int null_terminate_flag;
 extern int recursive_flag;
 extern int ignore_empty_flag;
 extern int quiet_flag;
@@ -108,6 +122,7 @@ static void report_cluster(struct Entry* duplicates,
  */
 static int stat_file(const char* path, struct stat* sb, int depth)
 {
+/* TODO: Implement proper behavior. */
 #if HAVE_LSTAT_EMPTY_STRING_BUG || HAVE_STAT_EMPTY_STRING_BUG
   if (*path == '\0')
     return -1;
@@ -307,7 +322,14 @@ static void report_cluster(struct Entry* duplicates,
     /* Report all but the first entry in the cluster */
     for (entry = duplicates->next;  entry;  entry = entry->next)
     {
-      printf("%s\n", entry->path);
+      if (null_terminate_flag)
+      {
+	fputs(entry->path, stdout);
+	fputc('\0', stdout);
+      }
+      else
+	printf("%s\n", entry->path);
+
       entry->status = REPORTED;
     }
   }
@@ -316,15 +338,29 @@ static void report_cluster(struct Entry* duplicates,
     /* Print header and report all entries in the cluster */
 
     if (*header_format != '\0')
+    {
       print_cluster_header(header_format,
 			   count,
 			   number,
 			   duplicates->size,
 			   duplicates->checksum);
 
+      if (null_terminate_flag)
+	fputc('\0', stdout);
+      else
+	fputc('\n', stdout);
+    }
+
     for (entry = duplicates;  entry;  entry = entry->next)
     {
-      printf("%s\n", entry->path);
+      if (null_terminate_flag)
+      {
+	fputs(entry->path, stdout);
+	fputc('\0', stdout);
+      }
+      else
+	printf("%s\n", entry->path);
+
       entry->status = REPORTED;
     }
   }

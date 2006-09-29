@@ -1,6 +1,11 @@
 User-visible changes in duff
 ============================
 
+Version 0.5
+-----------
+
+* Added flag to handle null-terminated file names (-0).
+
 Version 0.4
 -----------
 
