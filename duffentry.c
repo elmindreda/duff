@@ -262,7 +262,7 @@ static int get_entry_checksum(struct Entry* entry)
 /* This function defines the high-level comparison algorithm, using
  * lower level primitives.  This is the place to change or add
  * calls to comparison modes.  The general idea is to find proof of
- * un-equality as soon and as quickly as possible.
+ * equality or un-equality as early and as quickly as possible.
  */
 int compare_entries(struct Entry* first, struct Entry* second)
 {
@@ -275,14 +275,16 @@ int compare_entries(struct Entry* first, struct Entry* second)
       return -1;
   }
 
-  /* NOTE: Skip checksumming if potential cluster only has two entries?
-   * NOTE: Requires knowledge from higher level */
-  if (compare_entry_checksums(first, second) != 0)
-    return -1;
-
   if (thorough_flag)
   {
     if (compare_entry_contents(first, second) != 0)
+      return -1;
+  }
+  else
+  {
+    /* NOTE: Skip checksumming if potential cluster only has two entries?
+     * NOTE: Requires knowledge from higher level */
+    if (compare_entry_checksums(first, second) != 0)
       return -1;
   }
 
