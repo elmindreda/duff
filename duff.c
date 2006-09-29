@@ -285,8 +285,6 @@ int main(int argc, char** argv)
   {
     for (i = 0;  i < argc;  i++)
     {
-/* TODO: Correct proper behavior. */
-#if !LSTAT_FOLLOWS_SLASHED_SYMLINK
       /* Kill trailing slashes (except in "/") */
       while ((temp = strrchr(argv[i], '/')))
       {
@@ -294,7 +292,6 @@ int main(int argc, char** argv)
 	  break;
 	*temp = '\0';
       }
-#endif
 
       process_path(argv[i], 0);
     }
