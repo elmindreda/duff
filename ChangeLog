@@ -3,6 +3,12 @@ Change log for duff
 
 Started as of version 0.3.1.
 
+2006-10-07  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.c (main): Always kill trailing slashes (and in a nicer way).
+ * duff.c (kill_trailing_slashes): Added function.
+ * duff.c (main) (read_path): Don't kill newlines for -0 option.
+
 2006-09-29  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
  * duff.c (main) (usage): Added -0 option (credits to Clemens Lucas Fries).

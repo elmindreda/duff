@@ -180,6 +180,7 @@ static void bugs(void)
 static int read_path(char* path, size_t size)
 {
   int c, i = 0;
+  size_t length;
 
   if (null_terminate_flag)
   {
@@ -197,9 +198,28 @@ static int read_path(char* path, size_t size)
   {
     if (!fgets(path, size, stdin))
       return -1;
+
+    /* Kill newline terminator, if present */
+    length = strlen(path);
+    if ((length > 0) && (path[length - 1] == '\n'))
+      path[length - 1] = '\0';
   }
 
   return 0;
+}
+
+/* Kills trailing slashes in the specified path (except if it's /).
+ */
+static void kill_trailing_slashes(char* path)
+{
+  char* temp;
+
+  while ((temp = strrchr(path, '/')))
+  {
+    if (temp == path || *(temp + 1) != '\0')
+      break;
+    *temp = '\0';
+  }
 }
 
 /* I don't know what this function does.
@@ -283,16 +303,10 @@ int main(int argc, char** argv)
 
   if (argc)
   {
+    /* Read file names from command line */
     for (i = 0;  i < argc;  i++)
     {
-      /* Kill trailing slashes (except in "/") */
-      while ((temp = strrchr(argv[i], '/')))
-      {
-	if (temp == argv[i] || *(temp + 1) != '\0')
-	  break;
-	*temp = '\0';
-      }
-
+      kill_trailing_slashes(argv[i]);
       process_path(argv[i], 0);
     }
   }
@@ -301,9 +315,7 @@ int main(int argc, char** argv)
     /* Read file names from stdin */
     while (read_path(path, sizeof(path)) == 0)
     {
-      if ((temp = strchr(path, '\n')))
-	*temp = '\0';
-
+      kill_trailing_slashes(path);
       process_path(path, 0);
     }
   }
