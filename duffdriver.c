@@ -88,6 +88,12 @@
 #include "duffstring.h"
 #include "duff.h"
 
+struct SortEntry
+{
+  off_t size;
+  struct Entry* entry;
+};
+
 /* These flags are defined and documented in duff.c.
  */
 extern int follow_links_mode;
@@ -106,6 +112,12 @@ static struct Entry* file_entries = NULL;
 /* List head for traversed directories.
  */
 static struct Directory* directories = NULL;
+/* List of entries sorted by size.
+ */
+static struct SortEntry* sorted_entries = NULL;
+/* Number of collected entries.
+ */
+static size_t entry_count = 0;
 
 /* These functions are documented below, where they are defined.
  */
@@ -122,7 +134,6 @@ static void report_cluster(struct Entry* duplicates,
  */
 static int stat_file(const char* path, struct stat* sb, int depth)
 {
-/* TODO: Implement proper behavior. */
 #if HAVE_LSTAT_EMPTY_STRING_BUG || HAVE_STAT_EMPTY_STRING_BUG
   if (*path == '\0')
     return -1;
@@ -274,7 +285,7 @@ void process_path(const char* path, int depth)
 
       if (physical_flag)
       {
-	/* TODO: Make this less suboptimal */
+	/* TODO: Make this less pessimal */
 
 	for (entry = file_entries;  entry;  entry = entry->next)
 	{
@@ -284,7 +295,10 @@ void process_path(const char* path, int depth)
       }
 
       if ((entry = make_entry(path, &sb)) != NULL)
+      {
 	link_entry(&file_entries, entry);
+	entry_count++;
+      }
 
       break;
     }
@@ -366,6 +380,25 @@ static void report_cluster(struct Entry* duplicates,
   }
 }
 
+/* Fish.
+ */
+static void sort_entries(void)
+{
+  int index = 0;
+  struct Entry* entry;
+
+  sorted_entries = (struct SortEntry*) malloc(entry_count * sizeof(struct SortEntry));
+
+  for (entry = file_entries;  entry;  entry = entry->next)
+  {
+    sorted_entries[index].size = entry->size;
+    sorted_entries[index].entry = entry;
+    index++;
+  }
+
+  /* TODO: Sort entries */
+}
+
 /* Finds and reports all duplicate clusters among the collected entries.
  */
 void report_clusters(void)
@@ -376,7 +409,7 @@ void report_clusters(void)
   struct Entry* entry_next;
   struct Entry* duplicates = NULL;
 
-  /* TODO: Implement a more efficient data structure */
+  sort_entries();
 
   while ((base = file_entries) != NULL)
   {

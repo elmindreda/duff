@@ -6,6 +6,7 @@ Functionality
 * Implement i18n through gettext.
 * Detect duplicate file arguments?
 * Detect duplicate directory subtrees?
+* Switch from SHA1 to non-broken hash.
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage.

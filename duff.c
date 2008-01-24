@@ -147,25 +147,25 @@ static void version(void)
  */
 static void usage(void)
 {
-  fprintf(stderr, "usage: %s [-0HLPaepqrt] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
+  fprintf(stderr, "usage: %s [-0HLPaepqrtz] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -h\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
-  fprintf(stderr, "options:\n");
-  fprintf(stderr, "  -0  read and write file names terminated by a null character\n");
-  fprintf(stderr, "  -H  follow symbolic links on the command line\n");
-  fprintf(stderr, "  -L  follow all symbolic links\n");
-  fprintf(stderr, "  -P  do not follow any symbolic links (default)\n");
-  fprintf(stderr, "  -a  all files; include hidden files when searching recursively\n");
-  fprintf(stderr, "  -e  excess files mode, print excess files\n");
-  fprintf(stderr, "  -f  header format; set format for cluster headers\n");
-  fprintf(stderr, "  -h  show this help\n");
-  fprintf(stderr, "  -l  size limit; the minimal size that activates sampling\n");
-  fprintf(stderr, "  -q  quiet; suppress warnings and error messages\n");
-  fprintf(stderr, "  -p  physical mode; do not report multiple links\n");
-  fprintf(stderr, "  -r  recursive; search in specified directories\n");
-  fprintf(stderr, "  -t  thorough; force byte-by-byte comparison of files\n");
-  fprintf(stderr, "  -v  show version information\n");
-  fprintf(stderr, "  -z  do not report empty files\n");
+  fprintf(stderr, "options:\n"
+                  "  -0  read and write file names terminated by a null character\n"
+                  "  -H  follow symbolic links on the command line\n"
+                  "  -L  follow all symbolic links\n"
+                  "  -P  do not follow any symbolic links (default)\n"
+                  "  -a  all files; include hidden files when searching recursively\n"
+                  "  -e  excess files mode, print excess files\n"
+                  "  -f  header format; set format for cluster headers\n"
+                  "  -h  show this help\n"
+                  "  -l  size limit; the minimal size that activates sampling\n"
+                  "  -q  quiet; suppress warnings and error messages\n"
+                  "  -p  physical mode; do not report multiple links\n"
+                  "  -r  recursive; search in specified directories\n"
+                  "  -t  thorough; force byte-by-byte comparison of files\n"
+                  "  -v  show version information\n"
+                  "  -z  do not report empty files\n");
 }
 
 /* Prints bug report address to stderr.

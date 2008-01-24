@@ -5,6 +5,7 @@ Version 0.5
 -----------
 
 * Added flag to handle null-terminated file names (-0).
+* Improved handling of symbolic links to directories.
 
 Version 0.4
 -----------
