@@ -15,12 +15,12 @@ Cluster n.
 Directory n.
   A physical directory (inode, not link) which has been searched for entries.
 
+Function n.
+  A specific message digest function.
+
 Invalid a.
   An entry becomes invalid if any stage of data gathering failed on it.  An
   invalid entry should not be modified or operated upon.
-
-Function n.
-  A specific message digest function.
 
 
 Important files
