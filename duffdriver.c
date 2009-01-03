@@ -357,7 +357,7 @@ static void report_cluster(struct Entry* duplicates,
 			   count,
 			   number,
 			   duplicates->size,
-			   duplicates->checksum);
+			   duplicates->digest);
 
       if (null_terminate_flag)
 	fputc('\0', stdout);

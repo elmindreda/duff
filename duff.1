@@ -11,6 +11,7 @@
 .Sh SYNOPSIS
 .Nm
 .Op Fl 0HLPaeqprtz
+.Op Fl c Ar function
 .Op Fl f Ar format
 .Op Fl l Ar limit
 .Op Ar
@@ -76,6 +77,12 @@ This is the default.
 Note that this only applies to directories, as symbolic links to files are never followed.
 .It Fl a
 Include hidden files and directories when searching recursively.
+.It Fl c Ar function
+Hash function to use.
+The supported functions are 
+.Ar sha1 , sha256 , sha384
+and
+.Ar sha512 .
 .It Fl e
 Excess mode. List all excess files; i.e. all but the first one encountered of each cluster of duplicates.
 This is useful when you want to automate removal of duplicate files.
@@ -88,7 +95,7 @@ The following escape sequences are available:
 .It Cm %n
 The number of files in the cluster.
 .It Cm %c
-The SHA1 checksum of files in the cluster.
+The message digest (hash) of files in the cluster.
 .It Cm %i
 The one-based index of the file cluster.
 .It Cm %s

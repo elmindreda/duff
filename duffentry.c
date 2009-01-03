@@ -59,6 +59,10 @@
 #endif
 
 #include "sha1.h"
+#include "sha256.h"
+#include "sha384.h"
+#include "sha512.h"
+
 #include "duff.h"
 
 /* These flags are defined and documented in duff.c.
@@ -66,12 +70,17 @@
 extern int quiet_flag;
 extern int thorough_flag;
 extern off_t sample_limit;
+extern enum Function digest_function;
 
 /* These functions are documented below, where they are defined.
  */
 static int get_entry_samples(struct Entry* entry);
-static int get_entry_checksum(struct Entry* entry);
-static int compare_entry_checksums(struct Entry* first, struct Entry* second);
+static int get_entry_digest(struct Entry* entry);
+static int get_entry_digest_sha1(uint8_t** result, FILE* file);
+static int get_entry_digest_sha256(uint8_t** result, FILE* file);
+static int get_entry_digest_sha384(uint8_t** result, FILE* file);
+static int get_entry_digest_sha512(uint8_t** result, FILE* file);
+static int compare_entry_digests(struct Entry* first, struct Entry* second);
 static int compare_entry_samples(struct Entry* first, struct Entry* second);
 static int compare_entry_contents(struct Entry* first, struct Entry* second);
 
@@ -89,7 +98,7 @@ struct Entry* make_entry(const char* path, const struct stat* sb)
   entry->device = sb->st_dev;
   entry->inode = sb->st_ino;
   entry->status = UNTOUCHED;
-  entry->checksum = NULL;
+  entry->digest = NULL;
   entry->samples = NULL;
   
   return entry;
@@ -136,7 +145,7 @@ void free_entry(struct Entry* entry)
   assert(entry->next == NULL);
 
   free(entry->samples);
-  free(entry->checksum);
+  free(entry->digest);
   free(entry->path);
   free(entry);
 }
@@ -203,22 +212,18 @@ static int get_entry_samples(struct Entry* entry)
   return 0;
 }
 
-/* Calculates the checksum of a file, if needed.
+/* Calculates the digest of a file, if needed.
  */
-static int get_entry_checksum(struct Entry* entry)
+static int get_entry_digest(struct Entry* entry)
 {
   FILE* file;
-  size_t size;
-  char buffer[8192];
-  SHA1Context context;
+  int result;
   
   if (entry->status == INVALID)
     return -1;
-  if (entry->checksum)
+  if (entry->digest)
     return 0;
   
-  SHA1Init(&context);
-
   if (entry->size > 0)
   {
     file = fopen(entry->path, "rb");
@@ -231,31 +236,140 @@ static int get_entry_checksum(struct Entry* entry)
       return -1;
     }
 
-    for (;;)
+    switch (digest_function)
     {
-      size = fread(buffer, 1, sizeof(buffer), file);
-      if (ferror(file))
-      {
-	fclose(file);
-    
-	if (!quiet_flag)
-	  warning("%s: %s", entry->path, strerror(errno));
-
-	entry->status = INVALID;
-	return -1;
-      }
-
-      if (size == 0)
+      case SHA_1:
+	result = get_entry_digest_sha1(&(entry->digest), file);
 	break;
 
-      SHA1Update(&context, buffer, size);
+      case SHA_256:
+	result = get_entry_digest_sha256(&(entry->digest), file);
+	break;
+
+      case SHA_384:
+	result = get_entry_digest_sha384(&(entry->digest), file);
+	break;
+
+      case SHA_512:
+	result = get_entry_digest_sha512(&(entry->digest), file);
+	break;
+
+      default:
+	error("This cannot happen");
     }
 
     fclose(file);
+
+    if (result)
+    {
+      if (!quiet_flag)
+	warning("%s: %s", entry->path, strerror(errno));
+
+      entry->status = INVALID;
+      return -1;
+    }
   }
 
-  entry->checksum = (uint8_t*) malloc(SHA1_HASH_SIZE);
-  SHA1Final(&context, entry->checksum);
+  return 0;
+}
+
+static int get_entry_digest_sha1(uint8_t** result, FILE* file)
+{
+  size_t size;
+  char buffer[8192];
+  SHA1Context context;
+  
+  SHA1Init(&context);
+
+  for (;;)
+  {
+    size = fread(buffer, 1, sizeof(buffer), file);
+    if (ferror(file))
+      return -1;
+
+    if (size == 0)
+      break;
+
+    SHA1Update(&context, buffer, size);
+  }
+
+  *result = (uint8_t*) malloc(SHA1_HASH_SIZE);
+  SHA1Final(&context, *result);
+  return 0;
+}
+
+int get_entry_digest_sha256(uint8_t** result, FILE* file)
+{
+  size_t size;
+  char buffer[8192];
+  SHA256Context context;
+  
+  SHA256Init(&context);
+
+  for (;;)
+  {
+    size = fread(buffer, 1, sizeof(buffer), file);
+    if (ferror(file))
+      return -1;
+
+    if (size == 0)
+      break;
+
+    SHA256Update(&context, buffer, size);
+  }
+
+  *result = (uint8_t*) malloc(SHA256_HASH_SIZE);
+  SHA256Final(&context, *result);
+  return 0;
+}
+
+int get_entry_digest_sha384(uint8_t** result, FILE* file)
+{
+  size_t size;
+  char buffer[8192];
+  SHA384Context context;
+  
+  SHA384Init(&context);
+
+  for (;;)
+  {
+    size = fread(buffer, 1, sizeof(buffer), file);
+    if (ferror(file))
+      return -1;
+
+    if (size == 0)
+      break;
+
+    SHA384Update(&context, buffer, size);
+  }
+
+  *result = (uint8_t*) malloc(SHA384_HASH_SIZE);
+  SHA384Final(&context, *result);
+  return 0;
+}
+
+int get_entry_digest_sha512(uint8_t** result, FILE* file)
+{
+  size_t size;
+  char buffer[8192];
+  SHA512Context context;
+  
+  SHA512Init(&context);
+
+  for (;;)
+  {
+    size = fread(buffer, 1, sizeof(buffer), file);
+    if (ferror(file))
+      return -1;
+
+    if (size == 0)
+      break;
+
+    SHA512Update(&context, buffer, size);
+  }
+
+  *result = (uint8_t*) malloc(SHA512_HASH_SIZE);
+  SHA512Final(&context, *result);
   return 0;
 }
 
@@ -282,29 +396,29 @@ int compare_entries(struct Entry* first, struct Entry* second)
   }
   else
   {
-    /* NOTE: Skip checksumming if potential cluster only has two entries?
+    /* NOTE: Skip calculating digests if potential cluster only has two entries?
      * NOTE: Requires knowledge from higher level */
-    if (compare_entry_checksums(first, second) != 0)
+    if (compare_entry_digests(first, second) != 0)
       return -1;
   }
 
   return 0;
 }
 
-/* Compares the checksums of two files, generating them if neccessary.
+/* Compares the digests of two files, generating them if neccessary.
  */
-static int compare_entry_checksums(struct Entry* first, struct Entry* second)
+static int compare_entry_digests(struct Entry* first, struct Entry* second)
 {
   int i;
 
-  if (get_entry_checksum(first) != 0)
+  if (get_entry_digest(first) != 0)
     return -1;
 
-  if (get_entry_checksum(second) != 0)
+  if (get_entry_digest(second) != 0)
     return -1;
 
   for (i = 0;  i < SHA1_HASH_SIZE;  i++)
-    if (first->checksum[i] != second->checksum[i])
+    if (first->digest[i] != second->digest[i])
       return -1;
 
   return 0;

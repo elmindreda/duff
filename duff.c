@@ -108,7 +108,7 @@ int physical_flag = 0;
  * Useful for `xargs rm'.
  */
 int excess_flag = 0;
-/* The 'paranoid' flag.  Makes the program distrust checksums, forcing
+/* The 'paranoid' flag.  Makes the program distrust message digests, forcing
  * byte-by-byte comparisons.
  */
 int thorough_flag = 0;
@@ -124,6 +124,9 @@ const char* header_format = DEFAULT_HEADER_FORMAT;
  * compared with the sampling method.
  */
 off_t sample_limit = DEFAULT_SIZE_LIMIT;
+/* The message digest function to use.
+ */
+enum Function digest_function = SHA_1;
 
 /* These functions are documented below, where they are defined.
  */
@@ -147,7 +150,7 @@ static void version(void)
  */
 static void usage(void)
 {
-  fprintf(stderr, "usage: %s [-0HLPaepqrtz] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
+  fprintf(stderr, "usage: %s [-0HLPaepqrtz] [-c function] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -h\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
   fprintf(stderr, "options:\n"
@@ -156,6 +159,7 @@ static void usage(void)
                   "  -L  follow all symbolic links\n"
                   "  -P  do not follow any symbolic links (default)\n"
                   "  -a  all files; include hidden files when searching recursively\n"
+		  "  -c  the hash function to use\n"
                   "  -e  excess files mode, print excess files\n"
                   "  -f  header format; set format for cluster headers\n"
                   "  -h  show this help\n"
@@ -232,7 +236,7 @@ int main(int argc, char** argv)
   off_t limit;
   char path[PATH_MAX];
   
-  while ((ch = getopt(argc, argv, "0HLPaef:hl:pqrtvz")) != -1)
+  while ((ch = getopt(argc, argv, "0HLPac:ef:hl:pqrtvz")) != -1)
   {
     switch (ch)
     {
@@ -251,6 +255,18 @@ int main(int argc, char** argv)
       case 'a':
         all_files_flag = 1;
         break;
+      case 'c':
+	if (strcmp(optarg, "sha1") == 0)
+	  digest_function = SHA_1;
+	else if (strcmp(optarg, "sha256") == 0)
+	  digest_function = SHA_256;
+	else if (strcmp(optarg, "sha384") == 0)
+	  digest_function = SHA_384;
+	else if (strcmp(optarg, "sha512") == 0)
+	  digest_function = SHA_512;
+	else
+	  error("Unknown hash function %s", optarg);
+	break;
       case 'e':
         excess_flag = 1;
 	break;

@@ -53,8 +53,42 @@
 #endif
 
 #include "sha1.h"
+#include "sha256.h"
+#include "sha384.h"
+#include "sha512.h"
+
 #include "duffstring.h"
 #include "duff.h"
+
+/* These flags are defined and documented in duff.c.
+ */
+extern enum Function digest_function;
+
+static void print_message_digest(const uint8_t* digest)
+{
+  int i, size;
+
+  switch (digest_function)
+  {
+    case SHA_1:
+      size = SHA1_HASH_SIZE;
+      break;
+    case SHA_256:
+      size = SHA256_HASH_SIZE;
+      break;
+    case SHA_384:
+      size = SHA384_HASH_SIZE;
+      break;
+    case SHA_512:
+      size = SHA512_HASH_SIZE;
+      break;
+    default:
+      error("This cannot happen");
+  }
+
+  for (i = 0;  i < size;  i++)
+    printf("%02x", digest[i]);
+}
 
 /* Prints a formatted message to stderr and exist with non-zero status.
  */
@@ -125,7 +159,7 @@ void print_cluster_header(const char* format,
                           unsigned int count,
 			  unsigned int index,
 			  off_t size,
-			  const uint8_t* checksum)
+			  const uint8_t* digest)
 {
   int i;
   const char* c;
@@ -147,8 +181,7 @@ void print_cluster_header(const char* format,
 	  printf("%u", count);
 	  break;
 	case 'c':
-	  for (i = 0;  i < SHA1_HASH_SIZE;  i++)
-	    printf("%02x", checksum[i]);
+	  print_message_digest(digest);
 	  break;
 	case '%':
 	  putchar('%');

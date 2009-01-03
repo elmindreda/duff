@@ -75,8 +75,18 @@ struct Entry
   dev_t device;
   ino_t inode;
   int status;
-  uint8_t* checksum;
+  uint8_t* digest;
   uint8_t* samples;
+};
+
+/*
+ */
+enum Function
+{
+  SHA_1,
+  SHA_256,
+  SHA_384,
+  SHA_512,
 };
 
 /* These are defined and documented in duffentry.c */
@@ -95,7 +105,7 @@ void print_cluster_header(const char* format,
                           unsigned int count,
 			  unsigned int index,
 			  off_t size,
-			  const uint8_t* checksum);
+			  const uint8_t* digest);
 
 /* These are defined and documented in duffdriver.c */
 void process_path(const char* path, int depth);
