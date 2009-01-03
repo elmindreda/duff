@@ -19,6 +19,9 @@ Invalid a.
   An entry becomes invalid if any stage of data gathering failed on it.  An
   invalid entry should not be modified or operated upon.
 
+Function n.
+  A specific message digest function.
+
 
 Important files
 ===============
@@ -41,8 +44,8 @@ duffutil.c
 duff.h
   Main header file.
 
-sha1.c sha1.h
-  Implements SHA1 checksum calculation.
+sha1.c sha1.h sha256.c sha256.h sha384.c sha384.h sha512.c sha512.h
+  Implements SHA message digest calculation.
 
 
 Important functions
@@ -53,8 +56,8 @@ duffentry.c: compare_entries()
   the comparison algorithm.
 
 duffentry.c: compare_entry_*() and get_entry_*()
-  Compares and collects various entry attributes, respectively.  Start here if
-  you wish to modify one of the existing comparison methods.
+  Calculates and compares various entry attributes, respectively.  Start here
+  if you wish to modify one of the existing comparison methods.
 
 duffdriver.c: process_path() and recurse_directory()
   The main functions for collecting files and making entries.  Start here if
