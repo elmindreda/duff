@@ -26,7 +26,8 @@
 #include "config.h"
 #endif
 
-#define _GNU_SOURCE
+#define _GNU_SOURCE 1
+#define _FILE_OFFSET_BITS 64
 
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
@@ -172,7 +173,7 @@ void print_cluster_header(const char* format,
       switch (*c)
       {
 	case 's':
-	  printf("%llu", (unsigned long long int) size);
+	  printf("%lli", size);
 	  break;
 	case 'i':
 	  printf("%u", index);

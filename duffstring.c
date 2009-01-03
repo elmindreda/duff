@@ -26,6 +26,9 @@
 #include "config.h"
 #endif
 
+#define _GNU_SOURCE 1
+#define _FILE_OFFSET_BITS 64
+
 #if HAVE_STDARG_H
 #include <stdarg.h>
 #endif

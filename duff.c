@@ -26,7 +26,8 @@
 #include "config.h"
 #endif
 
-#define _GNU_SOURCE
+#define _GNU_SOURCE 1
+#define _FILE_OFFSET_BITS 64
 
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
@@ -235,7 +236,7 @@ int main(int argc, char** argv)
   char* temp;
   off_t limit;
   char path[PATH_MAX];
-  
+
   while ((ch = getopt(argc, argv, "0HLPac:ef:hl:pqrtvz")) != -1)
   {
     switch (ch)
