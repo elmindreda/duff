@@ -14,8 +14,6 @@ AC_DEFINE([DEFAULT_SIZE_LIMIT], [1048576], \
   [The default size limit for sampling.])
 AC_DEFINE([DEFAULT_HEADER_FORMAT], ["%n files in cluster %i (%s bytes, checksum %c)"], \
   [The default cluster header format.])
-AC_DEFINE([DEFAULT_DIGEST_FUNCTION], [SHA_1], \
-  [The default message digest function.])
 
 # Checks for programs.
 AC_PROG_CC

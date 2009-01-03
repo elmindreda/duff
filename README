@@ -41,9 +41,9 @@ Duff is copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
 Duff is licensed under the zlib/libpng license.  See the file `COPYING' for
 license details.  The license is also included at the top of each source file.
 
-Duff contains sha1-asaddi.
+Duff contains shax-asaddi.
 Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>
-See the files `sha1.c' or `sha1.h' for license details.
+See the files `sha*.c' or `sha*.h' for license details.
 
 
 2. Project news

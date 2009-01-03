@@ -3,6 +3,22 @@ Change log for duff
 
 Started as of version 0.3.1.
 
+2009-01-03  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * sha256.c: Added file.
+ * sha256.h: Added file.
+ * sha384.c: Added file.
+ * sha384.h: Added file.
+ * sha512.c: Added file.
+ * sha512.h: Added file.
+ * duffutil.c (print_message_digest): Added function.
+ * duffutil.c (print_cluster_header): Added call to print_message_digest.
+ * duffentry.c (get_entry_digest): Added support for digest function selection.
+ * duffentry.c (get_entry_digest_sha1) (get_entry_digest_sha256)
+   (get_entry_digest_sha384) (get_entry_digest_sha512): Added function.
+ * duff.c (main) (usage): Added -c option for selecting digest function.
+ * duff.h: Added digest function enumeration.
+
 2006-10-07  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
  * duff.c (main): Always kill trailing slashes (and in a nicer way).
