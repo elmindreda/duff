@@ -19,6 +19,8 @@ Started as of version 0.3.1.
  * duff.c (main) (usage): Added -c option for selecting digest function.
  * duff.h: Added digest function enumeration.
 
+ * duff.c duffdriver.c duffentry.c duffstring.c duffutil.c: Made off_t 64-bit on glibc.
+
 2006-10-07  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
  * duff.c (main): Always kill trailing slashes (and in a nicer way).
