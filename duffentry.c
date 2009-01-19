@@ -26,6 +26,8 @@
 #include "config.h"
 #endif
 
+/* Macros to get 64-bit off_t
+ */
 #define _GNU_SOURCE 1
 #define _FILE_OFFSET_BITS 64
 
@@ -258,7 +260,7 @@ static int get_entry_digest(struct Entry* entry)
 	break;
 
       default:
-	error("This cannot happen");
+	error(gettext("This cannot happen"));
     }
 
     fclose(file);
@@ -276,6 +278,8 @@ static int get_entry_digest(struct Entry* entry)
   return 0;
 }
 
+/* Calculates and returns the SHA-1 digest of the specified file.
+ */
 static int get_entry_digest_sha1(uint8_t** result, FILE* file)
 {
   size_t size;
@@ -301,6 +305,8 @@ static int get_entry_digest_sha1(uint8_t** result, FILE* file)
   return 0;
 }
 
+/* Calculates and returns the SHA-256 digest of the specified file.
+ */
 int get_entry_digest_sha256(uint8_t** result, FILE* file)
 {
   size_t size;
@@ -326,6 +332,8 @@ int get_entry_digest_sha256(uint8_t** result, FILE* file)
   return 0;
 }
 
+/* Calculates and returns the SHA-384 digest of the specified file.
+ */
 int get_entry_digest_sha384(uint8_t** result, FILE* file)
 {
   size_t size;
@@ -351,6 +359,8 @@ int get_entry_digest_sha384(uint8_t** result, FILE* file)
   return 0;
 }
 
+/* Calculates and returns the SHA-512 digest of the specified file.
+ */
 int get_entry_digest_sha512(uint8_t** result, FILE* file)
 {
   size_t size;
@@ -408,11 +418,11 @@ int compare_entries(struct Entry* first, struct Entry* second)
   return 0;
 }
 
-/* Compares the digests of two files, generating them if neccessary.
+/* Compares the digests of two files, calculating them if neccessary.
  */
 static int compare_entry_digests(struct Entry* first, struct Entry* second)
 {
-  int i;
+  int i, digest_size;
 
   if (get_entry_digest(first) != 0)
     return -1;
@@ -420,7 +430,8 @@ static int compare_entry_digests(struct Entry* first, struct Entry* second)
   if (get_entry_digest(second) != 0)
     return -1;
 
-  for (i = 0;  i < SHA1_HASH_SIZE;  i++)
+  digest_size = get_digest_size();
+  for (i = 0;  i < digest_size;  i++)
     if (first->digest[i] != second->digest[i])
       return -1;
 

@@ -26,6 +26,8 @@
 #include "config.h"
 #endif
 
+/* Macros to get 64-bit off_t
+ */
 #define _GNU_SOURCE 1
 #define _FILE_OFFSET_BITS 64
 
@@ -43,10 +45,8 @@
 
 #if HAVE_INTTYPES_H
 #include <inttypes.h>
-#else
-#if HAVE_STDINT_H
+#elif HAVE_STDINT_H
 #include <stdint.h>
-#endif
 #endif
 
 #if HAVE_ERRNO_H
@@ -75,6 +75,10 @@
 
 #if HAVE_LIMITS_H
 #include <limits.h>
+#endif
+
+#if HAVE_LOCALE_H
+#include <locale.h>
 #endif
 
 #include "duffstring.h"
@@ -120,11 +124,11 @@ int ignore_empty_flag = 0;
 /* The 'header format' value.  Specifies the look of the cluster header.
  * If set to the empty string, no headers are printed.
  */
-const char* header_format = DEFAULT_HEADER_FORMAT;
+const char* header_format = "%n files in cluster %i (%s bytes, digest %d)";
 /* The 'sample limit' value.  Specifies the minimal size of files to be
  * compared with the sampling method.
  */
-off_t sample_limit = DEFAULT_SIZE_LIMIT;
+off_t sample_limit = 1048576;
 /* The message digest function to use.
  */
 enum Function digest_function = SHA_1;
@@ -139,10 +143,10 @@ static void bugs(void);
  */
 static void version(void)
 {
-  fprintf(stderr, "%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
-  fprintf(stderr, "Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>\n");
-  fprintf(stderr, "%s contains sha1-asaddi\n", PACKAGE_NAME);
-  fprintf(stderr, "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n");
+  fprintf(stderr, "%s\n", PACKAGE_STRING);
+  fprintf(stderr, gettext("Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>\n"));
+  fprintf(stderr, gettext("%s contains shaX-asaddi\n"), PACKAGE_NAME);
+  fprintf(stderr, gettext("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
 }
 
 /* Prints brief help information to stderr.
@@ -151,7 +155,9 @@ static void version(void)
  */
 static void usage(void)
 {
-  fprintf(stderr, "usage: %s [-0HLPaepqrtz] [-c function] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
+  /* TODO: Internationalize this */
+
+  fprintf(stderr, "usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -h\n", PACKAGE_NAME);
   fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
   fprintf(stderr, "options:\n"
@@ -160,7 +166,7 @@ static void usage(void)
                   "  -L  follow all symbolic links\n"
                   "  -P  do not follow any symbolic links (default)\n"
                   "  -a  all files; include hidden files when searching recursively\n"
-		  "  -c  the hash function to use\n"
+		  "  -d  the message digest function to use\n"
                   "  -e  excess files mode, print excess files\n"
                   "  -f  header format; set format for cluster headers\n"
                   "  -h  show this help\n"
@@ -177,54 +183,7 @@ static void usage(void)
  */
 static void bugs(void)
 {
-  fprintf(stderr, "Report bugs to <%s>\n", PACKAGE_BUGREPORT);
-}
-
-/* Reads a path name from stdin, according to the specified flags.
- */
-static int read_path(char* path, size_t size)
-{
-  int c, i = 0;
-  size_t length;
-
-  if (null_terminate_flag)
-  {
-    while (i < size)
-    {
-      if ((c = fgetc(stdin)) == EOF)
-	return -1;
-
-      path[i++] = (char) c;
-      if (c == '\0')
-	break;
-    }
-  }
-  else
-  {
-    if (!fgets(path, size, stdin))
-      return -1;
-
-    /* Kill newline terminator, if present */
-    length = strlen(path);
-    if ((length > 0) && (path[length - 1] == '\n'))
-      path[length - 1] = '\0';
-  }
-
-  return 0;
-}
-
-/* Kills trailing slashes in the specified path (except if it's /).
- */
-static void kill_trailing_slashes(char* path)
-{
-  char* temp;
-
-  while ((temp = strrchr(path, '/')))
-  {
-    if (temp == path || *(temp + 1) != '\0')
-      break;
-    *temp = '\0';
-  }
+  fprintf(stderr, gettext("Report bugs to <%s>\n"), PACKAGE_BUGREPORT);
 }
 
 /* I don't know what this function does.
@@ -236,6 +195,10 @@ int main(int argc, char** argv)
   char* temp;
   off_t limit;
   char path[PATH_MAX];
+
+  setlocale(LC_ALL, "");
+  bindtextdomain(PACKAGE, LOCALEDIR);
+  textdomain(PACKAGE);
 
   while ((ch = getopt(argc, argv, "0HLPac:ef:hl:pqrtvz")) != -1)
   {
@@ -256,7 +219,7 @@ int main(int argc, char** argv)
       case 'a':
         all_files_flag = 1;
         break;
-      case 'c':
+      case 'd':
 	if (strcmp(optarg, "sha1") == 0)
 	  digest_function = SHA_1;
 	else if (strcmp(optarg, "sha256") == 0)
@@ -266,7 +229,7 @@ int main(int argc, char** argv)
 	else if (strcmp(optarg, "sha512") == 0)
 	  digest_function = SHA_512;
 	else
-	  error("Unknown hash function %s", optarg);
+	  error(gettext("%s is not a supported digest function"), optarg);
 	break;
       case 'e':
         excess_flag = 1;
@@ -281,11 +244,11 @@ int main(int argc, char** argv)
       case 'l':
         limit = (off_t) strtoull(optarg, &temp, 10);
 	if (temp == optarg || errno == ERANGE || errno == EINVAL)
-	  warning("malformed size limit %s; ignoring", optarg);
+	  warning(gettext("Ignoring invalid sample limit %s"), optarg);
 	else
 	{
 	  if (limit < SAMPLE_COUNT)
-	    warning("sample limit must be at least %u; ignoring", SAMPLE_COUNT);
+	    warning(gettext("Sample limit must be at least %u bytes"), SAMPLE_COUNT);
 	  else
 	    sample_limit = limit;
 	}
@@ -330,7 +293,7 @@ int main(int argc, char** argv)
   else
   {
     /* Read file names from stdin */
-    while (read_path(path, sizeof(path)) == 0)
+    while (read_path(stdin, path, sizeof(path)) == 0)
     {
       kill_trailing_slashes(path);
       process_path(path, 0);

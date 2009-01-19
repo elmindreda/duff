@@ -7,14 +7,6 @@ AC_CONFIG_SRCDIR([duff.c])
 AM_INIT_AUTOMAKE([check-news dist-bzip2])
 AM_CONFIG_HEADER([config.h])
 
-# These should be configurable
-AC_DEFINE([SAMPLE_COUNT], [10], \
-  [The number of samples to collect.])
-AC_DEFINE([DEFAULT_SIZE_LIMIT], [1048576], \
-  [The default size limit for sampling.])
-AC_DEFINE([DEFAULT_HEADER_FORMAT], ["%n files in cluster %i (%s bytes, checksum %c)"], \
-  [The default cluster header format.])
-
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_LN_S
@@ -24,7 +16,7 @@ AC_PROG_LN_S
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS([assert.h sys/param.h ctype.h errno.h limits.h stdio.h stdarg.h])
+AC_CHECK_HEADERS([assert.h sys/param.h ctype.h errno.h limits.h locale.h stdio.h stdarg.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

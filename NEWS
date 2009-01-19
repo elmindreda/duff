@@ -5,7 +5,10 @@ Version 0.5
 -----------
 
 * Added flag to handle null-terminated file names (-0).
+* Added flag to select message digest function (-d).
 * Improved handling of symbolic links to directories.
+* Added internationalization via GNU gettext.
+* Fixed a number of bugs
 
 Version 0.4
 -----------

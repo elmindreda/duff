@@ -2,7 +2,7 @@
 .\" This document is licensed under the zlib/libpng license.
 .\" Please see the file `COPYING' for license details.
 .\"
-.Dd November 7, 2006
+.Dd January 6, 2009
 .Os
 .Dt DUFF 1
 .Sh NAME
@@ -11,7 +11,7 @@
 .Sh SYNOPSIS
 .Nm
 .Op Fl 0HLPaeqprtz
-.Op Fl c Ar function
+.Op Fl d Ar function
 .Op Fl f Ar format
 .Op Fl l Ar limit
 .Op Ar
@@ -42,6 +42,10 @@ Therefore, the
 and
 .Fl P
 options now apply only to directories.
+.Pp
+Also note that as of version 0.5,
+.Nm
+works on both regular files and block device nodes.
 .Pp
 The following options are available:
 .Bl -tag -width indent
@@ -77,12 +81,14 @@ This is the default.
 Note that this only applies to directories, as symbolic links to files are never followed.
 .It Fl a
 Include hidden files and directories when searching recursively.
-.It Fl c Ar function
-Hash function to use.
+.It Fl d Ar function
+The message digest function to use.
 The supported functions are 
 .Ar sha1 , sha256 , sha384
 and
 .Ar sha512 .
+The default is
+.Ar sha1 .
 .It Fl e
 Excess mode. List all excess files; i.e. all but the first one encountered of each cluster of duplicates.
 This is useful when you want to automate removal of duplicate files.
@@ -95,7 +101,11 @@ The following escape sequences are available:
 .It Cm %n
 The number of files in the cluster.
 .It Cm %c
-The message digest (hash) of files in the cluster.
+A legacy synonym for
+.Cm %d ,
+for compatibility reasons.
+.It Cm %d
+The message digest of files in the cluster.
 .It Cm %i
 The one-based index of the file cluster.
 .It Cm %s
@@ -108,15 +118,15 @@ character.
 .Pp
 The default format string is:
 .Pp
-.Dl %n files in cluster %i (%s bytes, checksum %c)
+.Dl %n files in cluster %i (%s bytes, digest %d)
 .It Fl h
 Display help information and exit.
 .It Fl l Ar limit
 The minimum size of files to be sampled.
 If the size of files in a cluster is equal or greater than the specified limit,
 .Nm
-will sample and compare a few bytes from each file before calculating a full checksum.
-This is an optimization for larger files.
+will sample and compare a few bytes from each file before calculating a full digest.
+This is merely an optimization for larger files and does not affect which files are considered by duff.
 The default limit is 1048576 bytes.
 .It Fl q
 Quiet mode.
@@ -131,10 +141,10 @@ If specified, multiple hard links to the same physical file will not be reported
 Recursively search into all specified directories.
 .It Fl t
 Thorough mode.
-Distrust checksums as a guarantee for equality.
+Distrust digests as a guarantee for equality.
 In thorough mode,
 .Nm
-compares files byte by byte when their checksums match.
+compares files byte by byte when their digests match.
 .It Fl v
 Display version information and exit.
 .It Fl z
@@ -167,5 +177,10 @@ lists all duplicate header files in the current directory and its subdirectories
 .An "Camilla Berglund" Aq elmindreda@users.sourceforge.net
 .Sh BUGS
 .Nm
-no longer considers symbolic links to files potential duplicates, and will not report them.
+doesn't check whether the same file or block device node has been specified twice on the command line.
+This may lead it to report single files or block device nodes as duplicates.
+Note that this problem does not affect directories.
+.Pp
+.Nm
+no longer (as of version 0.4) considers symbolic links to files potential duplicates, and will not report them.
 This may break scripts relying on the previous behavior.

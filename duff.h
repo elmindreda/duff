@@ -22,6 +22,14 @@
  *     distribution.
  */
 
+/* Macros for pretend gettext.
+ */
+#define gettext(String) (String)
+#define textdomain(Domain)
+#define bindtextdomain(Package, Directory)
+
+#define SAMPLE_COUNT 10
+
 /* Status modes for entries.
  */
 enum
@@ -79,7 +87,7 @@ struct Entry
   uint8_t* samples;
 };
 
-/*
+/* Message digest functions.
  */
 enum Function
 {
@@ -98,9 +106,11 @@ void free_entry_list(struct Entry** entries);
 int compare_entries(struct Entry* first, struct Entry* second);
 
 /* These are defined and documented in duffutil.c */
+int read_path(FILE* stream, char* path, size_t size);
+void kill_trailing_slashes(char* path);
+size_t get_digest_size(void);
 void error(const char* format, ...);
 void warning(const char* format, ...);
-const char* get_mode_name(int mode);
 void print_cluster_header(const char* format,
                           unsigned int count,
 			  unsigned int index,

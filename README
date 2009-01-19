@@ -5,8 +5,8 @@ duff - Duplicate file finder
 ===============
 
 Duff is a command-line utility for identifying duplicates in a given set of
-files.  It attempts to be usably fast, and uses SHA1 checksums as a part of
-the comparisons.
+files.  It attempts to be usably fast and uses the SHA family of message
+digests as a part of the comparisons.
 
 The project website is here:
 
@@ -22,8 +22,7 @@ The CVS module for duff 0.x is `duff'.
 The version numbering scheme for duff is as follows:
 
  * The first number is the major version.  This will be updated upon what the
-   author considers a round of feature completion.  The only feature currently
-   missing for the next major release is i18n.
+   author considers a round of feature completion.
 
  * The second number is the minor version number.  This is updated for releases
    that include minor new features, or features that do not change the
@@ -55,9 +54,9 @@ See the file `NEWS'.
 3. Building Duff
 ================
 
-If you got this source tree from a CVS repository, you will need to bootstrap
-the build environment using `bootstrap.sh'.  Note that this script requires
-autoconf and automake to run.
+If you got this source tree from a CVS repository then you will need to
+bootstrap the build environment using `bootstrap.sh'.  Note that this script
+requires autoconf and automake to run.
 
 If (or once) you have a `configure' script, go ahead and run it.  No additional
 magic should be required.  If it is, then that's a bug and should be reported.
@@ -99,7 +98,7 @@ To read the manpage before installation, use the following command:
 
   groff -mdoc -Tascii duff.1 | less -R
 
-On Linux systems, however, the following command may suffice:
+On GNU/Linux systems, however, the following command may suffice:
 
   man -l duff.1
 
@@ -121,7 +120,27 @@ For more involved discussions, please join the mailing list:
   http://lists.sourceforge.net/lists/listinfo/duff-devel
 
 
-8. Disambiguation
+8. Credits and thanks
+=====================
+
+The following people have contributed to duff, either by reporting bugs,
+suggesting new features or submitting patches:
+
+Harald Barth
+Alexander Bostrom
+Magnus Danielsson
+Patrik Jarnefelt
+Rasmus Kaj
+Richard Levitte
+Fernando Lopez
+Clemens Lucas Fries
+Ross Newell
+Allan Saddi <allan@saddi.com>
+
+...and everyone I forgot.
+
+
+9. Disambiguation
 =================
 
 This is duff the Unix command-line utility, not DUFF the Windows program.
@@ -132,7 +151,7 @@ DUFF also has a SourceForge.net URL:
   http://dff.sourceforge.net/
 
 
-9. Release history
+10. Release history
 ===================
 
 Version 0.1 was named `duplicate', and was never released anywhere.

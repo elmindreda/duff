@@ -26,6 +26,8 @@
 #include "config.h"
 #endif
 
+/* Macros to get 64-bit off_t
+ */
 #define _GNU_SOURCE 1
 #define _FILE_OFFSET_BITS 64
 
@@ -89,12 +91,6 @@
 #include "duffstring.h"
 #include "duff.h"
 
-struct SortEntry
-{
-  off_t size;
-  struct Entry* entry;
-};
-
 /* These flags are defined and documented in duff.c.
  */
 extern int follow_links_mode;
@@ -113,16 +109,13 @@ static struct Entry* file_entries = NULL;
 /* List head for traversed directories.
  */
 static struct Directory* directories = NULL;
-/* List of entries sorted by size.
- */
-static struct SortEntry* sorted_entries = NULL;
 /* Number of collected entries.
  */
 static size_t entry_count = 0;
 
 /* These functions are documented below, where they are defined.
  */
-static int stat_file(const char* path, struct stat* sb, int depth);
+static int stat_path(const char* path, struct stat* sb, int depth);
 static int has_recursed_directory(dev_t device, ino_t inode);
 static void recurse_directory(const char* path,
                               const struct stat* sb,
@@ -133,12 +126,10 @@ static void report_cluster(struct Entry* duplicates,
 
 /* Stat:s a file according to the specified options.
  */
-static int stat_file(const char* path, struct stat* sb, int depth)
+static int stat_path(const char* path, struct stat* sb, int depth)
 {
-#if HAVE_LSTAT_EMPTY_STRING_BUG || HAVE_STAT_EMPTY_STRING_BUG
   if (*path == '\0')
     return -1;
-#endif
 
   if (lstat(path, sb) != 0)
   {
@@ -148,7 +139,7 @@ static int stat_file(const char* path, struct stat* sb, int depth)
     return -1;
   }
 
-  if ((sb->st_mode & S_IFMT) == S_IFLNK)
+  if (S_ISLNK(sb->st_mode))
   {
     if (follow_links_mode == ALL_SYMLINKS ||
         (depth == 0 && follow_links_mode == ARG_SYMLINKS))
@@ -161,7 +152,7 @@ static int stat_file(const char* path, struct stat* sb, int depth)
 	return -1;
       }
 
-      if ((sb->st_mode & S_IFMT) != S_IFDIR)
+      if (S_ISDIR(sb->st_mode))
 	return -1;
     }
     else
@@ -172,13 +163,11 @@ static int stat_file(const char* path, struct stat* sb, int depth)
 }
 
 /* Returns true if the directory has already been recursed into.
- * NOTE: This implementation is hideous.
+ * TODO: Implement a more efficient data structure.
  */
 static int has_recursed_directory(dev_t device, ino_t inode)
 {
   struct Directory* dir;
-
-  /* TODO: Implement a more efficient data structure */
 
   for (dir = directories;  dir;  dir = dir->next)
   {
@@ -190,7 +179,7 @@ static int has_recursed_directory(dev_t device, ino_t inode)
 }
 
 /* Records the specified directory as recursed.
- * NOTE: This implementation is hideous.
+ * TODO: Implement a more efficient data structure.
  */
 static void record_directory(dev_t device, ino_t inode)
 {
@@ -258,13 +247,14 @@ void process_path(const char* path, int depth)
   struct stat sb;
   struct Entry* entry;
 
-  if (stat_file(path, &sb, depth) != 0)
+  if (stat_path(path, &sb, depth) != 0)
     return;
 
   mode = sb.st_mode & S_IFMT;
   switch (mode)
   {
     case S_IFREG:
+    case S_IFBLK:
     {
       if (sb.st_size == 0)
       {
@@ -275,6 +265,8 @@ void process_path(const char* path, int depth)
       {
 	if (access(path, R_OK) != 0)
 	{
+	  /* We can't read the file, so we fail here */
+
 	  if (!quiet_flag)
 	    warning("%s: %s", path, strerror(errno));
 
@@ -318,8 +310,28 @@ void process_path(const char* path, int depth)
     default:
     {
       if (!quiet_flag)
-        warning("%s: %s, skipping", path, get_mode_name(mode));
-      break;
+      {
+	switch (mode)
+	{
+	  case S_IFLNK:
+	    warning(gettext("%s is a symbolic link; skipping"), path);
+	    break;
+	  case S_IFIFO:
+	    warning(gettext("%s is a named pipe; skipping"), path);
+	    break;
+	  case S_IFCHR:
+	    warning(gettext("%s is a character device; skipping"), path);
+	    break;
+	  case S_IFDIR:
+	    warning(gettext("%s is a directory; skipping"), path);
+	    break;
+	  case S_IFSOCK:
+	    warning(gettext("%s is a socket; skipping"), path);
+	    break;
+	  default:
+	    error(gettext("This cannot happen"));
+	}
+      }
     }
   }
 }
@@ -381,25 +393,6 @@ static void report_cluster(struct Entry* duplicates,
   }
 }
 
-/* Fish.
- */
-static void sort_entries(void)
-{
-  int index = 0;
-  struct Entry* entry;
-
-  sorted_entries = (struct SortEntry*) malloc(entry_count * sizeof(struct SortEntry));
-
-  for (entry = file_entries;  entry;  entry = entry->next)
-  {
-    sorted_entries[index].size = entry->size;
-    sorted_entries[index].entry = entry;
-    index++;
-  }
-
-  /* TODO: Sort entries */
-}
-
 /* Finds and reports all duplicate clusters among the collected entries.
  */
 void report_clusters(void)
@@ -409,8 +402,6 @@ void report_clusters(void)
   struct Entry* entry;
   struct Entry* entry_next;
   struct Entry* duplicates = NULL;
-
-  sort_entries();
 
   while ((base = file_entries) != NULL)
   {
