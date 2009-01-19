@@ -3,6 +3,22 @@ Change log for duff
 
 Started as of version 0.3.1.
 
+2009-01-16  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.c (read_path, kill_trailing_slashes): Moved functions into duffutil.c.
+ * duff.h: Added declarations for read_path and kill_trailing_slashes.
+ * duff.c (version): Annotated strings for i18n.
+
+2009-01-05  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.c (main): Moved option default values into source file.
+ * duff.c (main) (usage): Renamed -c flag to -d.
+
+2009-01-04  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duff.c duffdriver.c duffentry.c duffstring.c duffutil.c: Annotated strings for i18n.
+ * duff.c (main): Added call to setlocale(3).
+
 2009-01-03  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
  * sha256.c: Added file.
