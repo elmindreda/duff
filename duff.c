@@ -109,7 +109,7 @@ int quiet_flag = 0;
  * physical files instead of hard links.
  */
 int physical_flag = 0;
-/* The 'excess' flag.  For each duplicate cluster, reports all but one.
+/* The 'excess mode' flag.  For each duplicate cluster, reports all but one.
  * Useful for `xargs rm'.
  */
 int excess_flag = 0;
@@ -200,7 +200,7 @@ int main(int argc, char** argv)
   bindtextdomain(PACKAGE, LOCALEDIR);
   textdomain(PACKAGE);
 
-  while ((ch = getopt(argc, argv, "0HLPac:ef:hl:pqrtvz")) != -1)
+  while ((ch = getopt(argc, argv, "0HLPad:ef:hl:pqrtvz")) != -1)
   {
     switch (ch)
     {
