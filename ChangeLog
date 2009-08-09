@@ -3,6 +3,12 @@ Change log for duff
 
 Started as of version 0.3.1.
 
+2009-08-09  Camilla Berglund  <elmindreda@users.sourceforge.net>
+
+ * duffdriver.c (recurse_directory): Added error handling for asprintf.
+ * duffentry.c (get_entry_samples): Added error handling for fread.
+ * duffutil.c (error, warning): Added error handling for asprintf.
+
 2009-01-16  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
  * duff.c (read_path, kill_trailing_slashes): Moved functions into duffutil.c.

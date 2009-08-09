@@ -230,9 +230,11 @@ static void recurse_directory(const char* path,
 	continue;
     }
 
-    asprintf(&child_path, "%s/%s", path, name);
-    process_path(child_path, depth);
-    free(child_path);
+    if (asprintf(&child_path, "%s/%s", path, name) > 0)
+    {
+      process_path(child_path, depth);
+      free(child_path);
+    }
   }
   
   closedir(dir);

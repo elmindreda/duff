@@ -143,16 +143,19 @@ size_t get_digest_size(void)
 void error(const char* format, ...)
 {
   char* message;
-  
+  int result;
   va_list vl;
   
   va_start(vl, format);
-  vasprintf(&message, format, vl);
+  result = vasprintf(&message, format, vl);
   va_end(vl);
   
-  fprintf(stderr, "%s\n", message);
-  
-  free(message);
+  if (result > 0)
+  {
+    fprintf(stderr, "%s\n", message);
+    free(message);
+  }
+
   exit(1);
 }
 
@@ -161,16 +164,18 @@ void error(const char* format, ...)
 void warning(const char* format, ...)
 {
   char* message;
-  
+  int result;
   va_list vl;
   
   va_start(vl, format);
-  vasprintf(&message, format, vl);
+  result = vasprintf(&message, format, vl);
   va_end(vl);
   
-  fprintf(stderr, "%s\n", message);
-  
-  free(message);
+  if (result > 0)
+  {
+    fprintf(stderr, "%s\n", message);
+    free(message);
+  }
 }
 
 /* Prints a duplicate cluster header to stdout.  Various escape

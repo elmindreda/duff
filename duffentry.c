@@ -198,9 +198,8 @@ static int get_entry_samples(struct Entry* entry)
   for (i = 0;  i < SAMPLE_COUNT;  i++)
   {
     fseek(file, i * entry->size / SAMPLE_COUNT, SEEK_SET);
-    fread(samples + i, 1, 1, file);
 
-    if (ferror(file))
+    if (fread(samples + i, 1, 1, file) < 1)
     {
       if (!quiet_flag)
         warning("%s: %s", entry->path, strerror(errno));
