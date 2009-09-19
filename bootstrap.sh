@@ -13,5 +13,5 @@
     exit 1
   fi
 ) && \
-echo "Bootstrap successful"
+echo "Bootstrap successful; now run configure"
 
