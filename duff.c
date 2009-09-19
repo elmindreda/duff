@@ -167,7 +167,7 @@ static void usage(void)
                   "  -P  do not follow any symbolic links (default)\n"
                   "  -a  all files; include hidden files when searching recursively\n"
 		  "  -d  the message digest function to use\n"
-                  "  -e  excess files mode, print excess files\n"
+                  "  -e  excess files mode; list only excess files (no headers)\n"
                   "  -f  header format; set format for cluster headers\n"
                   "  -h  show this help\n"
                   "  -l  size limit; the minimal size that activates sampling\n"

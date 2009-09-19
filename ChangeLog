@@ -8,6 +8,7 @@ Started as of version 0.3.1.
  * duffdriver.c (recurse_directory): Added error handling for asprintf.
  * duffentry.c (get_entry_samples): Added error handling for fread.
  * duffutil.c (error, warning): Added error handling for asprintf.
+ * duff.c (usage): Clarified wording of help text.
 
 2009-01-16  Camilla Berglund  <elmindreda@users.sourceforge.net>
 
