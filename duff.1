@@ -184,3 +184,6 @@ Note that this problem does not affect directories.
 .Nm
 no longer (as of version 0.4) considers symbolic links to files potential duplicates, and will not report them.
 This may break scripts relying on the previous behavior.
+.Pp
+If the underlying files are modified while duff is running, all bets are off.
+This is not really a bug, but it can still bite you.
