@@ -45,7 +45,7 @@ duff.h
   Main header file.
 
 sha1.c sha1.h sha256.c sha256.h sha384.c sha384.h sha512.c sha512.h
-  Implements SHA message digest calculation.
+  Implements SHA family message digest calculation.
 
 
 Important functions
