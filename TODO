@@ -11,6 +11,7 @@ Documentation
 * Add more examples to manpage.
 
 Optimisation
+* Make digest use a digest of the first n KB
 * Make directory cache less stupid and slow.
 * Change linear lists into hash tables or trees?
 * Compare contents directly for clusters of two in excess mode?
