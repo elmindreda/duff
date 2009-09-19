@@ -228,50 +228,47 @@ static int get_entry_digest(struct Entry* entry)
   if (entry->digest)
     return 0;
   
-  if (entry->size > 0)
+  file = fopen(entry->path, "rb");
+  if (!file)
   {
-    file = fopen(entry->path, "rb");
-    if (!file)
-    {
-      if (!quiet_flag)
-	warning("%s: %s", entry->path, strerror(errno));
-      
-      entry->status = INVALID;
-      return -1;
-    }
+    if (!quiet_flag)
+      warning("%s: %s", entry->path, strerror(errno));
+    
+    entry->status = INVALID;
+    return -1;
+  }
 
-    switch (digest_function)
-    {
-      case SHA_1:
-	result = get_entry_digest_sha1(&(entry->digest), file);
-	break;
+  switch (digest_function)
+  {
+    case SHA_1:
+      result = get_entry_digest_sha1(&(entry->digest), file);
+      break;
 
-      case SHA_256:
-	result = get_entry_digest_sha256(&(entry->digest), file);
-	break;
+    case SHA_256:
+      result = get_entry_digest_sha256(&(entry->digest), file);
+      break;
 
-      case SHA_384:
-	result = get_entry_digest_sha384(&(entry->digest), file);
-	break;
+    case SHA_384:
+      result = get_entry_digest_sha384(&(entry->digest), file);
+      break;
 
-      case SHA_512:
-	result = get_entry_digest_sha512(&(entry->digest), file);
-	break;
+    case SHA_512:
+      result = get_entry_digest_sha512(&(entry->digest), file);
+      break;
 
-      default:
-	error(gettext("This cannot happen"));
-    }
+    default:
+      error(gettext("This cannot happen"));
+  }
 
-    fclose(file);
+  fclose(file);
 
-    if (result)
-    {
-      if (!quiet_flag)
-	warning("%s: %s", entry->path, strerror(errno));
+  if (result)
+  {
+    if (!quiet_flag)
+      warning("%s: %s", entry->path, strerror(errno));
 
-      entry->status = INVALID;
-      return -1;
-    }
+    entry->status = INVALID;
+    return -1;
   }
 
   return 0;
