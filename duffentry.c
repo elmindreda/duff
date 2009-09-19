@@ -79,23 +79,23 @@ extern enum Function digest_function;
 
 /* These functions are documented below, where they are defined.
  */
-static int get_entry_samples(struct Entry* entry);
-static int get_entry_digest(struct Entry* entry);
+static int get_entry_samples(Entry* entry);
+static int get_entry_digest(Entry* entry);
 static int get_entry_digest_sha1(uint8_t** result, FILE* file);
 static int get_entry_digest_sha256(uint8_t** result, FILE* file);
 static int get_entry_digest_sha384(uint8_t** result, FILE* file);
 static int get_entry_digest_sha512(uint8_t** result, FILE* file);
-static int compare_entry_digests(struct Entry* first, struct Entry* second);
-static int compare_entry_samples(struct Entry* first, struct Entry* second);
-static int compare_entry_contents(struct Entry* first, struct Entry* second);
+static int compare_entry_digests(Entry* first, Entry* second);
+static int compare_entry_samples(Entry* first, Entry* second);
+static int compare_entry_contents(Entry* first, Entry* second);
 
 /* Allocates and initialises an entry.
  */
-struct Entry* make_entry(const char* path, const struct stat* sb)
+Entry* make_entry(const char* path, const struct stat* sb)
 {
-  struct Entry* entry;
+  Entry* entry;
 
-  entry = (struct Entry*) malloc(sizeof(struct Entry));
+  entry = (Entry*) malloc(sizeof(Entry));
   entry->prev = NULL;
   entry->next = NULL;
   entry->path = strdup(path);
@@ -112,7 +112,7 @@ struct Entry* make_entry(const char* path, const struct stat* sb)
 /* Inserts an entry as the first item in a list.
  * Note that the entry must be detached from any previous list.
  */
-void link_entry(struct Entry** head, struct Entry* entry)
+void link_entry(Entry** head, Entry* entry)
 {
   assert(entry->prev == NULL);
   assert(entry->next == NULL);
@@ -129,7 +129,7 @@ void link_entry(struct Entry** head, struct Entry* entry)
 /* Removes an entry from a list.
  * Note that the entry must be a member of the list.
  */
-void unlink_entry(struct Entry** head, struct Entry* entry)
+void unlink_entry(Entry** head, Entry* entry)
 {
   if (entry->prev != NULL)
     entry->prev->next = entry->next;
@@ -144,7 +144,7 @@ void unlink_entry(struct Entry** head, struct Entry* entry)
 
 /* Frees an entry and any dynamically allocated members.
  */
-void free_entry(struct Entry* entry)
+void free_entry(Entry* entry)
 {
   assert(entry->prev == NULL);
   assert(entry->next == NULL);
@@ -158,9 +158,9 @@ void free_entry(struct Entry* entry)
 /* Frees a list of entries.
  * On exit, the specified head is set to NULL.
  */
-void free_entry_list(struct Entry** entries)
+void free_entry_list(Entry** entries)
 {
-  struct Entry* entry;
+  Entry* entry;
   
   while (*entries)
   {
@@ -172,7 +172,7 @@ void free_entry_list(struct Entry** entries)
 
 /* Retrieves samples from a file, if needed.
  */
-static int get_entry_samples(struct Entry* entry)
+static int get_entry_samples(Entry* entry)
 {
   int i;
   FILE* file;
@@ -218,7 +218,7 @@ static int get_entry_samples(struct Entry* entry)
 
 /* Calculates the digest of a file, if needed.
  */
-static int get_entry_digest(struct Entry* entry)
+static int get_entry_digest(Entry* entry)
 {
   FILE* file;
   int result;
@@ -387,7 +387,7 @@ int get_entry_digest_sha512(uint8_t** result, FILE* file)
  * calls to comparison modes.  The general idea is to find proof of
  * equality or un-equality as early and as quickly as possible.
  */
-int compare_entries(struct Entry* first, struct Entry* second)
+int compare_entries(Entry* first, Entry* second)
 {
   if (first->size != second->size)
     return -1;
@@ -416,7 +416,7 @@ int compare_entries(struct Entry* first, struct Entry* second)
 
 /* Compares the digests of two files, calculating them if neccessary.
  */
-static int compare_entry_digests(struct Entry* first, struct Entry* second)
+static int compare_entry_digests(Entry* first, Entry* second)
 {
   int i, digest_size;
 
@@ -436,7 +436,7 @@ static int compare_entry_digests(struct Entry* first, struct Entry* second)
 
 /* Compares the samples of two files, retrieving them if neccessary.
  */
-static int compare_entry_samples(struct Entry* first, struct Entry* second)
+static int compare_entry_samples(Entry* first, Entry* second)
 {
   int i;
 
@@ -460,7 +460,7 @@ static int compare_entry_samples(struct Entry* first, struct Entry* second)
  * there's little point in calling it otherwise.
  * TODO: Use a read buffer.
  */
-static int compare_entry_contents(struct Entry* first, struct Entry* second)
+static int compare_entry_contents(Entry* first, Entry* second)
 {
   int fc, sc, result = 0;
   FILE* first_stream;

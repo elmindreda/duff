@@ -65,19 +65,19 @@ enum
 
 /* Represents a traversed directory.
  */
-struct Directory
+typedef struct Directory_t
 {
-  struct Directory* next;
+  struct Directory_t* next;
   dev_t device;
   ino_t inode;
-};
+} Directory;
 
 /* Represents a collected file and potential duplicate.
  */
-struct Entry
+typedef struct Entry_t
 {
-  struct Entry* prev;
-  struct Entry* next;
+  struct Entry_t* prev;
+  struct Entry_t* next;
   char* path;
   off_t size;
   dev_t device;
@@ -85,7 +85,7 @@ struct Entry
   int status;
   uint8_t* digest;
   uint8_t* samples;
-};
+} Entry;
 
 /* Message digest functions.
  */
@@ -98,12 +98,12 @@ enum Function
 };
 
 /* These are defined and documented in duffentry.c */
-struct Entry* make_entry(const char* path, const struct stat* sb);
-void link_entry(struct Entry** head, struct Entry* entry);
-void unlink_entry(struct Entry** head, struct Entry* entry);
-void free_entry(struct Entry* entry);
-void free_entry_list(struct Entry** entries);
-int compare_entries(struct Entry* first, struct Entry* second);
+Entry* make_entry(const char* path, const struct stat* sb);
+void link_entry(Entry** head, Entry* entry);
+void unlink_entry(Entry** head, Entry* entry);
+void free_entry(Entry* entry);
+void free_entry_list(Entry** entries);
+int compare_entries(Entry* first, Entry* second);
 
 /* These are defined and documented in duffutil.c */
 int read_path(FILE* stream, char* path, size_t size);

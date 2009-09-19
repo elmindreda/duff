@@ -105,10 +105,10 @@ extern const char* header_format;
 
 /* List head for collected entries.
  */
-static struct Entry* file_entries = NULL;
+static Entry* file_entries = NULL;
 /* List head for traversed directories.
  */
-static struct Directory* directories = NULL;
+static Directory* directories = NULL;
 /* Number of collected entries.
  */
 static size_t entry_count = 0;
@@ -120,7 +120,7 @@ static int has_recursed_directory(dev_t device, ino_t inode);
 static void recurse_directory(const char* path,
                               const struct stat* sb,
 			      int depth);
-static void report_cluster(struct Entry* duplicates,
+static void report_cluster(Entry* duplicates,
                            unsigned int number,
 			   unsigned int count);
 
@@ -167,7 +167,7 @@ static int stat_path(const char* path, struct stat* sb, int depth)
  */
 static int has_recursed_directory(dev_t device, ino_t inode)
 {
-  struct Directory* dir;
+  Directory* dir;
 
   for (dir = directories;  dir;  dir = dir->next)
   {
@@ -183,9 +183,9 @@ static int has_recursed_directory(dev_t device, ino_t inode)
  */
 static void record_directory(dev_t device, ino_t inode)
 {
-  struct Directory* dir;
+  Directory* dir;
 
-  dir = (struct Directory*) malloc(sizeof(struct Directory));
+  dir = (Directory*) malloc(sizeof(Directory));
   dir->device = device;
   dir->inode = inode;
   dir->next = directories;
@@ -247,7 +247,7 @@ void process_path(const char* path, int depth)
 {
   mode_t mode;
   struct stat sb;
-  struct Entry* entry;
+  Entry* entry;
 
   if (stat_path(path, &sb, depth) != 0)
     return;
@@ -340,11 +340,11 @@ void process_path(const char* path, int depth)
 
 /* Reports a cluster to stdout, according to the specified options.
  */
-static void report_cluster(struct Entry* duplicates,
+static void report_cluster(Entry* duplicates,
                            unsigned int number,
 			   unsigned int count)
 {
-  struct Entry* entry;
+  Entry* entry;
 
   if (excess_flag)
   {
@@ -400,10 +400,10 @@ static void report_cluster(struct Entry* duplicates,
 void report_clusters(void)
 {
   int number = 1, count = 0;
-  struct Entry* base;
-  struct Entry* entry;
-  struct Entry* entry_next;
-  struct Entry* duplicates = NULL;
+  Entry* base;
+  Entry* entry;
+  Entry* entry_next;
+  Entry* duplicates = NULL;
 
   while ((base = file_entries) != NULL)
   {
