@@ -139,7 +139,7 @@ static void version(void);
 static void usage(void);
 static void bugs(void);
 
-/* Prints version information to stderr.
+/* Prints version information to stdout.
  */
 static void version(void)
 {
@@ -149,7 +149,7 @@ static void version(void)
   printf(gettext("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
 }
 
-/* Prints brief help information to stderr.
+/* Prints brief help information to stdout.
  * Note that it is a good idea to keep this synchronised with the actual code.
  * Note that it is also a good idea it keep it synchronised with the manpage.
  */
@@ -179,7 +179,7 @@ static void usage(void)
          "  -z  do not report empty files\n");
 }
 
-/* Prints bug report address to stderr.
+/* Prints bug report address to stdout.
  */
 static void bugs(void)
 {
