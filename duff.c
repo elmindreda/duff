@@ -143,10 +143,10 @@ static void bugs(void);
  */
 static void version(void)
 {
-  fprintf(stderr, "%s\n", PACKAGE_STRING);
-  fprintf(stderr, gettext("Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>\n"));
-  fprintf(stderr, gettext("%s contains shaX-asaddi\n"), PACKAGE_NAME);
-  fprintf(stderr, gettext("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
+  printf("%s\n", PACKAGE_STRING);
+  printf(gettext("Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>\n"));
+  printf(gettext("%s contains shaX-asaddi\n"), PACKAGE_NAME);
+  printf(gettext("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
 }
 
 /* Prints brief help information to stderr.
@@ -157,33 +157,33 @@ static void usage(void)
 {
   /* TODO: Internationalize this */
 
-  fprintf(stderr, "usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s -h\n", PACKAGE_NAME);
-  fprintf(stderr, "       %s -v\n", PACKAGE_NAME);
-  fprintf(stderr, "options:\n"
-                  "  -0  read and write file names terminated by a null character\n"
-                  "  -H  follow symbolic links on the command line\n"
-                  "  -L  follow all symbolic links\n"
-                  "  -P  do not follow any symbolic links (default)\n"
-                  "  -a  all files; include hidden files when searching recursively\n"
-		  "  -d  the message digest function to use\n"
-                  "  -e  excess files mode; list only excess files (no headers)\n"
-                  "  -f  header format; set format for cluster headers\n"
-                  "  -h  show this help\n"
-                  "  -l  size limit; the minimal size that activates sampling\n"
-                  "  -q  quiet; suppress warnings and error messages\n"
-                  "  -p  physical mode; do not report multiple links\n"
-                  "  -r  recursive; search in specified directories\n"
-                  "  -t  thorough; force byte-by-byte comparison of files\n"
-                  "  -v  show version information\n"
-                  "  -z  do not report empty files\n");
+  printf("usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
+  printf("       %s -h\n", PACKAGE_NAME);
+  printf("       %s -v\n", PACKAGE_NAME);
+  printf("options:\n"
+         "  -0  read and write file names terminated by a null character\n"
+         "  -H  follow symbolic links on the command line\n"
+         "  -L  follow all symbolic links\n"
+         "  -P  do not follow any symbolic links (default)\n"
+         "  -a  all files; include hidden files when searching recursively\n"
+	 "  -d  the message digest function to use\n"
+         "  -e  excess files mode; list only excess files (no headers)\n"
+         "  -f  header format; set format for cluster headers\n"
+         "  -h  show this help\n"
+         "  -l  size limit; the minimal size that activates sampling\n"
+         "  -q  quiet; suppress warnings and error messages\n"
+         "  -p  physical mode; do not report multiple links\n"
+         "  -r  recursive; search in specified directories\n"
+         "  -t  thorough; force byte-by-byte comparison of files\n"
+         "  -v  show version information\n"
+         "  -z  do not report empty files\n");
 }
 
 /* Prints bug report address to stderr.
  */
 static void bugs(void)
 {
-  fprintf(stderr, gettext("Report bugs to <%s>\n"), PACKAGE_BUGREPORT);
+  printf(gettext("Report bugs to <%s>\n"), PACKAGE_BUGREPORT);
 }
 
 /* I don't know what this function does.
