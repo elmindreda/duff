@@ -63,21 +63,26 @@ typedef enum
   ARG_SYMLINKS,
 } SymlinkMode;
 
+/* Typedefs for structs below.
+ */
+typedef struct Entry_t Entry;
+typedef struct Directory_t Directory;
+
 /* Represents a traversed directory.
  */
-typedef struct Directory_t
+struct Directory_t
 {
-  struct Directory_t* next;
+  Directory* next;
   dev_t device;
   ino_t inode;
-} Directory;
+};
 
 /* Represents a collected file and potential duplicate.
  */
-typedef struct Entry_t
+struct Entry_t
 {
-  struct Entry_t* prev;
-  struct Entry_t* next;
+  Entry* prev;
+  Entry* next;
   char* path;
   off_t size;
   dev_t device;
@@ -85,7 +90,7 @@ typedef struct Entry_t
   Status status;
   uint8_t* digest;
   uint8_t* samples;
-} Entry;
+};
 
 /* Message digest functions.
  */
