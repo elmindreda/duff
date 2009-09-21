@@ -32,9 +32,9 @@
 
 /* Status modes for entries.
  */
-enum
+typedef enum
 {
-  /* The file is collected but its data hasn't been touched.
+  /* The file has been stat:d but its data has not been touched.
    */
   UNTOUCHED,
   /* An error ocurred when reading from the file.
@@ -46,11 +46,11 @@ enum
   /* The file has been reported as a duplicate.
    */
   REPORTED,
-};
+} Status;
 
 /* Symlink dereferencing modes.
  */
-enum
+typedef enum
 {
   /* Do not dereference any directory symlinks.
    */
@@ -61,7 +61,7 @@ enum
   /* Dereference only those directory symlinks listed on the command line.
    */
   ARG_SYMLINKS,
-};
+} SymlinkMode;
 
 /* Represents a traversed directory.
  */
@@ -82,7 +82,7 @@ typedef struct Entry_t
   off_t size;
   dev_t device;
   ino_t inode;
-  int status;
+  Status status;
   uint8_t* digest;
   uint8_t* samples;
 } Entry;

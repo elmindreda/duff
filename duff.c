@@ -87,7 +87,7 @@
 /* The 'symlink dereference' mode.  Controls the handling of symlinks to
  * directories.  The different modes are defined in duff.h.
  */
-int follow_links_mode = NO_SYMLINKS;
+SymlinkMode follow_links_mode = NO_SYMLINKS;
 /* The 'all files' flag.  Includes dotfiles when searching recursively.
  */
 int all_files_flag = 0;
