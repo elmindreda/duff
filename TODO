@@ -3,11 +3,16 @@ List of things to do in duff
 
 Functionality
 * Change to getopt_long and add long options?
+  - ...which would require adding gnulib
 * Detect duplicate file arguments?
+  - is that even possible?
 * Detect duplicate directory subtrees?
+  - ...in treeduff, not plain old duff
+* Finish i18n work.
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage.
+  - ...although first we should have an algorithm
 * Add more examples to manpage.
 
 Optimisation
