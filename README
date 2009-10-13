@@ -64,6 +64,7 @@ magic should be required.  If it is, then that's a bug and should be reported.
 This release of duff has been successfully built on the following systems:
 
   Debian Lenny x86
+  Ubunty Jaunty x86
 
 Earlier releases have been successfully built on the following systems:
 
@@ -74,6 +75,8 @@ Earlier releases have been successfully built on the following systems:
   Debian Sarge alpha
   FreeBSD 4.11 x86
   FreeBSD 5.4 x86
+  Mac OS X 10.3
+  Mac OS X 10.4
   NetBSD 1.6.1 sparc
   Red Hat Enterprise 4.0 x86
   SunOS 5.9 sparc64
@@ -123,8 +126,8 @@ For more involved discussions, please join the mailing list:
 8. Credits and thanks
 =====================
 
-The following people have contributed to duff, either by reporting bugs,
-suggesting new features or submitting patches:
+The following (alphabetically listed) people have contributed to duff, either
+by reporting bugs, suggesting new features or submitting patches:
 
 Harald Barth
 Alexander Bostrom
