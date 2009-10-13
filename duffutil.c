@@ -145,11 +145,11 @@ void error(const char* format, ...)
   char* message;
   int result;
   va_list vl;
-  
+
   va_start(vl, format);
   result = vasprintf(&message, format, vl);
   va_end(vl);
-  
+
   if (result > 0)
   {
     fprintf(stderr, "%s\n", message);
@@ -166,11 +166,11 @@ void warning(const char* format, ...)
   char* message;
   int result;
   va_list vl;
-  
+
   va_start(vl, format);
   result = vasprintf(&message, format, vl);
   va_end(vl);
-  
+
   if (result > 0)
   {
     fprintf(stderr, "%s\n", message);

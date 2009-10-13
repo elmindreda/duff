@@ -105,7 +105,7 @@ Entry* make_entry(const char* path, const struct stat* sb)
   entry->status = UNTOUCHED;
   entry->digest = NULL;
   entry->samples = NULL;
-  
+
   return entry;
 }
 
@@ -161,7 +161,7 @@ void free_entry(Entry* entry)
 void free_entry_list(Entry** entries)
 {
   Entry* entry;
-  
+
   while (*entries)
   {
     entry = *entries;
@@ -177,7 +177,7 @@ static int get_entry_samples(Entry* entry)
   int i;
   FILE* file;
   uint8_t* samples;
-  
+
   if (entry->status == INVALID)
     return -1;
   if (entry->samples)
@@ -188,13 +188,13 @@ static int get_entry_samples(Entry* entry)
   {
     if (!quiet_flag)
       warning("%s: %s", entry->path, strerror(errno));
-      
+
     entry->status = INVALID;
     return -1;
   }
 
   samples = (uint8_t*) malloc(SAMPLE_COUNT);
-  
+
   for (i = 0;  i < SAMPLE_COUNT;  i++)
   {
     fseek(file, i * entry->size / SAMPLE_COUNT, SEEK_SET);
@@ -222,18 +222,18 @@ static int get_entry_digest(Entry* entry)
 {
   FILE* file;
   int result;
-  
+
   if (entry->status == INVALID)
     return -1;
   if (entry->digest)
     return 0;
-  
+
   file = fopen(entry->path, "rb");
   if (!file)
   {
     if (!quiet_flag)
       warning("%s: %s", entry->path, strerror(errno));
-    
+
     entry->status = INVALID;
     return -1;
   }
@@ -281,7 +281,7 @@ static int get_entry_digest_sha1(uint8_t** result, FILE* file)
   size_t size;
   char buffer[8192];
   SHA1Context context;
-  
+
   SHA1Init(&context);
 
   for (;;)
@@ -308,7 +308,7 @@ int get_entry_digest_sha256(uint8_t** result, FILE* file)
   size_t size;
   char buffer[8192];
   SHA256Context context;
-  
+
   SHA256Init(&context);
 
   for (;;)
@@ -335,7 +335,7 @@ int get_entry_digest_sha384(uint8_t** result, FILE* file)
   size_t size;
   char buffer[8192];
   SHA384Context context;
-  
+
   SHA384Init(&context);
 
   for (;;)
@@ -362,7 +362,7 @@ int get_entry_digest_sha512(uint8_t** result, FILE* file)
   size_t size;
   char buffer[8192];
   SHA512Context context;
-  
+
   SHA512Init(&context);
 
   for (;;)
@@ -465,7 +465,7 @@ static int compare_entry_contents(Entry* first, Entry* second)
   int fc, sc, result = 0;
   FILE* first_stream;
   FILE* second_stream;
-  
+
   if (first->size == 0)
     return 0;
 

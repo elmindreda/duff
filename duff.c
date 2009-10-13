@@ -277,7 +277,7 @@ int main(int argc, char** argv)
         exit(1);
     }
   }
-  
+
   argc -= optind;
   argv += optind;
 
@@ -299,9 +299,9 @@ int main(int argc, char** argv)
       process_path(path, 0);
     }
   }
-  
+
   report_clusters();
-  
+
   exit(0);
 }
 

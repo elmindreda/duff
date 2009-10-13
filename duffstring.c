@@ -63,7 +63,7 @@ int asprintf(char** result, const char* format, ...)
 {
   va_list vl;
   int length;
-  
+
   va_start(vl, format);
   length = vasprintf(result, format, vl);
   va_end(vl);

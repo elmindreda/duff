@@ -236,7 +236,7 @@ static void recurse_directory(const char* path,
       free(child_path);
     }
   }
-  
+
   closedir(dir);
 }
 
@@ -411,7 +411,7 @@ void report_clusters(void)
       continue;
 
     count = 0;
-    
+
     for (entry = base->next;  entry;  entry = entry_next)
     {
       entry_next = entry->next;
@@ -422,19 +422,19 @@ void report_clusters(void)
 	{
 	  unlink_entry(&file_entries, base);
 	  link_entry(&duplicates, base);
-	  
+
 	  base->status = DUPLICATE;
 	  count++;
 	}
-	
+
 	unlink_entry(&file_entries, entry);
 	link_entry(&duplicates, entry);
-	
+
 	entry->status = DUPLICATE;
 	count++;
       }
     }
-     
+
     if (duplicates)
     {
       report_cluster(duplicates, number, count);
