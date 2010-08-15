@@ -66,6 +66,7 @@ This release of duff has been successfully built on the following systems:
   Debian Lenny x86
   Ubunty Jaunty x86
   Ubuntu Lucid amd64
+  Mac OS X 10.6 x86_64
 
 Earlier releases have been successfully built on the following systems:
 
@@ -76,8 +77,8 @@ Earlier releases have been successfully built on the following systems:
   Debian Sarge alpha
   FreeBSD 4.11 x86
   FreeBSD 5.4 x86
-  Mac OS X 10.3
-  Mac OS X 10.4
+  Mac OS X 10.3 powerpc
+  Mac OS X 10.4 powerpc
   NetBSD 1.6.1 sparc
   Red Hat Enterprise 4.0 x86
   SunOS 5.9 sparc64
