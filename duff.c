@@ -220,13 +220,13 @@ int main(int argc, char** argv)
         all_files_flag = 1;
         break;
       case 'd':
-	if (strcmp(optarg, "sha1") == 0)
+	if (strcasecmp(optarg, "sha1") == 0)
 	  digest_function = SHA_1;
-	else if (strcmp(optarg, "sha256") == 0)
+	else if (strcasecmp(optarg, "sha256") == 0)
 	  digest_function = SHA_256;
-	else if (strcmp(optarg, "sha384") == 0)
+	else if (strcasecmp(optarg, "sha384") == 0)
 	  digest_function = SHA_384;
-	else if (strcmp(optarg, "sha512") == 0)
+	else if (strcasecmp(optarg, "sha512") == 0)
 	  digest_function = SHA_512;
 	else
 	  error(gettext("%s is not a supported digest function"), optarg);
