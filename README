@@ -65,6 +65,7 @@ This release of duff has been successfully built on the following systems:
 
   Debian Lenny x86
   Ubunty Jaunty x86
+  Ubuntu Lucid amd64
 
 Earlier releases have been successfully built on the following systems:
 
