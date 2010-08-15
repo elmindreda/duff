@@ -157,26 +157,29 @@ static void usage(void)
 {
   /* TODO: Internationalize this */
 
-  printf("usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n", PACKAGE_NAME);
+  printf(gettext("Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n",
+                 PACKAGE_NAME));
+
   printf("       %s -h\n", PACKAGE_NAME);
   printf("       %s -v\n", PACKAGE_NAME);
-  printf("options:\n"
-         "  -0  read and write file names terminated by a null character\n"
-         "  -H  follow symbolic links on the command line\n"
-         "  -L  follow all symbolic links\n"
-         "  -P  do not follow any symbolic links (default)\n"
-         "  -a  all files; include hidden files when searching recursively\n"
-	 "  -d  the message digest function to use\n"
-         "  -e  excess files mode; list only excess files (no headers)\n"
-         "  -f  header format; set format for cluster headers\n"
-         "  -h  show this help\n"
-         "  -l  size limit; the minimal size that activates sampling\n"
-         "  -q  quiet; suppress warnings and error messages\n"
-         "  -p  physical mode; do not report multiple links\n"
-         "  -r  recursive; search in specified directories\n"
-         "  -t  thorough; force byte-by-byte comparison of files\n"
-         "  -v  show version information\n"
-         "  -z  do not report empty files\n");
+
+  printf(gettext("Options:\n"));
+  printf(gettext("  -0  read and write file names terminated by a null character\n"));
+  printf(gettext("  -H  follow symbolic links on the command line\n"));
+  printf(gettext("  -L  follow all symbolic links\n"));
+  printf(gettext("  -P  do not follow any symbolic links (default)\n"));
+  printf(gettext("  -a  all files; include hidden files when searching recursively\n"));
+  printf(gettext("  -d  the message digest function to use\n"));
+  printf(gettext("  -e  excess files mode; list only excess files (no headers)\n"));
+  printf(gettext("  -f  header format; set format for cluster headers\n"));
+  printf(gettext("  -h  show this help\n"));
+  printf(gettext("  -l  size limit; the minimal size that activates sampling\n"));
+  printf(gettext("  -q  quiet; suppress warnings and error messages\n"));
+  printf(gettext("  -p  physical mode; do not report multiple links\n"));
+  printf(gettext("  -r  recursive; search in specified directories\n"));
+  printf(gettext("  -t  thorough; force byte-by-byte comparison of files\n"));
+  printf(gettext("  -v  show version information\n"));
+  printf(gettext("  -z  do not report empty files\n"));
 }
 
 /* Prints bug report address to stdout.
