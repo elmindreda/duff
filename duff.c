@@ -157,8 +157,8 @@ static void usage(void)
 {
   /* TODO: Internationalize this */
 
-  printf(gettext("Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n",
-                 PACKAGE_NAME));
+  printf(gettext("Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"),
+                 PACKAGE_NAME);
 
   printf("       %s -h\n", PACKAGE_NAME);
   printf("       %s -v\n", PACKAGE_NAME);
