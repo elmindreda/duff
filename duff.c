@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>
+ * Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.org>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -144,7 +144,7 @@ static void bugs(void);
 static void version(void)
 {
   printf("%s\n", PACKAGE_STRING);
-  printf(gettext("Copyright (c) 2005 Camilla Berglund <elmindreda@users.sourceforge.net>\n"));
+  printf(gettext("Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.org>\n"));
   printf(gettext("%s contains shaX-asaddi\n"), PACKAGE_NAME);
   printf(gettext("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
 }
