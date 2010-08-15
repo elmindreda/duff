@@ -1,25 +1,25 @@
 Release checklist for duff
 ==========================
 
- * Make changes in the code.
- * Comment all new symbols.
- * Test the changes.
- * Update NEWS.
- * Update ChangeLog.
- * Update HACKING.
- * Update README.
- * Update TODO.
- * Update duff.1 (including date).
- * Build release file.
- * Commit changes to CVS.
- * Tag release in CVS.
- * Upload release file to SF.net.
- * Make release on SF.net.
- * Update SF.net trove categorisation.
- * Post SF.net news item.
- * Post announcement to duff-devel.
- * Make release on Freshmeat.
- * Update project homepage.
- * Update version number.
- * Commit updated version number.
+ * Make changes in the code
+ * Comment all new symbols
+ * Test the changes
+ * Update NEWS
+ * Update ChangeLog
+ * Update HACKING
+ * Update README
+ * Update TODO
+ * Update duff.1 (including date)
+ * Build release file
+ * Commit changes to CVS
+ * Tag release in CVS
+ * Upload release file to SF.net
+ * Make release on SF.net
+ * Update SF.net trove categorisation
+ * Post SF.net news item
+ * Post announcement to duff-devel
+ * Make release on Freshmeat
+ * Update project homepage
+ * Update version number
+ * Commit updated version number
 
