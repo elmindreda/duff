@@ -243,7 +243,7 @@ int main(int argc, char** argv)
       case 'h':
         usage();
         bugs();
-        exit(0);
+        exit(EXIT_SUCCESS);
       case 'l':
         limit = (off_t) strtoull(optarg, &temp, 10);
 	if (temp == optarg || errno == ERANGE || errno == EINVAL)
@@ -270,14 +270,14 @@ int main(int argc, char** argv)
         break;
       case 'v':
         version();
-        exit(0);
+        exit(EXIT_SUCCESS);
       case 'z':
 	ignore_empty_flag = 1;
 	break;
       default:
         usage();
         bugs();
-        exit(1);
+        exit(EXIT_FAILURE);
     }
   }
 
@@ -305,6 +305,6 @@ int main(int argc, char** argv)
 
   report_clusters();
 
-  exit(0);
+  exit(EXIT_SUCCESS);
 }
 
