@@ -12,12 +12,9 @@ The project website is here:
 
   http://duff.sourceforge.net/
 
-Duff resides in public CVS on cvs.sourceforge.net.  The CVSROOT for anonymous,
-read-only access is:
+Duff resides in public git repository on SourceForge.net:
 
-  :pserver:anonymous@cvs.sourceforge.net:/cvsroot/duff
-
-The CVS module for duff 0.x is `duff'.
+  git://duff.git.sourceforge.net/gitroot/duff/duff
 
 The version numbering scheme for duff is as follows:
 
@@ -54,7 +51,7 @@ See the file `NEWS'.
 3. Building Duff
 ================
 
-If you got this source tree from a CVS repository then you will need to
+If you got this source tree from a git repository then you will need to
 bootstrap the build environment using `bootstrap.sh'.  Note that this script
 requires autoconf and automake to run.
 

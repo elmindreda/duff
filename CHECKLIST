@@ -11,8 +11,8 @@ Release checklist for duff
  * Update TODO
  * Update duff.1 (including date)
  * Build release file
- * Commit changes to CVS
- * Tag release in CVS
+ * Commit changes to git
+ * Tag release in git
  * Upload release file to SF.net
  * Make release on SF.net
  * Update SF.net trove categorisation
