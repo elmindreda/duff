@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT([duff], [0.5], [elmindreda@elmindreda.org])
+AC_INIT([duff], [0.5], [elmindreda@elmindreda.org], [duff], [http://duff.sourceforge.net/])
 AC_CONFIG_SRCDIR([src/duff.c])
 AM_INIT_AUTOMAKE([check-news dist-bzip2])
 AM_CONFIG_HEADER([src/config.h])
