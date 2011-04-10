@@ -84,51 +84,59 @@
 #include "duffstring.h"
 #include "duff.h"
 
-/* The 'symlink dereference' mode.  Controls the handling of symlinks to
- * directories.  The different modes are defined in duff.h.
+/* Controls the handling of symlinks to directories.  The different modes are
+ * defined in duff.h.
  */
 SymlinkMode follow_links_mode = NO_SYMLINKS;
-/* The 'all files' flag.  Includes dotfiles when searching recursively.
+
+/* Whether to include dotfiles when searching recursively.
  */
 int all_files_flag = 0;
-/* The 'verbose' flag.  Makes the program verbose.
+
+/* Makes the program output verbose.
  */
 int verbose_flag = 0;
-/* The 'recursive' flag.  Recurses into all specified directories.
+
+/* Whether to recurse into all specified directories.
  */
 int recursive_flag = 0;
-/*! The 'null termination' flag.  Reads and writes null-terminated file
- *  names.
+
+/*! Whether to use null characters as delimiters instead of newlines.
  */
 int null_terminate_flag = 0;
-/* The 'shut up' flag.  Makes the program not complain about skipped
- * non-files.
+
+/* Makes the program not warn about skipped files.
  */
 int quiet_flag = 0;
-/* The 'physical mode' flag.  Makes the program consider entries being
- * physical files instead of hard links.
+
+/* Makes the program consider entries to be physical files instead of hard
+ * links.
  */
 int physical_flag = 0;
-/* The 'excess mode' flag.  For each duplicate cluster, reports all but one.
- * Useful for `xargs rm'.
+
+/* For each duplicate cluster, reports all but one.  Useful for uses of
+ * `xargs rm'.
  */
 int excess_flag = 0;
-/* The 'paranoid' flag.  Makes the program distrust message digests, forcing
- * byte-by-byte comparisons.
+
+/* Makes the program not rely on message digests for file equality, forcing
+ * byte-by-byte comparisons of candidates.
  */
 int thorough_flag = 0;
-/* The ignore empty files' flag.  Makes the program not report empty
- * files as duplicates.
+
+/* Makes the program not report files of zero size as duplicates.
  */
 int ignore_empty_flag = 0;
-/* The 'header format' value.  Specifies the look of the cluster header.
+
+/* Specifies the look of the cluster header.
  * If set to the empty string, no headers are printed.
  */
 const char* header_format = "%n files in cluster %i (%s bytes, digest %d)";
-/* The 'sample limit' value.  Specifies the minimal size of files to be
- * compared with the sampling method.
+
+/* Specifies the minimal size of files to be compared with the sampling method.
  */
 off_t sample_limit = 1048576;
+
 /* The message digest function to use.
  */
 enum Function digest_function = SHA_1;
