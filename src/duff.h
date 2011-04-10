@@ -24,21 +24,9 @@
 
 #include "gettext.h"
 
-#if ENABLE_NLS
-
-  /* Macros for actual gettext.
-   */
-  #define _(String) gettext(String)
-
-#else /*ENABLE_NLS*/
-
-  /* Macros for pretend gettext.
-   */
-  #define _(String) (String)
-  #define textdomain(Domain)
-  #define bindtextdomain(Package, Directory)
-
-#endif /*ENABLE_NLS*/
+/* Shorthand macro for gettext.
+  */
+#define _(String) gettext(String)
 
 #define SAMPLE_COUNT 10
 
