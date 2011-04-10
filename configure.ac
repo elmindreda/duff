@@ -42,5 +42,5 @@ AC_CHECK_FUNCS([strdup strerror memset strchr strrchr strtoull], \
   [], [AC_MSG_ERROR([Function not found])])
 AC_CHECK_FUNCS([asprintf vasprintf])
 
-AC_OUTPUT([Makefile src/Makefile po/Makefile.in man/Makefile])
+AC_OUTPUT([Makefile lib/Makefile src/Makefile po/Makefile.in man/Makefile])
 

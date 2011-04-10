@@ -22,6 +22,8 @@
  *     distribution.
  */
 
+#include "gettext.h"
+
 #if ENABLE_NLS
 
   /* Macros for actual gettext.
