@@ -1,15 +1,14 @@
 # Swedish messages for duff
 # Copyright © 2011 Camilla Berglund <elmindreda@elmindreda.se>
-
 msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
 "POT-Creation-Date: 2011-04-10 19:04+0200\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Camilla Berglund <elmindreda@elmindreda.se>\n"
+"PO-Revision-Date: 2011-04-10 23:39+0200\n"
+"Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
