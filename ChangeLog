@@ -3,6 +3,14 @@ Change log for duff
 
 Started as of version 0.3.1.
 
+2011-04-10  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.c duff.h duffdriver.c duffentry.c: Changed gettext macro to _.
+ * duff.c duffdriver.c duffentry.c duff.h duffstring.c duffstring.h duffutil.c
+   sha1.c sha1.h sha256.c sha256.h sha384.c sha384.h sha512.c
+   sha512.h: Moved to src directory.
+ * duff.1: Moved to man directory.
+
 2010-08-15  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.c (usage): Annotated strings for i18n.
