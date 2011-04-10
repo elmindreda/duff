@@ -17,6 +17,8 @@ Maintained since version 0.3.1.
    sha1.c sha1.h sha256.c sha256.h sha384.c sha384.h sha512.c
    sha512.h: Moved to src directory.
  * duff.1: Moved to man directory.
+ * duff.c duffdriver.c duffentry.c duffstring.c
+   duffutil.c: Moved to autoconf large file support.
 
 2010-08-15  Camilla Berglund  <elmindreda@elmindreda.org>
 

@@ -20,6 +20,7 @@ AC_HEADER_DIRENT
 AC_CHECK_HEADERS([assert.h sys/param.h ctype.h errno.h limits.h locale.h stdio.h stdarg.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_SYS_LARGEFILE
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_MODE_T
@@ -34,6 +35,7 @@ AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
 AC_FUNC_STAT
 AC_FUNC_LSTAT
+AC_FUNC_FSEEKO
 AC_FUNC_CLOSEDIR_VOID
 AC_CHECK_FUNCS([strdup strerror memset strchr strrchr strtoull], \
   [], [AC_MSG_ERROR([Function not found])])

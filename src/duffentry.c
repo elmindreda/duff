@@ -26,11 +26,6 @@
 #include "config.h"
 #endif
 
-/* Macros to get 64-bit off_t
- */
-#define _GNU_SOURCE 1
-#define _FILE_OFFSET_BITS 64
-
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
@@ -197,7 +192,7 @@ static int get_entry_samples(Entry* entry)
 
   for (i = 0;  i < SAMPLE_COUNT;  i++)
   {
-    fseek(file, i * entry->size / SAMPLE_COUNT, SEEK_SET);
+    fseeko(file, i * entry->size / SAMPLE_COUNT, SEEK_SET);
 
     if (fread(samples + i, 1, 1, file) < 1)
     {

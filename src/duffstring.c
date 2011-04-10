@@ -26,11 +26,6 @@
 #include "config.h"
 #endif
 
-/* Macros to get 64-bit off_t
- */
-#define _GNU_SOURCE 1
-#define _FILE_OFFSET_BITS 64
-
 #if HAVE_STDARG_H
 #include <stdarg.h>
 #endif
