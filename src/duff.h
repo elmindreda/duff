@@ -22,11 +22,11 @@
  *     distribution.
  */
 
+#include <gettext.h>
+
 /* Macros for pretend gettext.
  */
-#define _(String) (String)
-#define textdomain(Domain)
-#define bindtextdomain(Package, Directory)
+#define _(String) gettext(String)
 
 #define SAMPLE_COUNT 10
 

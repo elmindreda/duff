@@ -6,6 +6,7 @@ AC_INIT([duff], [0.5], [elmindreda@elmindreda.org])
 AC_CONFIG_SRCDIR([src/duff.c])
 AM_INIT_AUTOMAKE([check-news dist-bzip2])
 AM_CONFIG_HEADER([src/config.h])
+AM_GNU_GETTEXT([external])
 
 # Checks for programs.
 AC_PROG_CC
@@ -39,6 +40,7 @@ AC_CHECK_FUNCS([strdup strerror memset strchr strrchr strtoull], \
 AC_CHECK_FUNCS([asprintf vasprintf])
 
 AC_OUTPUT([Makefile
+           po/Makefile.in
            src/Makefile
            man/Makefile])
 

@@ -3,6 +3,13 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2011-04-10  gettextize  <bug-gnu-gettext@gnu.org>
+
+ * Makefile.am (SUBDIRS): Add po.
+   (ACLOCAL_AMFLAGS): New variable.
+   (EXTRA_DIST): Add config.rpath, m4/ChangeLog.
+ * configure.ac (AC_OUTPUT): Add po/Makefile.in.
+
 2011-04-10  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.c duff.h duffdriver.c duffentry.c: Changed gettext macro to _.
