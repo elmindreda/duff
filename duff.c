@@ -144,9 +144,9 @@ static void bugs(void);
 static void version(void)
 {
   printf("%s\n", PACKAGE_STRING);
-  printf(gettext("Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.org>\n"));
-  printf(gettext("%s contains shaX-asaddi\n"), PACKAGE_NAME);
-  printf(gettext("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
+  printf(_("Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.org>\n"));
+  printf(_("%s contains shaX-asaddi\n"), PACKAGE_NAME);
+  printf(_("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
 }
 
 /* Prints brief help information to stdout.
@@ -157,36 +157,36 @@ static void usage(void)
 {
   /* TODO: Internationalize this */
 
-  printf(gettext("Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"),
-                 PACKAGE_NAME);
+  printf(_("Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"),
+           PACKAGE_NAME);
 
   printf("       %s -h\n", PACKAGE_NAME);
   printf("       %s -v\n", PACKAGE_NAME);
 
-  printf(gettext("Options:\n"));
-  printf(gettext("  -0  read and write file names terminated by a null character\n"));
-  printf(gettext("  -H  follow symbolic links on the command line\n"));
-  printf(gettext("  -L  follow all symbolic links\n"));
-  printf(gettext("  -P  do not follow any symbolic links (default)\n"));
-  printf(gettext("  -a  all files; include hidden files when searching recursively\n"));
-  printf(gettext("  -d  the message digest function to use\n"));
-  printf(gettext("  -e  excess files mode; list only excess files (no headers)\n"));
-  printf(gettext("  -f  header format; set format for cluster headers\n"));
-  printf(gettext("  -h  show this help\n"));
-  printf(gettext("  -l  size limit; the minimal size that activates sampling\n"));
-  printf(gettext("  -q  quiet; suppress warnings and error messages\n"));
-  printf(gettext("  -p  physical mode; do not report multiple links\n"));
-  printf(gettext("  -r  recursive; search in specified directories\n"));
-  printf(gettext("  -t  thorough; force byte-by-byte comparison of files\n"));
-  printf(gettext("  -v  show version information\n"));
-  printf(gettext("  -z  do not report empty files\n"));
+  printf(_("Options:\n"));
+  printf(_("  -0  read and write file names terminated by a null character\n"));
+  printf(_("  -H  follow symbolic links on the command line\n"));
+  printf(_("  -L  follow all symbolic links\n"));
+  printf(_("  -P  do not follow any symbolic links (default)\n"));
+  printf(_("  -a  all files; include hidden files when searching recursively\n"));
+  printf(_("  -d  the message digest function to use\n"));
+  printf(_("  -e  excess files mode; list only excess files (no headers)\n"));
+  printf(_("  -f  header format; set format for cluster headers\n"));
+  printf(_("  -h  show this help\n"));
+  printf(_("  -l  size limit; the minimal size that activates sampling\n"));
+  printf(_("  -q  quiet; suppress warnings and error messages\n"));
+  printf(_("  -p  physical mode; do not report multiple links\n"));
+  printf(_("  -r  recursive; search in specified directories\n"));
+  printf(_("  -t  thorough; force byte-by-byte comparison of files\n"));
+  printf(_("  -v  show version information\n"));
+  printf(_("  -z  do not report empty files\n"));
 }
 
 /* Prints bug report address to stdout.
  */
 static void bugs(void)
 {
-  printf(gettext("Report bugs to <%s>\n"), PACKAGE_BUGREPORT);
+  printf(_("Report bugs to <%s>\n"), PACKAGE_BUGREPORT);
 }
 
 /* I don't know what this function does.
@@ -232,7 +232,7 @@ int main(int argc, char** argv)
 	else if (strcasecmp(optarg, "sha512") == 0)
 	  digest_function = SHA_512;
 	else
-	  error(gettext("%s is not a supported digest function"), optarg);
+	  error(_("%s is not a supported digest function"), optarg);
 	break;
       case 'e':
         excess_flag = 1;
@@ -247,11 +247,11 @@ int main(int argc, char** argv)
       case 'l':
         limit = (off_t) strtoull(optarg, &temp, 10);
 	if (temp == optarg || errno == ERANGE || errno == EINVAL)
-	  warning(gettext("Ignoring invalid sample limit %s"), optarg);
+	  warning(_("Ignoring invalid sample limit %s"), optarg);
 	else
 	{
 	  if (limit < SAMPLE_COUNT)
-	    warning(gettext("Sample limit must be at least %u bytes"), SAMPLE_COUNT);
+	    warning(_("Sample limit must be at least %u bytes"), SAMPLE_COUNT);
 	  else
 	    sample_limit = limit;
 	}

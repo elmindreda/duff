@@ -24,7 +24,7 @@
 
 /* Macros for pretend gettext.
  */
-#define gettext(String) (String)
+#define _(String) (String)
 #define textdomain(Domain)
 #define bindtextdomain(Package, Directory)
 
