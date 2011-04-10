@@ -4,6 +4,7 @@
 AC_PREREQ(2.57)
 AC_INIT([duff], [0.5], [elmindreda@elmindreda.org], [duff], [http://duff.sourceforge.net/])
 AC_CONFIG_SRCDIR([src/duff.c])
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([check-news dist-bzip2])
 AM_CONFIG_HEADER([src/config.h])
 AM_GNU_GETTEXT([external])
