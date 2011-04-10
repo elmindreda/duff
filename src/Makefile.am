@@ -1,5 +1,5 @@
 
-AM_CPPFLAGS = -I../lib -DLOCALEDIR=\"$(localedir)\"
+AM_CPPFLAGS = -I$(top_srcdir)/lib -DLOCALEDIR=\"$(localedir)\"
 
 bin_PROGRAMS = duff
 
