@@ -257,7 +257,7 @@ static int get_entry_digest(Entry* entry)
       break;
 
     default:
-      error(gettext("This cannot happen"));
+      error(_("This cannot happen"));
   }
 
   fclose(file);

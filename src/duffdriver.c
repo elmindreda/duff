@@ -316,22 +316,22 @@ void process_path(const char* path, int depth)
 	switch (mode)
 	{
 	  case S_IFLNK:
-	    warning(gettext("%s is a symbolic link; skipping"), path);
+	    warning(_("%s is a symbolic link; skipping"), path);
 	    break;
 	  case S_IFIFO:
-	    warning(gettext("%s is a named pipe; skipping"), path);
+	    warning(_("%s is a named pipe; skipping"), path);
 	    break;
 	  case S_IFCHR:
-	    warning(gettext("%s is a character device; skipping"), path);
+	    warning(_("%s is a character device; skipping"), path);
 	    break;
 	  case S_IFDIR:
-	    warning(gettext("%s is a directory; skipping"), path);
+	    warning(_("%s is a directory; skipping"), path);
 	    break;
 	  case S_IFSOCK:
-	    warning(gettext("%s is a socket; skipping"), path);
+	    warning(_("%s is a socket; skipping"), path);
 	    break;
 	  default:
-	    error(gettext("This cannot happen"));
+	    error(_("This cannot happen"));
 	}
       }
     }
