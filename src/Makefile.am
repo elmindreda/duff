@@ -5,9 +5,3 @@ duff_SOURCES = duff.c duffdriver.c duffentry.c duffstring.c duffutil.c sha1.c sh
 
 noinst_HEADERS = duff.h duffstring.h sha1.h sha256.h sha384.h sha512.h
 
-dist_man1_MANS = duff.1
-
-dist_pkgdata_DATA = join-duplicates.sh
-
-EXTRA_DIST = HACKING README.SHA
-

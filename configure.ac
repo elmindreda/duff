@@ -3,9 +3,9 @@
 
 AC_PREREQ(2.57)
 AC_INIT([duff], [0.5], [elmindreda@elmindreda.org])
-AC_CONFIG_SRCDIR([duff.c])
+AC_CONFIG_SRCDIR([src/duff.c])
 AM_INIT_AUTOMAKE([check-news dist-bzip2])
-AM_CONFIG_HEADER([config.h])
+AM_CONFIG_HEADER([src/config.h])
 
 # Checks for programs.
 AC_PROG_CC
@@ -38,5 +38,7 @@ AC_CHECK_FUNCS([strdup strerror memset strchr strrchr strtoull], \
   [], [AC_MSG_ERROR([Function not found])])
 AC_CHECK_FUNCS([asprintf vasprintf])
 
-AC_OUTPUT(Makefile)
+AC_OUTPUT([Makefile
+           src/Makefile
+           man/Makefile])
 
