@@ -1,5 +1,5 @@
 
-SUBDIRS = po src man
+SUBDIRS = src po man
 
 dist_pkgdata_DATA = join-duplicates.sh
 
