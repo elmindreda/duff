@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.61)
 AC_INIT([duff], [0.5], [elmindreda@elmindreda.org], [duff], [http://duff.sourceforge.net/])
 AC_CONFIG_SRCDIR([src/duff.c])
 AC_CONFIG_AUX_DIR([build-aux])
