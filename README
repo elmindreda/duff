@@ -69,6 +69,11 @@ magic should be required.  If it is, then that's a bug and should be reported.
 
 This release of duff has been successfully built on the following systems:
 
+  Cygwin 1.7 i686
+  Debian Wheezy amd64
+  FreeBSD 8.2 i386
+  Mac OS X 10.6 x86_64
+  Mac OS X 10.6 x86_64 (with MacPorts)
   Ubuntu Maverick amd64
 
 Earlier releases have been successfully built on the following systems:
