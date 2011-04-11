@@ -151,7 +151,7 @@ void error(const char* format, ...)
     free(message);
   }
 
-  exit(1);
+  exit(EXIT_FAILURE);
 }
 
 /* Prints a formatted message to stderr.
