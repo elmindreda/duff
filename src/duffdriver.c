@@ -115,6 +115,7 @@ static int has_recursed_directory(dev_t device, ino_t inode);
 static void recurse_directory(const char* path,
                               const struct stat* sb,
 			      int depth);
+static void process_file(const char* path, struct stat* sb);
 static void report_cluster(Entry* duplicates,
                            unsigned int number,
 			   unsigned int count);
@@ -235,6 +236,50 @@ static void recurse_directory(const char* path,
   closedir(dir);
 }
 
+/* Processes a single file.
+ */
+static void process_file(const char* path, struct stat* sb)
+{
+  Entry* entry;
+
+  if (sb->st_size == 0)
+  {
+    if (ignore_empty_flag)
+      return;
+  }
+  else
+  {
+    if (access(path, R_OK) != 0)
+    {
+      /* We can't read the file, so we fail here */
+
+      if (!quiet_flag)
+        warning("%s: %s", path, strerror(errno));
+
+      return;
+    }
+  }
+
+  /* NOTE: Check for duplicate arguments? */
+
+  if (physical_flag)
+  {
+    /* TODO: Make this less pessimal */
+
+    for (entry = file_entries;  entry;  entry = entry->next)
+    {
+      if (entry->device == sb->st_dev && entry->inode == sb->st_ino)
+        return;
+    }
+  }
+
+  if ((entry = make_entry(path, sb)) != NULL)
+  {
+    link_entry(&file_entries, entry);
+    entry_count++;
+  }
+}
+
 /* Processes a path name, whether from the command line or from
  * directory recursion.
  */
@@ -242,7 +287,6 @@ void process_path(const char* path, int depth)
 {
   mode_t mode;
   struct stat sb;
-  Entry* entry;
 
   if (stat_path(path, &sb, depth) != 0)
     return;
@@ -252,43 +296,7 @@ void process_path(const char* path, int depth)
   {
     case S_IFREG:
     {
-      if (sb.st_size == 0)
-      {
-	if (ignore_empty_flag)
-	  return;
-      }
-      else
-      {
-	if (access(path, R_OK) != 0)
-	{
-	  /* We can't read the file, so we fail here */
-
-	  if (!quiet_flag)
-	    warning("%s: %s", path, strerror(errno));
-
-	  return;
-	}
-      }
-
-      /* NOTE: Check for duplicate arguments? */
-
-      if (physical_flag)
-      {
-	/* TODO: Make this less pessimal */
-
-	for (entry = file_entries;  entry;  entry = entry->next)
-	{
-	  if (entry->device == sb.st_dev && entry->inode == sb.st_ino)
-	    return;
-	}
-      }
-
-      if ((entry = make_entry(path, &sb)) != NULL)
-      {
-	link_entry(&file_entries, entry);
-	entry_count++;
-      }
-
+      process_file(path, &sb);
       break;
     }
 
