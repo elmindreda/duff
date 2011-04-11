@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2011-04-11 16:44+0200\n"
+"POT-Creation-Date: 2011-04-11 17:54+0200\n"
 "PO-Revision-Date: 2011-04-11 16:48+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.se>\n"
 "Language-Team: \n"
@@ -128,22 +128,22 @@ msgstr "  -z  rapportera inte tomma filer\n"
 msgid "Report bugs to <%s>\n"
 msgstr "Rapportera fel till <%s>\n"
 
-#: src/duff.c:238
+#: src/duff.c:236
 #, c-format
 msgid "%s is not a supported digest function"
 msgstr "%s är inte en stödd hash-funktion"
 
-#: src/duff.c:253
+#: src/duff.c:251
 #, c-format
 msgid "Ignoring invalid sample limit %s"
 msgstr "Ignorerar den ogiltiga samplings-gränsen %s"
 
-#: src/duff.c:257
+#: src/duff.c:255
 #, c-format
 msgid "Sample limit must be at least %u bytes"
 msgstr "Samplings-gränsen måste vara åtminstone %u byte"
 
-#: src/duff.c:291
+#: src/duff.c:289
 #, c-format
 msgid "%n files in cluster %i (%s bytes, digest %d)"
 msgstr "%n filer i grupp %i (%s byte, hash %d)"
