@@ -128,9 +128,9 @@ size_t get_digest_size(void)
       return SHA384_HASH_SIZE;
     case SHA_512:
       return SHA512_HASH_SIZE;
-    default:
-      error(_("This cannot happen"));
   }
+
+  error(_("This cannot happen"));
 }
 
 /* Prints a formatted message to stderr and exist with non-zero status.
