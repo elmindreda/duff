@@ -3,6 +3,11 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2011-04-11  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.c (main): Made cluster header translatable.
+ * duffutil.c (error): Changed exit status to EXIT_FAILURE.
+
 2011-04-10  gettextize  <bug-gnu-gettext@gnu.org>
 
  * Makefile.am (SUBDIRS): Add po.
@@ -13,12 +18,11 @@ Maintained since version 0.3.1.
 2011-04-10  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.c duff.h duffdriver.c duffentry.c: Changed gettext macro to _.
- * duff.c duffdriver.c duffentry.c duff.h duffstring.c duffstring.h duffutil.c
-   sha1.c sha1.h sha256.c sha256.h sha384.c sha384.h sha512.c
-   sha512.h: Moved to src directory.
- * duff.1: Moved to man directory.
- * duff.c duffdriver.c duffentry.c duffstring.c
-   duffutil.c: Moved to autoconf large file support.
+ * gettext.h: Added file to lib directory.
+ * duff.c (usage): Improved grammar in help text.
+ * duff.c duff.h duffdriver.c duffentry.c: Enabled use of gettext.
+ * duff.c duff.h duffdriver.c duffentry.c duffutil.c
+   duffstring.c: Moved to use autoconf large file support detection.
 
 2010-08-15  Camilla Berglund  <elmindreda@elmindreda.org>
 

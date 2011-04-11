@@ -39,7 +39,14 @@ license details.  The license is also included at the top of each source file.
 
 Duff contains shaX-asaddi.
 Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>
-See the files `sha*.c' or `sha*.h' for license details.
+See the files `src/sha*.c' and `src/sha*.h' for license details.
+
+Duff uses the gettext.h convenience header from GNU gettext.
+Copyright (C) 1995-1998, 2000-2002, 2004-2006, 2009 Free Software Foundation,
+Inc.  See the `lib/gettex.h' for license details.
+
+Duff comes with a number of files provided by the GNU autoconf, automake and
+gettext packages.  See the individual files in question for license details.
 
 
 2. Project news
@@ -53,17 +60,14 @@ See the file `NEWS'.
 
 If you got this source tree from a git repository then you will need to
 bootstrap the build environment using `bootstrap.sh'.  Note that this script
-requires autoconf and automake to run.
+requires GNU autoconf, automake and gettext to run.
 
 If (or once) you have a `configure' script, go ahead and run it.  No additional
 magic should be required.  If it is, then that's a bug and should be reported.
 
 This release of duff has been successfully built on the following systems:
 
-  Debian Lenny x86
-  Ubunty Jaunty x86
-  Ubuntu Lucid amd64
-  Mac OS X 10.6 x86_64
+  Ubuntu Maverick amd64
 
 Earlier releases have been successfully built on the following systems:
 
@@ -71,15 +75,19 @@ Earlier releases have been successfully built on the following systems:
   Darwin 7.9.0 powerpc
   Debian Etch powerpc
   Debian Etch x86
+  Debian Lenny x86
   Debian Sarge alpha
   FreeBSD 4.11 x86
   FreeBSD 5.4 x86
   Mac OS X 10.3 powerpc
   Mac OS X 10.4 powerpc
+  Mac OS X 10.6 x86_64
   NetBSD 1.6.1 sparc
   Red Hat Enterprise 4.0 x86
   SunOS 5.9 sparc64
   Ubuntu Breezy x86
+  Ubuntu Lucid amd64
+  Ubunty Jaunty x86
 
 The tools used were gcc and GNU or BSD make.  However, it should build on most
 Unix systems without modifications.
@@ -115,7 +123,13 @@ See the file `HACKING'.
 =============================
 
 Please send bug reports, feedback, patches and cookies to:
-Camilla Berglund <elmindreda@elmindreda.org>
+
+  Camilla Berglund <elmindreda@elmindreda.org>
+
+Or, if you prefer, you may use the trackers on SF.net to report bugs, submit
+patches or request features:
+
+  http://sourceforge.net/projects/duff
 
 For more involved discussions, please join the mailing list:
 
@@ -139,7 +153,7 @@ Clemens Lucas Fries
 Ross Newell
 Allan Saddi <allan@saddi.com>
 
-...and everyone I forgot.
+...and everyone I forgot.  Did I forget you?  Drop me an email.
 
 
 9. Disambiguation
@@ -156,14 +170,14 @@ DUFF also has a SourceForge.net URL:
 10. Release history
 ===================
 
-Version 0.1 was named `duplicate', and was never released anywhere.
+Version 0.1 was named `duplicate' and was never released anywhere.
 
 Version 0.2 was the first release named duff.  It lacked a real checksumming
 algorithm, and was thus only released to a few individuals, during the first
 half of 2005.
 
 Version 0.3 was the first official release, on November 22, 2005, after a
-prolonged search for a suitably licensed implementation of SHA1.
+long search for a suitably licensed implementation of SHA1.
 
 Version 0.3.1 was a bugfix release, on November 27, 2005, adding a single
 feature (-z), which just happened to get included.
@@ -171,4 +185,8 @@ feature (-z), which just happened to get included.
 Version 0.4 was the second feature release, on January 13, 2006, adding a
 number of missing and/or requested features as well as bug fixes.  It was the
 first release to be considered stable and safe enough for everyday use.
+
+Version 0.5 was the third feature release, on April 11, 2011, adding a number
+of minor features and fixing a number of bugs.  It was mostly intended to get
+the ball rolling again and thus low on features.
 

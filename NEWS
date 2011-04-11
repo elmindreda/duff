@@ -8,6 +8,8 @@ Version 0.5
 * Added flag to select message digest function (-d).
 * Improved handling of symbolic links to directories.
 * Added internationalization via GNU gettext.
+* Added complete Swedish translation.
+* Added support for large files on more platforms.
 * Fixed a number of bugs
 
 Version 0.4

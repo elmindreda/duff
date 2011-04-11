@@ -8,7 +8,6 @@ Functionality
   - is that even possible to do in a sane fashion?
 * Detect duplicate directory subtrees
   - in the upcoming treeduff, not plain duff
-* Finish i18n work
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage
