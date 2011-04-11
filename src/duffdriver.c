@@ -281,7 +281,7 @@ static void process_file(const char* path, struct stat* sb)
 }
 
 /* Processes a path name, whether from the command line or from
- * directory recursion.
+ * directory recursion, according to its type.
  */
 void process_path(const char* path, int depth)
 {
