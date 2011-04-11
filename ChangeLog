@@ -7,6 +7,8 @@ Maintained since version 0.3.1.
 
  * duff.c (main): Made cluster header translatable.
  * duffutil.c (error): Changed exit status to EXIT_FAILURE.
+ * duffdriver.c (process_path): Split file processing into process_file function.
+ * duffdriver.c (process_file): Reverted to old behaviour of skipping block devices.
 
 2011-04-10  gettextize  <bug-gnu-gettext@gnu.org>
 
