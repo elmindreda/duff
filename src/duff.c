@@ -158,8 +158,6 @@ static void version(void)
  */
 static void usage(void)
 {
-  /* TODO: Internationalize this */
-
   printf(_("Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"),
            PACKAGE_NAME);
 
