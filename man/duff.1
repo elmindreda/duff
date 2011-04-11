@@ -43,10 +43,6 @@ and
 .Fl P
 options now apply only to directories.
 .Pp
-Also note that as of version 0.5,
-.Nm
-works on both regular files and block device nodes.
-.Pp
 The following options are available:
 .Bl -tag -width indent
 .It Fl 0
@@ -177,8 +173,8 @@ lists all duplicate header files in the current directory and its subdirectories
 .An "Camilla Berglund" Aq elmindreda@elmindreda.org
 .Sh BUGS
 .Nm
-doesn't check whether the same file or block device node has been specified twice on the command line.
-This may lead it to report single files or block device nodes as duplicates.
+doesn't check whether the same file has been specified twice on the command line.
+This may lead it to report single files as duplicates.
 Note that this problem does not affect directories.
 .Pp
 .Nm

@@ -251,7 +251,6 @@ void process_path(const char* path, int depth)
   switch (mode)
   {
     case S_IFREG:
-    case S_IFBLK:
     {
       if (sb.st_size == 0)
       {
@@ -315,6 +314,9 @@ void process_path(const char* path, int depth)
 	    break;
 	  case S_IFIFO:
 	    warning(_("%s is a named pipe; skipping"), path);
+	    break;
+          case S_IFBLK:
+	    warning(_("%s is a block device; skipping"), path);
 	    break;
 	  case S_IFCHR:
 	    warning(_("%s is a character device; skipping"), path);
