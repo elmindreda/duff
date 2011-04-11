@@ -126,7 +126,7 @@ int ignore_empty_flag = 0;
 /* Specifies the look of the cluster header.
  * If set to the empty string, no headers are printed.
  */
-const char* header_format = "%n files in cluster %i (%s bytes, digest %d)";
+const char* header_format = NULL;
 
 /* Specifies the minimal size of files to be compared with the sampling method.
  */
@@ -284,6 +284,9 @@ int main(int argc, char** argv)
 
   argc -= optind;
   argv += optind;
+
+  if (!header_format)
+    header_format = _("%n files in cluster %i (%s bytes, digest %d)");
 
   if (argc)
   {

@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2011-04-10 19:04+0200\n"
-"PO-Revision-Date: 2011-04-10 23:39+0200\n"
+"POT-Creation-Date: 2011-04-11 14:27+0200\n"
+"PO-Revision-Date: 2011-04-11 14:28+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: sv\n"
@@ -28,115 +28,120 @@ msgstr "%s innehåller shaX-asaddi\n"
 msgid "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"
 msgstr "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"
 
-#: src/duff.c:163
+#: src/duff.c:161
 #, c-format
 msgid "Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"
 msgstr "Användning: %s [-0HLPaepqrtz] [-d funktion] [-f format] [-l storlek] [fil ...]\n"
 
-#: src/duff.c:169
+#: src/duff.c:167
 #, c-format
 msgid "Options:\n"
 msgstr "Flaggor:\n"
 
-#: src/duff.c:170
+#: src/duff.c:168
 #, c-format
 msgid "  -0  read and write file names terminated by a null character\n"
 msgstr "  -0  läs och skriv filnamn avslutade med nulltecken\n"
 
-#: src/duff.c:171
+#: src/duff.c:169
 #, c-format
 msgid "  -H  follow symbolic links on the command line\n"
 msgstr "  -H  följ symboliska länkar på kommandoraden\n"
 
-#: src/duff.c:172
+#: src/duff.c:170
 #, c-format
 msgid "  -L  follow all symbolic links\n"
 msgstr "  -L  följ alla symboliska länkar\n"
 
-#: src/duff.c:173
+#: src/duff.c:171
 #, c-format
 msgid "  -P  do not follow any symbolic links (default)\n"
 msgstr "  -P  följ inga symboliska länkar (normalt)\n"
 
-#: src/duff.c:174
+#: src/duff.c:172
 #, c-format
 msgid "  -a  include hidden files when searching recursively\n"
 msgstr "  -a  inkludera dolda filer vid rekursiv sökning\n"
 
-#: src/duff.c:175
+#: src/duff.c:173
 #, c-format
 msgid "  -d  the message digest function to use\n"
 msgstr "  -d  hash-funktionen att använda\n"
 
-#: src/duff.c:176
+#: src/duff.c:174
 #, c-format
 msgid "  -e  excess mode; list all but one file from each cluster (no headers)\n"
 msgstr "  -e  lista alla filer utom en från varje grupp dubletter (inga headers)\n"
 
-#: src/duff.c:177
+#: src/duff.c:175
 #, c-format
 msgid "  -f  format for cluster headers\n"
 msgstr "  -f  format för headern innan varje grupp dubletter\n"
 
-#: src/duff.c:178
+#: src/duff.c:176
 #, c-format
 msgid "  -h  show this help\n"
 msgstr "  -h  visa denna hjälptext\n"
 
-#: src/duff.c:179
+#: src/duff.c:177
 #, c-format
 msgid "  -l  the minimum size that activates sampling\n"
 msgstr "  -l  den minsta filstorleken som aktiverar sampling\n"
 
-#: src/duff.c:180
+#: src/duff.c:178
 #, c-format
 msgid "  -q  quiet; suppress warnings and error messages\n"
 msgstr "  -q  utelämna de flesta felmeddelanden\n"
 
-#: src/duff.c:181
+#: src/duff.c:179
 #, c-format
 msgid "  -p  physical mode; do not report multiple links as duplicates\n"
 msgstr "  -p  rapportera inte multipla fysiska länkar som dubletter\n"
 
-#: src/duff.c:182
+#: src/duff.c:180
 #, c-format
 msgid "  -r  search recursively through specified directories\n"
 msgstr "  -r  sök rekursivt genom angivna kataloger\n"
 
-#: src/duff.c:183
+#: src/duff.c:181
 #, c-format
 msgid "  -t  thorough; force byte-by-byte comparison of files\n"
 msgstr "  -t  tvinga byte-för-byte-jämförelse av filer\n"
 
-#: src/duff.c:184
+#: src/duff.c:182
 #, c-format
 msgid "  -v  show version information\n"
 msgstr "  -v  visa versionsinformation\n"
 
-#: src/duff.c:185
+#: src/duff.c:183
 #, c-format
 msgid "  -z  do not report empty files\n"
 msgstr "  -z  rapportera inte tomma filer\n"
 
-#: src/duff.c:192
+#: src/duff.c:190
 #, c-format
 msgid "Report bugs to <%s>\n"
 msgstr "Rapportera fel till <%s>\n"
 
-#: src/duff.c:238
+#: src/duff.c:236
 #, c-format
 msgid "%s is not a supported digest function"
 msgstr "%s är inte en stödd hash-funktion"
 
-#: src/duff.c:253
+#: src/duff.c:251
 #, c-format
 msgid "Ignoring invalid sample limit %s"
 msgstr "Ignorerar den ogiltiga samplings-gränsen %s"
 
-#: src/duff.c:257
+#: src/duff.c:255
 #, c-format
 msgid "Sample limit must be at least %u bytes"
 msgstr "Samplings-gränsen måste vara åtminstone %u byte"
+
+#: src/duff.c:289
+#, c-format
+msgid "%n files in cluster %i (%s bytes, digest %d)"
+msgstr "%n filer i grupp %i (%s byte, hash %d)"
 
 #: src/duffdriver.c:314
 #, c-format
