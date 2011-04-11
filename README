@@ -60,7 +60,9 @@ See the file `NEWS'.
 
 If you got this source tree from a Git repository then you will need to
 bootstrap the build environment using `bootstrap.sh'.  Note that this script
-requires GNU autoconf, automake and gettext to run.
+requires GNU autoconf, automake and gettext to run.  Also note that running
+gettextize may cause a few duplicate entries in various build files.  To remove
+these, use `git reset --hard`.
 
 If (or once) you have a `configure' script, go ahead and run it.  No additional
 magic should be required.  If it is, then that's a bug and should be reported.
