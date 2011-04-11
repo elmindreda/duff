@@ -4,58 +4,58 @@ User-visible changes in duff
 Version 0.5
 -----------
 
-* Added flag to handle null-terminated file names (-0).
-* Added flag to select message digest function (-d).
-* Improved handling of symbolic links to directories.
-* Added internationalization via GNU gettext.
-* Added complete Swedish translation.
-* Added support for large files on more platforms.
-* Fixed a number of bugs
+ * Added flag to handle null-terminated file names (-0).
+ * Added flag to select message digest function (-d).
+ * Improved handling of symbolic links to directories.
+ * Added internationalization via GNU gettext.
+ * Added complete Swedish translation.
+ * Added support for large files on more platforms.
+ * Fixed a number of bugs.
 
 Version 0.4
 -----------
 
-* Added file name reading from stdin.
-* Added primitive directory loop detection.
-* Compatibility with more systems.
-* Added physical mode flag (-p).
-* Added argument symbolic link flag (-H).
-* Improved warnings for sample limit flag (-l).
-* Removed collection of symbolic links to files.
-* Added reporting of access-protected empty files.
-* Added example script for hard-linking duplicate files.
-* Updated and improved manpage.
-* Fixed a number of bugs.
+ * Added file name reading from stdin.
+ * Added primitive directory loop detection.
+ * Compatibility with more systems.
+ * Added physical mode flag (-p).
+ * Added argument symbolic link flag (-H).
+ * Improved warnings for sample limit flag (-l).
+ * Removed collection of symbolic links to files.
+ * Added reporting of access-protected empty files.
+ * Added example script for hard-linking duplicate files.
+ * Updated and improved manpage.
+ * Fixed a number of bugs.
 
 Version 0.3.1
 -------------
 
-* Added flag to ignore empty files (-z).
-* Fixed a number of bugs.
+ * Added flag to ignore empty files (-z).
+ * Fixed a number of bugs.
 
 Version 0.3
 -----------
 
-* Added explicit link handling flags (-L,-P).
-* Added sha1-asaddi for SHA1 checksum calculation.
-* Completed basic manpage.
-* Added sample size limit flag (-l).
-* Added very brief hacking guide.
-* Compatibility, portability, refactoring, cleanup.
-* Added basic (non symlink-aware) excess mode (-e).
+ * Added explicit link handling flags (-L,-P).
+ * Added sha1-asaddi for SHA1 checksum calculation.
+ * Completed basic manpage.
+ * Added sample size limit flag (-l).
+ * Added very brief hacking guide.
+ * Compatibility, portability, refactoring, cleanup.
+ * Added basic (non symlink-aware) excess mode (-e).
 
 Version 0.2
 -----------
 
-* Added customisable cluster headers (-f).
-* Split code into multiple files.
-* Got SourceForge.net account (duff.sf.net).
-* Added recursive flag (-r).
-* Added quiet flag (-q).
-* Started writing manpage.
+ * Added customisable cluster headers (-f).
+ * Split code into multiple files.
+ * Got SourceForge.net account (duff.sf.net).
+ * Added recursive flag (-r).
+ * Added quiet flag (-q).
+ * Started writing manpage.
 
 Version 0.1
 -----------
 
-* Basic functionality.
+ * Basic functionality.
 
