@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2011-04-11 18:07+0200\n"
+"POT-Creation-Date: 2011-04-11 18:23+0200\n"
 "PO-Revision-Date: 2011-04-11 18:11+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -148,36 +148,36 @@ msgstr "Samplings-gränsen måste vara åtminstone %u byte"
 msgid "%n files in cluster %i (%s bytes, digest %d)"
 msgstr "%n filer i grupp %i (%s byte, hash %d)"
 
-#: src/duffdriver.c:313
+#: src/duffdriver.c:321
 #, c-format
 msgid "%s is a symbolic link; skipping"
 msgstr "%s är en symbolisk länk; hoppar över"
 
-#: src/duffdriver.c:316
+#: src/duffdriver.c:324
 #, c-format
 msgid "%s is a named pipe; skipping"
 msgstr "%s är ett namngivet rör (named pipe); hoppar över"
 
-#: src/duffdriver.c:319
+#: src/duffdriver.c:327
 #, c-format
 msgid "%s is a block device; skipping"
 msgstr "%s är en blockspecialfil (block device); hoppar över"
 
-#: src/duffdriver.c:322
+#: src/duffdriver.c:330
 #, c-format
 msgid "%s is a character device; skipping"
 msgstr "%s är en teckenspecialfil (character device); hoppar över"
 
-#: src/duffdriver.c:325
+#: src/duffdriver.c:333
 #, c-format
 msgid "%s is a directory; skipping"
 msgstr "%s är en katalog; hoppar över"
 
-#: src/duffdriver.c:328
+#: src/duffdriver.c:336
 #, c-format
 msgid "%s is a socket; skipping"
 msgstr "%s är ett uttag (socket); hoppar över"
 
-#: src/duffdriver.c:331 src/duffentry.c:255 src/duffutil.c:133
+#: src/duffdriver.c:339 src/duffentry.c:255 src/duffutil.c:133
 msgid "This cannot happen"
 msgstr "Detta kan inte hända"
