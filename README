@@ -199,5 +199,6 @@ Version 0.5 was the third feature release, on April 11, 2011, adding a number
 of minor features and fixing a number of bugs.  It was mostly intended to get
 the ball rolling again and thus low on features.
 
-Version 0.5.1 was a bugfix release, on DATE HERE, adding a single bugfix.
+Version 0.5.1 was a bugfix release, on January 17, 2012, adding a single bugfix
+and a new default cluster header for thorough mode.
 
