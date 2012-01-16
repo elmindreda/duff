@@ -286,7 +286,15 @@ int main(int argc, char** argv)
   argv += optind;
 
   if (!header_format)
-    header_format = _("%n files in cluster %i (%s bytes, digest %d)");
+  {
+    if (thorough_flag)
+      header_format = _("%n files in cluster %i (%s bytes)");
+    else
+      header_format = _("%n files in cluster %i (%s bytes, digest %d)");
+  }
+
+  if (thorough_flag && cluster_header_uses_digest(header_format))
+    error(_("Digest (%%d) is not calculated in thorough mode (-t)"));
 
   if (argc)
   {

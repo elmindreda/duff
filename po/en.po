@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2011-04-11 18:23+0200\n"
+"POT-Creation-Date: 2012-01-17 00:31+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -142,10 +142,20 @@ msgstr "Ignoring invalid sample limit %s"
 msgid "Sample limit must be at least %u bytes"
 msgstr "Sample limit must be at least %u bytes"
 
-#: src/duff.c:289
+#: src/duff.c:291
+#, fuzzy, c-format
+msgid "%n files in cluster %i (%s bytes)"
+msgstr "%n files in cluster %i (%s bytes, digest %d)"
+
+#: src/duff.c:293
 #, c-format
 msgid "%n files in cluster %i (%s bytes, digest %d)"
 msgstr "%n files in cluster %i (%s bytes, digest %d)"
+
+#: src/duff.c:297
+#, c-format
+msgid "Digest (%%d) is not calculated in thorough mode (-t)"
+msgstr "Digest (%%d) is not calculated in thorough mode (-t)"
 
 #: src/duffdriver.c:321
 #, c-format

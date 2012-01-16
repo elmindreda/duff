@@ -3,6 +3,13 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-01-16  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.1: Added new cluster header to description of -f flag.
+ * duff.c (main): Added error if thorough mode cluster header uses digest.
+ * duff.c (main): Added non-digest default cluster header for thorough mode.
+ * duffutil.c duff.h: Added function cluster_header_uses_digest.
+
 2011-04-11  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.c (main): Made cluster header translatable.

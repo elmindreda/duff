@@ -116,6 +116,7 @@ void kill_trailing_slashes(char* path);
 size_t get_digest_size(void);
 void error(const char* format, ...);
 void warning(const char* format, ...);
+int cluster_header_uses_digest(const char* format);
 void print_cluster_header(const char* format,
                           unsigned int count,
 			  unsigned int index,

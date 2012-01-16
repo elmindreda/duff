@@ -1,6 +1,11 @@
 User-visible changes in duff
 ============================
 
+Version 0.5.1
+
+ * Fixed crash where thorough mode cluster header used digest.
+ * Added a different default cluster header for thorough mode.
+
 Version 0.5
 -----------
 

@@ -2,7 +2,7 @@
 .\" This document is licensed under the zlib/libpng license.
 .\" Please see the file `COPYING' for license details.
 .\"
-.Dd January 6, 2009
+.Dd January 16, 2012
 .Os
 .Dt DUFF 1
 .Sh NAME
@@ -112,7 +112,11 @@ A
 character.
 .El
 .Pp
-The default format string is:
+The default format string for thorough mode is:
+.Pp
+.Dl %n files in cluster %i (%s bytes)
+.Pp
+The default format string for the other modes is:
 .Pp
 .Dl %n files in cluster %i (%s bytes, digest %d)
 .It Fl h

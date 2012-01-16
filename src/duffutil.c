@@ -173,6 +173,27 @@ void warning(const char* format, ...)
   }
 }
 
+/* Checks whether the cluster header format string uses file digests.
+ */
+int cluster_header_uses_digest(const char* format)
+{
+  const char* c;
+
+  for (c = format;  *c != '\0';  c++)
+  {
+    if (*c == '%')
+    {
+      c++;
+      if (*c == 'c' || *c == 'd')
+        return 1;
+      if (*c == '\0')
+        break;
+    }
+  }
+
+  return 0;
+}
+
 /* Prints a duplicate cluster header to stdout.  Various escape
  * sequences in the format string are replaced with the provided values.
  * Note that this function does not terminate the output with any
