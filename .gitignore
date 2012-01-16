@@ -24,6 +24,8 @@ po/quot.sed
 po/remove-potcdate.sed
 po/remove-potcdate.sin
 po/stamp-po
+po/*.header
+po/*.insert-header
 src/*.o
 src/.deps
 src/config.h
