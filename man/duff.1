@@ -159,7 +159,7 @@ This option suppresses reporting a cluster of empty files.
 .Sh EXAMPLES
 .\" TODO: Fix the formatting of the example commands.
 The command:
-.Dl duff -e * \&| xargs rm
+.Dl duff -e0 * \&| xargs -0 rm
 .Pp
 removes all duplicate files in the current directory.
 Note that it's usually a good idea to check what will be removed before running a command like the one above.
@@ -170,7 +170,7 @@ The command:
 lists all duplicate files in the directory foo and its subdirectories.
 .Pp
 The command:
-.Dl find \&. -name '*.h' -print0 \&| duff -0
+.Dl find \&. -name '*.h' -print0 \&| duff -0 | xargs -0 -n1 echo
 .Pp
 lists all duplicate header files in the current directory and its subdirectories, correctly handling file names containing whitespace.
 .Sh DIAGNOSTICS
