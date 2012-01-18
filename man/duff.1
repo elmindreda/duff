@@ -102,6 +102,9 @@ A legacy synonym for
 for compatibility reasons.
 .It Cm %d
 The message digest of files in the cluster.
+This may not be combined with
+.Fl t
+as no digest is calculated.
 .It Cm %i
 The one-based index of the file cluster.
 .It Cm %s
@@ -112,11 +115,13 @@ A
 character.
 .El
 .Pp
-The default format string for thorough mode is:
+The default format string when using
+.Fl t
+is:
 .Pp
 .Dl %n files in cluster %i (%s bytes)
 .Pp
-The default format string for the other modes is:
+The default format string for other modes is:
 .Pp
 .Dl %n files in cluster %i (%s bytes, digest %d)
 .It Fl h
