@@ -28,6 +28,11 @@
   */
 #define _(String) gettext(String)
 
+/* Only use __attribute__ on GCC and compatible compilers */
+#ifndef __GNUC__
+#define __attribute__(x)
+#endif
+
 #define SAMPLE_COUNT 10
 
 /* Status modes for entries.
@@ -114,8 +119,8 @@ int compare_entries(Entry* first, Entry* second);
 int read_path(FILE* stream, char* path, size_t size);
 void kill_trailing_slashes(char* path);
 size_t get_digest_size(void);
-void error(const char* format, ...);
-void warning(const char* format, ...);
+void error(const char* format, ...) __attribute__((format(printf, 1, 2))) __attribute__((noreturn));
+void warning(const char* format, ...) __attribute__((format(printf, 1, 2)));
 int cluster_header_uses_digest(const char* format);
 void print_cluster_header(const char* format,
                           unsigned int count,

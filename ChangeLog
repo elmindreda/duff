@@ -5,6 +5,8 @@ Maintained since version 0.3.1.
 
 2012-01-19  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duff.h: Tagged functions error and warning with GCC attributes.
+ * duff.1: Clarified default sampling limit.
  * duffdriver.c: Renamed cluster index variable to index.
 
 2012-01-18  Camilla Berglund  <elmindreda@elmindreda.org>
