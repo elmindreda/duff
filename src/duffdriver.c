@@ -117,7 +117,7 @@ static void recurse_directory(const char* path,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
 static void report_cluster(Entry* duplicates,
-                           unsigned int number,
+                           unsigned int index,
 			   unsigned int count);
 
 /* Stat:s a file according to the specified options.
@@ -346,7 +346,7 @@ void process_path(const char* path, int depth)
 /* Reports a cluster to stdout, according to the specified options.
  */
 static void report_cluster(Entry* duplicates,
-                           unsigned int number,
+                           unsigned int index,
 			   unsigned int count)
 {
   Entry* entry;
@@ -375,7 +375,7 @@ static void report_cluster(Entry* duplicates,
     {
       print_cluster_header(header_format,
 			   count,
-			   number,
+			   index,
 			   duplicates->size,
 			   duplicates->digest);
 
@@ -404,7 +404,7 @@ static void report_cluster(Entry* duplicates,
  */
 void report_clusters(void)
 {
-  int number = 1, count = 0;
+  int index = 1, count = 0;
   Entry* base;
   Entry* entry;
   Entry* entry_next;
@@ -442,9 +442,9 @@ void report_clusters(void)
 
     if (duplicates)
     {
-      report_cluster(duplicates, number, count);
+      report_cluster(duplicates, index, count);
       free_entry_list(&duplicates);
-      number++;
+      index++;
     }
     else
     {

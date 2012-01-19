@@ -3,6 +3,15 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-01-19  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duffdriver.c: Renamed cluster index variable to index.
+
+2012-01-18  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.1: Clarified language regarding -t and %d.
+ * duff.1: Made the output of examples human-readable.
+
 2012-01-16  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.1: Added new cluster header to description of -f flag.
