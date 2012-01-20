@@ -170,7 +170,7 @@ removes all duplicate files in the current directory.
 Note that it's usually a good idea to check what will be removed before running a command like the one above.
 .Pp
 The command:
-.Dl find \&. -name '*.h' -print0 \&| duff -0 | xargs -0 -n1 echo
+.Dl find \&. -name '*.h' -type f -print0 \&| duff -0 | xargs -0 -n1 echo
 .Pp
 lists all duplicate header files in the current directory and its subdirectories, correctly handling file names containing whitespace.
 .Sh DIAGNOSTICS
