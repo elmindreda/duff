@@ -3,6 +3,10 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-01-20  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.1: Added missing -type f to example (credits to Stephan Hegel).
+
 2012-01-19  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.h: Tagged functions error and warning with GCC attributes.
@@ -17,7 +21,8 @@ Maintained since version 0.3.1.
 2012-01-16  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.1: Added new cluster header to description of -f flag.
- * duff.c (main): Added error if thorough mode cluster header uses digest.
+ * duff.c (main): Added error if thorough mode output uses digest (credits to
+ Kamal Mostafa and Mika Kuoppala).
  * duff.c (main): Added non-digest default cluster header for thorough mode.
  * duffutil.c duff.h: Added function cluster_header_uses_digest.
 
