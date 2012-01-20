@@ -91,7 +91,7 @@ Earlier releases have been successfully built on the following systems:
   Mac OS X 10.4 powerpc
   Mac OS X 10.6 i386
   Mac OS X 10.6 x86_64
-  Mac OS X 10.6 x86_64 (with MacPorts)
+  Mac OS X 10.6 x86_64 (with MacPorts gettext)
   NetBSD 1.6.1 sparc
   Red Hat Enterprise 4.0 x86
   SunOS 5.9 sparc64
