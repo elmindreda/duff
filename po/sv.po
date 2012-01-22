@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-01-17 00:47+0100\n"
+"POT-Creation-Date: 2012-01-22 17:55+0100\n"
 "PO-Revision-Date: 2011-04-11 18:11+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -47,14 +47,14 @@ msgid "  -0  read and write file names terminated by a null character\n"
 msgstr "  -0  läs och skriv filnamn avslutade med nulltecken\n"
 
 #: src/duff.c:169
-#, c-format
-msgid "  -H  follow symbolic links on the command line\n"
-msgstr "  -H  följ symboliska länkar på kommandoraden\n"
+#, fuzzy, c-format
+msgid "  -H  follow symbolic links to directories on the command line\n"
+msgstr "  -H  följ symboliska länkar till kataloger på kommandoraden\n"
 
 #: src/duff.c:170
-#, c-format
-msgid "  -L  follow all symbolic links\n"
-msgstr "  -L  följ alla symboliska länkar\n"
+#, fuzzy, c-format
+msgid "  -L  follow all symbolic links to directories\n"
+msgstr "  -L  följ alla symboliska länkar till kataloger\n"
 
 #: src/duff.c:171
 #, c-format

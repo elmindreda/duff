@@ -166,8 +166,8 @@ static void usage(void)
 
   printf(_("Options:\n"));
   printf(_("  -0  read and write file names terminated by a null character\n"));
-  printf(_("  -H  follow symbolic links on the command line\n"));
-  printf(_("  -L  follow all symbolic links\n"));
+  printf(_("  -H  follow symbolic links to directories on the command line\n"));
+  printf(_("  -L  follow all symbolic links to directories\n"));
   printf(_("  -P  do not follow any symbolic links (default)\n"));
   printf(_("  -a  include hidden files when searching recursively\n"));
   printf(_("  -d  the message digest function to use\n"));
