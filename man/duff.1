@@ -187,7 +187,7 @@ This may lead it to report single files as duplicates.
 Note that this problem does not affect directories.
 .Pp
 .Nm
-no longer (as of version 0.4) considers symbolic links to files potential duplicates, and will not report them.
+no longer (as of version 0.4) reports symbolic links to files as duplicates, as they're by definition always duplicates.
 This may break scripts relying on the previous behavior.
 .Pp
 If the underlying files are modified while duff is running, all bets are off.
