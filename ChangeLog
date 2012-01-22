@@ -3,6 +3,10 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-01-22  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.c: Clarified help for -H and -L flags.
+
 2012-01-20  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.1: Added missing -type f to example (credits to Stephan Hegel).
