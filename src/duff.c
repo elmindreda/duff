@@ -170,7 +170,7 @@ static void usage(void)
   printf(_("  -L  follow all symbolic links to directories\n"));
   printf(_("  -P  do not follow any symbolic links (default)\n"));
   printf(_("  -a  include hidden files when searching recursively\n"));
-  printf(_("  -d  the message digest function to use\n"));
+  printf(_("  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"));
   printf(_("  -e  excess mode; list all but one file from each cluster (no headers)\n"));
   printf(_("  -f  format for cluster headers\n"));
   printf(_("  -h  show this help\n"));

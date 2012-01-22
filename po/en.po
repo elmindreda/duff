@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-01-22 17:55+0100\n"
+"POT-Creation-Date: 2012-01-22 18:35+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -66,9 +66,9 @@ msgid "  -a  include hidden files when searching recursively\n"
 msgstr "  -a  include hidden files when searching recursively\n"
 
 #: src/duff.c:173
-#, c-format
-msgid "  -d  the message digest function to use\n"
-msgstr "  -d  the message digest function to use\n"
+#, fuzzy, c-format
+msgid "  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"
+msgstr "  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"
 
 #: src/duff.c:174
 #, c-format
