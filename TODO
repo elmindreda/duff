@@ -8,6 +8,7 @@ Functionality
   - is that even possible to do in a sane fashion?
 * Detect duplicate directory subtrees
   - in the upcoming treeduff, not plain duff
+* Prepend program name to error and warning output
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage
