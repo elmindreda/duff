@@ -145,7 +145,7 @@ msgstr "Sample limit must be at least %u bytes"
 #: src/duff.c:291
 #, fuzzy, c-format
 msgid "%n files in cluster %i (%s bytes)"
-msgstr "%n files in cluster %i (%s bytes, digest %d)"
+msgstr "%n files in cluster %i (%s bytes)"
 
 #: src/duff.c:293
 #, c-format
