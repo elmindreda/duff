@@ -132,7 +132,7 @@ If the size of files in a cluster is equal or greater than the specified limit,
 .Nm
 will sample and compare a few bytes from the start of each file before calculating a full digest.
 This is stricly an optimization and does not affect which files are considered by duff.
-The default limit is 1 MB (1048576 bytes).
+The default limit is zero bytes, i.e. to use sampling on all files.
 .It Fl q
 Quiet mode.
 Suppress warnings and error messages.

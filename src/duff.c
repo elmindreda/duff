@@ -130,7 +130,7 @@ const char* header_format = NULL;
 
 /* Specifies the minimal size of files to be compared with the sampling method.
  */
-off_t sample_limit = 1048576;
+off_t sample_limit = 0;
 
 /* The message digest function to use.
  */

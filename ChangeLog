@@ -3,6 +3,10 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.1 duff.c: Changed default sampling limit to zero.
+
 2012-01-22  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.c duff.h duffentry.c: Changed sampling to read (up to) the first
