@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-01-22 18:35+0100\n"
+"POT-Creation-Date: 2012-01-23 02:03+0100\n"
 "PO-Revision-Date: 2011-04-11 18:11+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -138,22 +138,17 @@ msgstr "%s är inte en stödd hash-funktion"
 msgid "Ignoring invalid sample limit %s"
 msgstr "Ignorerar den ogiltiga samplings-gränsen %s"
 
-#: src/duff.c:255
-#, c-format
-msgid "Sample limit must be at least %u bytes"
-msgstr "Samplings-gränsen måste vara åtminstone %u byte"
-
-#: src/duff.c:291
+#: src/duff.c:286
 #, fuzzy, c-format
 msgid "%n files in cluster %i (%s bytes)"
 msgstr "%n filer i grupp %i (%s byte)"
 
-#: src/duff.c:293
+#: src/duff.c:288
 #, c-format
 msgid "%n files in cluster %i (%s bytes, digest %d)"
 msgstr "%n filer i grupp %i (%s byte, hash %d)"
 
-#: src/duff.c:297
+#: src/duff.c:292
 #, c-format
 msgid "Digest (%%d) is not calculated in thorough mode (-t)"
 msgstr "Hash (%%d) beräknas inte i byte-för-byte läge (-t)"
@@ -188,6 +183,9 @@ msgstr "%s är en katalog; hoppar över"
 msgid "%s is a socket; skipping"
 msgstr "%s är ett uttag (socket); hoppar över"
 
-#: src/duffdriver.c:339 src/duffentry.c:255 src/duffutil.c:133
+#: src/duffdriver.c:339 src/duffentry.c:254 src/duffutil.c:133
 msgid "This cannot happen"
 msgstr "Detta kan inte hända"
+
+#~ msgid "Sample limit must be at least %u bytes"
+#~ msgstr "Samplings-gränsen måste vara åtminstone %u byte"
