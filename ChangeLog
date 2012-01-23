@@ -5,6 +5,12 @@ Maintained since version 0.3.1.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffutil.c (set_digest_function): Added function.
+ * duffutil.c (digest_init): Added function.
+ * duffutil.c (digest_update): Added function.
+ * duffutil.c (digest_finish): Added function.
+ * duff.c duffutil.c duffentry.c: Moved all calls to sha to duffutil.
+ * duff.c duffutil.c duffentry.c: Made digest_function private to duffutil.
  * duff.1 duff.c: Changed default sampling limit to zero.
 
 2012-01-22  Camilla Berglund  <elmindreda@elmindreda.org>

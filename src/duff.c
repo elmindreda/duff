@@ -132,10 +132,6 @@ const char* header_format = NULL;
  */
 off_t sample_limit = 0;
 
-/* The message digest function to use.
- */
-Function digest_function = SHA_1;
-
 /* These functions are documented below, where they are defined.
  */
 static void version(void);
@@ -225,13 +221,13 @@ int main(int argc, char** argv)
         break;
       case 'd':
 	if (strcasecmp(optarg, "sha1") == 0)
-	  digest_function = SHA_1;
+	  set_digest_function(SHA_1);
 	else if (strcasecmp(optarg, "sha256") == 0)
-	  digest_function = SHA_256;
+	  set_digest_function(SHA_256);
 	else if (strcasecmp(optarg, "sha384") == 0)
-	  digest_function = SHA_384;
+	  set_digest_function(SHA_384);
 	else if (strcasecmp(optarg, "sha512") == 0)
-	  digest_function = SHA_512;
+	  set_digest_function(SHA_512);
 	else
 	  error(_("%s is not a supported digest function"), optarg);
 	break;

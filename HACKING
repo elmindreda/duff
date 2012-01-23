@@ -39,7 +39,7 @@ duffstring.c duffstring.h
   Replacement implementations of various libc string functions.
 
 duffutil.c
-  Error reporting and various other utility functions.
+  Error reporting, digest selection and various other utility functions.
 
 duff.h
   Main header file.

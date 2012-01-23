@@ -46,6 +46,12 @@
 #include <stdarg.h>
 #endif
 
+#if HAVE_INTTYPES_H
+#include <inttypes.h>
+#elif HAVE_STDINT_H
+#include <stdint.h>
+#endif
+
 #if HAVE_STRING_H
 #include <string.h>
 #endif
@@ -65,7 +71,20 @@
 /* These flags are defined and documented in duff.c.
  */
 extern int null_terminate_flag;
-extern Function digest_function;
+
+/* The message digest function to use.
+ */
+static Function digest_function = SHA_1;
+
+union Context
+{
+  SHA1Context sha1;
+  SHA256Context sha256;
+  SHA384Context sha384;
+  SHA512Context sha512;
+};
+
+static union Context context;
 
 /* Reads a path name from stdin according to the specified flags.
  */
@@ -114,6 +133,11 @@ void kill_trailing_slashes(char* path)
   }
 }
 
+void set_digest_function(Function function)
+{
+  digest_function = function;
+}
+
 /*! Returns the size, in bytes, of the specified digest type.
  */
 size_t get_digest_size(void)
@@ -128,6 +152,69 @@ size_t get_digest_size(void)
       return SHA384_HASH_SIZE;
     case SHA_512:
       return SHA512_HASH_SIZE;
+  }
+
+  error(_("This cannot happen"));
+}
+
+void digest_init(void)
+{
+  switch (digest_function)
+  {
+    case SHA_1:
+      SHA1Init(&context.sha1);
+      return;
+    case SHA_256:
+      SHA256Init(&context.sha256);
+      return;
+    case SHA_384:
+      SHA384Init(&context.sha384);
+      return;
+    case SHA_512:
+      SHA512Init(&context.sha512);
+      return;
+  }
+
+  error(_("This cannot happen"));
+}
+
+void digest_update(const void* data, size_t size)
+{
+  switch (digest_function)
+  {
+    case SHA_1:
+      SHA1Update(&context.sha1, data, size);
+      return;
+    case SHA_256:
+      SHA256Update(&context.sha256, data, size);
+      return;
+    case SHA_384:
+      SHA384Update(&context.sha384, data, size);
+      return;
+    case SHA_512:
+      SHA512Update(&context.sha512, data, size);
+      return;
+  }
+
+  error(_("This cannot happen"));
+}
+
+void digest_finish(uint8_t* digest)
+{
+  switch (digest_function)
+  {
+    case SHA_1:
+      SHA1Final(&context.sha1, digest);
+      return;
+    case SHA_256:
+      SHA256Final(&context.sha256, digest);
+      return;
+    case SHA_384:
+      SHA384Final(&context.sha384, digest);
+      return;
+    case SHA_512:
+      SHA512Final(&context.sha512, digest);
+      return;
   }
 
   error(_("This cannot happen"));

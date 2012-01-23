@@ -54,14 +54,15 @@
 #include <stdlib.h>
 #endif
 
+#if HAVE_INTTYPES_H
+#include <inttypes.h>
+#elif HAVE_STDINT_H
+#include <stdint.h>
+#endif
+
 #if HAVE_ASSERT_H
 #include <assert.h>
 #endif
-
-#include "sha1.h"
-#include "sha256.h"
-#include "sha384.h"
-#include "sha512.h"
 
 #include "duff.h"
 
@@ -70,16 +71,11 @@
 extern int quiet_flag;
 extern int thorough_flag;
 extern off_t sample_limit;
-extern Function digest_function;
 
 /* These functions are documented below, where they are defined.
  */
 static int get_entry_sample(Entry* entry);
 static int get_entry_digest(Entry* entry);
-static int get_entry_digest_sha1(uint8_t** result, FILE* file);
-static int get_entry_digest_sha256(uint8_t** result, FILE* file);
-static int get_entry_digest_sha384(uint8_t** result, FILE* file);
-static int get_entry_digest_sha512(uint8_t** result, FILE* file);
 static int compare_entry_digests(Entry* first, Entry* second);
 static int compare_entry_samples(Entry* first, Entry* second);
 static int compare_entry_contents(Entry* first, Entry* second);
@@ -215,7 +211,8 @@ static int get_entry_sample(Entry* entry)
 static int get_entry_digest(Entry* entry)
 {
   FILE* file;
-  int result;
+  size_t size;
+  char buffer[8192];
 
   if (entry->status == INVALID)
     return -1;
@@ -232,147 +229,32 @@ static int get_entry_digest(Entry* entry)
     return -1;
   }
 
-  switch (digest_function)
+  digest_init();
+
+  for (;;)
   {
-    case SHA_1:
-      result = get_entry_digest_sha1(&(entry->digest), file);
+    size = fread(buffer, 1, sizeof(buffer), file);
+    if (ferror(file))
+    {
+      if (!quiet_flag)
+        warning("%s: %s", entry->path, strerror(errno));
+
+      fclose(file);
+
+      entry->status = INVALID;
+      return -1;
+    }
+
+    if (size == 0)
       break;
 
-    case SHA_256:
-      result = get_entry_digest_sha256(&(entry->digest), file);
-      break;
-
-    case SHA_384:
-      result = get_entry_digest_sha384(&(entry->digest), file);
-      break;
-
-    case SHA_512:
-      result = get_entry_digest_sha512(&(entry->digest), file);
-      break;
-
-    default:
-      error(_("This cannot happen"));
+    digest_update(buffer, size);
   }
+
+  entry->digest = (uint8_t*) malloc(get_digest_size());
+  digest_finish(entry->digest);
 
   fclose(file);
-
-  if (result)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", entry->path, strerror(errno));
-
-    entry->status = INVALID;
-    return -1;
-  }
-
-  return 0;
-}
-
-/* Calculates and returns the SHA-1 digest of the specified file.
- */
-static int get_entry_digest_sha1(uint8_t** result, FILE* file)
-{
-  size_t size;
-  char buffer[8192];
-  SHA1Context context;
-
-  SHA1Init(&context);
-
-  for (;;)
-  {
-    size = fread(buffer, 1, sizeof(buffer), file);
-    if (ferror(file))
-      return -1;
-
-    if (size == 0)
-      break;
-
-    SHA1Update(&context, buffer, size);
-  }
-
-  *result = (uint8_t*) malloc(SHA1_HASH_SIZE);
-  SHA1Final(&context, *result);
-  return 0;
-}
-
-/* Calculates and returns the SHA-256 digest of the specified file.
- */
-int get_entry_digest_sha256(uint8_t** result, FILE* file)
-{
-  size_t size;
-  char buffer[8192];
-  SHA256Context context;
-
-  SHA256Init(&context);
-
-  for (;;)
-  {
-    size = fread(buffer, 1, sizeof(buffer), file);
-    if (ferror(file))
-      return -1;
-
-    if (size == 0)
-      break;
-
-    SHA256Update(&context, buffer, size);
-  }
-
-  *result = (uint8_t*) malloc(SHA256_HASH_SIZE);
-  SHA256Final(&context, *result);
-  return 0;
-}
-
-/* Calculates and returns the SHA-384 digest of the specified file.
- */
-int get_entry_digest_sha384(uint8_t** result, FILE* file)
-{
-  size_t size;
-  char buffer[8192];
-  SHA384Context context;
-
-  SHA384Init(&context);
-
-  for (;;)
-  {
-    size = fread(buffer, 1, sizeof(buffer), file);
-    if (ferror(file))
-      return -1;
-
-    if (size == 0)
-      break;
-
-    SHA384Update(&context, buffer, size);
-  }
-
-  *result = (uint8_t*) malloc(SHA384_HASH_SIZE);
-  SHA384Final(&context, *result);
-  return 0;
-}
-
-/* Calculates and returns the SHA-512 digest of the specified file.
- */
-int get_entry_digest_sha512(uint8_t** result, FILE* file)
-{
-  size_t size;
-  char buffer[8192];
-  SHA512Context context;
-
-  SHA512Init(&context);
-
-  for (;;)
-  {
-    size = fread(buffer, 1, sizeof(buffer), file);
-    if (ferror(file))
-      return -1;
-
-    if (size == 0)
-      break;
-
-    SHA512Update(&context, buffer, size);
-  }
-
-  *result = (uint8_t*) malloc(SHA512_HASH_SIZE);
-  SHA512Final(&context, *result);
   return 0;
 }
 

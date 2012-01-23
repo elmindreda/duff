@@ -121,7 +121,11 @@ int compare_entries(Entry* first, Entry* second);
 /* These are defined and documented in duffutil.c */
 int read_path(FILE* stream, char* path, size_t size);
 void kill_trailing_slashes(char* path);
+void set_digest_function(Function function);
 size_t get_digest_size(void);
+void digest_init(void);
+void digest_update(const void* data, size_t size);
+void digest_finish(uint8_t* digest);
 void error(const char* format, ...) __attribute__((format(printf, 1, 2))) __attribute__((noreturn));
 void warning(const char* format, ...) __attribute__((format(printf, 1, 2)));
 int cluster_header_uses_digest(const char* format);
