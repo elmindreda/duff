@@ -5,6 +5,7 @@ Maintained since version 0.3.1.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffdriver.c: Moved from single to BUCKET_COUNT entry lists, indexed by size.
  * duffdriver.c (process_args): Added function.
  * duffdriver.c (process_path, report_clusters): Made private to duffdriver.
  * duff.c duffdriver.c: Moved argument processing to duffdriver.

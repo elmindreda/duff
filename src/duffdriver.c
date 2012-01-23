@@ -84,6 +84,9 @@
 #include "duffstring.h"
 #include "duff.h"
 
+#define BUCKET_COUNT (1 << HASH_BITS)
+#define BUCKET_INDEX(size) ((size) & (BUCKET_COUNT - 1))
+
 /* These flags are defined and documented in duff.c.
  */
 extern int follow_links_mode;
@@ -97,9 +100,9 @@ extern int excess_flag;
 extern const char* header_format;
 extern int header_uses_digest;
 
-/* List of collected entries.
+/* Buckets of list of collected entries.
  */
-static List files;
+static List buckets[1 << HASH_BITS];
 /* List head for traversed directories.
  */
 static Directory* directories = NULL;
@@ -262,19 +265,19 @@ static void process_file(const char* path, struct stat* sb)
   {
     /* TODO: Make this less pessimal */
 
-    size_t i;
+    size_t i, bucket = BUCKET_INDEX(sb->st_size);
 
-    for (i = 0;  i < files.allocated;  i++)
+    for (i = 0;  i < buckets[bucket].allocated;  i++)
     {
-      if (files.entries[i].device == sb->st_dev &&
-          files.entries[i].inode == sb->st_ino)
+      if (buckets[bucket].entries[i].device == sb->st_dev &&
+          buckets[bucket].entries[i].inode == sb->st_ino)
       {
         return;
       }
     }
   }
 
-  fill_entry(entry_list_alloc(&files), path, sb);
+  fill_entry(entry_list_alloc(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
 }
 
 /* Initializes the driver, processes the specified arguments and reports the
@@ -282,10 +285,11 @@ static void process_file(const char* path, struct stat* sb)
  */
 void process_args(int argc, char** argv)
 {
-  size_t i;
+  size_t i, j;
   char path[PATH_MAX];
 
-  entry_list_init(&files);
+  for (i = 0;  i < BUCKET_COUNT;  i++)
+    entry_list_init(&buckets[i]);
 
   if (argc)
   {
@@ -308,10 +312,13 @@ void process_args(int argc, char** argv)
 
   report_clusters();
 
-  for (i = 0;  i < files.allocated;  i++)
-    free_entry(&files.entries[i]);
+  for (i = 0;  i < BUCKET_COUNT;  i++)
+  {
+    for (j = 0;  j < buckets[i].allocated;  j++)
+      free_entry(&buckets[i].entries[j]);
 
-  entry_list_free(&files);
+    entry_list_free(&buckets[i]);
+  }
 }
 
 /* Processes a path name, whether from the command line or from
@@ -447,37 +454,41 @@ static void report_clusters(void)
 
   entry_list_init(&duplicates);
 
-  for (first = 0;  first < files.allocated;  first++)
+  for (i = 0;  i < BUCKET_COUNT;  i++)
   {
-    if (files.entries[first].status == INVALID ||
-        files.entries[first].status == REPORTED)
+    for (first = 0;  first < buckets[i].allocated;  first++)
     {
-      continue;
-    }
-
-    for (second = first + 1;  second < files.allocated;  second++)
-    {
-      if (files.entries[second].status == INVALID ||
-          files.entries[second].status == REPORTED)
+      if (buckets[i].entries[first].status == INVALID ||
+          buckets[i].entries[first].status == REPORTED)
       {
-          continue;
+        continue;
       }
 
-      if (compare_entries(&files.entries[first], &files.entries[second]) == 0)
+      for (second = first + 1;  second < buckets[i].allocated;  second++)
       {
-	if (duplicates.allocated == 0)
-          *entry_list_alloc(&duplicates) = files.entries[first];
+        if (buckets[i].entries[second].status == INVALID ||
+            buckets[i].entries[second].status == REPORTED)
+        {
+            continue;
+        }
 
-        *entry_list_alloc(&duplicates) = files.entries[second];
+        if (compare_entries(&buckets[i].entries[first],
+                            &buckets[i].entries[second]) == 0)
+        {
+          if (duplicates.allocated == 0)
+            *entry_list_alloc(&duplicates) = buckets[i].entries[first];
+
+          *entry_list_alloc(&duplicates) = buckets[i].entries[second];
+        }
       }
-    }
 
-    if (duplicates.allocated)
-    {
-      report_cluster(&duplicates, index);
-      entry_list_empty(&duplicates);
+      if (duplicates.allocated)
+      {
+        report_cluster(&duplicates, index);
+        entry_list_empty(&duplicates);
 
-      index++;
+        index++;
+      }
     }
   }
 

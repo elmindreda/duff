@@ -34,6 +34,7 @@
 #endif
 
 #define SAMPLE_SIZE 512
+#define HASH_BITS 8
 
 /* Typedefs for structs and enums.
  */
