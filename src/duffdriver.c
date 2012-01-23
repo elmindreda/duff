@@ -116,7 +116,7 @@ static void recurse_directory(const char* path,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
-static void report_cluster(List* duplicates, unsigned int index);
+static void report_cluster(const List* duplicates, unsigned int index);
 static void report_clusters(void);
 
 /* Stat:s a file according to the specified options.
@@ -386,15 +386,13 @@ void process_path(const char* path, int depth)
 
 /* Reports a cluster to stdout, according to the specified options.
  */
-static void report_cluster(List* duplicates, unsigned int index)
+static void report_cluster(const List* duplicates, unsigned int index)
 {
   size_t i;
   Entry* entries = duplicates->entries;
 
   if (excess_flag)
   {
-    entries[0].status = REPORTED;
-
     /* Report all but the first entry in the cluster */
     for (i = 1;  i < duplicates->allocated;  i++)
     {
@@ -405,8 +403,6 @@ static void report_cluster(List* duplicates, unsigned int index)
       }
       else
         printf("%s\n", entries[i].path);
-
-      entries[i].status = REPORTED;
     }
   }
   else
@@ -439,8 +435,6 @@ static void report_cluster(List* duplicates, unsigned int index)
       }
       else
 	printf("%s\n", entries[i].path);
-
-      entries[i].status = REPORTED;
     }
   }
 }
@@ -450,35 +444,41 @@ static void report_cluster(List* duplicates, unsigned int index)
 static void report_clusters(void)
 {
   size_t i, first, second, index;
+  Entry* entries;
   List duplicates;
 
   entry_list_init(&duplicates);
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
   {
+    entries = buckets[i].entries;
+
     for (first = 0;  first < buckets[i].allocated;  first++)
     {
-      if (buckets[i].entries[first].status == INVALID ||
-          buckets[i].entries[first].status == REPORTED)
+      if (entries[first].status == INVALID ||
+          entries[first].status == REPORTED)
       {
         continue;
       }
 
       for (second = first + 1;  second < buckets[i].allocated;  second++)
       {
-        if (buckets[i].entries[second].status == INVALID ||
-            buckets[i].entries[second].status == REPORTED)
+        if (entries[second].status == INVALID ||
+            entries[second].status == REPORTED)
         {
             continue;
         }
 
-        if (compare_entries(&buckets[i].entries[first],
-                            &buckets[i].entries[second]) == 0)
+        if (compare_entries(&entries[first], &entries[second]) == 0)
         {
           if (duplicates.allocated == 0)
-            *entry_list_alloc(&duplicates) = buckets[i].entries[first];
+          {
+            *entry_list_alloc(&duplicates) = entries[first];
+            entries[first].status = REPORTED;
+          }
 
-          *entry_list_alloc(&duplicates) = buckets[i].entries[second];
+          *entry_list_alloc(&duplicates) = entries[second];
+          entries[second].status = REPORTED;
         }
       }
 
