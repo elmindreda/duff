@@ -128,6 +128,10 @@ int ignore_empty_flag = 0;
  */
 const char* header_format = NULL;
 
+/* Whether or not the cluster header uses a digest.
+ */
+int header_uses_digest = 0;
+
 /* Specifies the minimal size of files to be compared with the sampling method.
  */
 off_t sample_limit = 0;
@@ -284,7 +288,9 @@ int main(int argc, char** argv)
       header_format = _("%n files in cluster %i (%s bytes, digest %d)");
   }
 
-  if (thorough_flag && cluster_header_uses_digest(header_format))
+  header_uses_digest = cluster_header_uses_digest(header_format);
+
+  if (thorough_flag && header_uses_digest)
     error(_("Digest (%%d) is not calculated in thorough mode (-t)"));
 
   if (argc)

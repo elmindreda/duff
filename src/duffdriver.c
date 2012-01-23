@@ -95,6 +95,7 @@ extern int quiet_flag;
 extern int physical_flag;
 extern int excess_flag;
 extern const char* header_format;
+extern int header_uses_digest;
 
 /* List head for collected entries.
  */
@@ -371,6 +372,9 @@ static void report_cluster(Entry* duplicates,
 
     if (*header_format != '\0')
     {
+      if (header_uses_digest)
+        generate_entry_digest(duplicates);
+
       print_cluster_header(header_format,
 			   count,
 			   index,

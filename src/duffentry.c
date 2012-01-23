@@ -69,6 +69,7 @@
 /* These flags are defined and documented in duff.c.
  */
 extern int quiet_flag;
+extern int physical_flag;
 extern int thorough_flag;
 extern off_t sample_limit;
 
@@ -223,7 +224,7 @@ static int get_entry_digest(Entry* entry)
 
   if (entry->sample && entry->size <= SAMPLE_SIZE)
     digest_update(entry->sample, entry->size);
-  else
+  else if (entry->size > 0)
   {
     file = fopen(entry->path, "rb");
     if (!file)
@@ -274,11 +275,23 @@ int compare_entries(Entry* first, Entry* second)
   if (first->size != second->size)
     return -1;
 
+  if (first->size == 0)
+    return 0;
+
+  if (!physical_flag)
+  {
+    if (first->device == second->device && first->inode == second->inode)
+      return 0;
+  }
+
 #if SAMPLE_SIZE > 0
   if (first->size >= sample_limit)
   {
     if (compare_entry_samples(first, second) != 0)
       return -1;
+
+    if (first->size <= SAMPLE_SIZE)
+      return 0;
   }
 #endif
 
@@ -296,6 +309,11 @@ int compare_entries(Entry* first, Entry* second)
   }
 
   return 0;
+}
+
+void generate_entry_digest(Entry* entry)
+{
+  get_entry_digest(entry);
 }
 
 /* Compares the digests of two files, calculating them if neccessary.

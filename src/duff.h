@@ -117,6 +117,7 @@ void unlink_entry(Entry** head, Entry* entry);
 void free_entry(Entry* entry);
 void free_entry_list(Entry** entries);
 int compare_entries(Entry* first, Entry* second);
+void generate_entry_digest(Entry* entry);
 
 /* These are defined and documented in duffutil.c */
 int read_path(FILE* stream, char* path, size_t size);

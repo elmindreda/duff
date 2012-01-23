@@ -5,6 +5,12 @@ Maintained since version 0.3.1.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duff.c (main): Saved header digest use before processing entries.
+ * duff.c: Added header_uses_digest global flag.
+ * duffentry.c (report_cluster): Ensured that first cluster entry has digest.
+ * duffentry.c (compare_entries): Added more early-out cases.
+ * duffentry.c (get_entry_digest): Stopped reading empty files.
+ * duffentry.c (generate_entry_digest): Added function.
  * duffentry.c (get_entry_digest): Hash sample if it contains entire file.
  * duffutil.c (error, warning): Prefixed program name to output.
  * duffutil.c (set_digest_function): Added function.
