@@ -5,8 +5,16 @@ Maintained since version 0.3.1.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffentry.c (fill_entry): Renamed function from make_entry.
+ * duffdriver.c (free_entry_list): Removed function.
+ * duffdriver.c: Replaced doubly linked lists with List.
+ * duffutil.c (entry_list_init, entry_list_alloc, entry_list_empty,
+ entry_list_free): Added entry list functions.
+ * duffutil.c (link_entry, unlink_entry): Removed functions.
+ * duff.h (List): Added linear entry list struct and typedef.
+ * duff.h (Entry): Removed list links.
  * duff.c (main): Saved header digest use before processing entries.
- * duff.c: Added header_uses_digest global flag.
+ * duff.c (header_uses_digest): Added global flag.
  * duffentry.c (report_cluster): Ensured that first cluster entry has digest.
  * duffentry.c (compare_entries): Added more early-out cases.
  * duffentry.c (get_entry_digest): Stopped reading empty files.

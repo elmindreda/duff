@@ -97,15 +97,12 @@ extern int excess_flag;
 extern const char* header_format;
 extern int header_uses_digest;
 
-/* List head for collected entries.
+/* List of collected entries.
  */
-static Entry* file_entries = NULL;
+static List files = { NULL, 0, 0 };
 /* List head for traversed directories.
  */
 static Directory* directories = NULL;
-/* Number of collected entries.
- */
-static size_t entry_count = 0;
 
 /* These functions are documented below, where they are defined.
  */
@@ -115,9 +112,7 @@ static void recurse_directory(const char* path,
                               const struct stat* sb,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
-static void report_cluster(Entry* duplicates,
-                           unsigned int index,
-			   unsigned int count);
+static void report_cluster(List* duplicates, unsigned int index);
 
 /* Stat:s a file according to the specified options.
  */
@@ -265,18 +260,19 @@ static void process_file(const char* path, struct stat* sb)
   {
     /* TODO: Make this less pessimal */
 
-    for (entry = file_entries;  entry;  entry = entry->next)
+    size_t i;
+
+    for (i = 0;  i < files.allocated;  i++)
     {
-      if (entry->device == sb->st_dev && entry->inode == sb->st_ino)
+      if (files.entries[i].device == sb->st_dev &&
+          files.entries[i].inode == sb->st_ino)
+      {
         return;
+      }
     }
   }
 
-  if ((entry = make_entry(path, sb)) != NULL)
-  {
-    link_entry(&file_entries, entry);
-    entry_count++;
-  }
+  fill_entry(entry_list_alloc(&files), path, sb);
 }
 
 /* Processes a path name, whether from the command line or from
@@ -344,26 +340,27 @@ void process_path(const char* path, int depth)
 
 /* Reports a cluster to stdout, according to the specified options.
  */
-static void report_cluster(Entry* duplicates,
-                           unsigned int index,
-			   unsigned int count)
+static void report_cluster(List* duplicates, unsigned int index)
 {
-  Entry* entry;
+  size_t i;
+  Entry* entries = duplicates->entries;
 
   if (excess_flag)
   {
+    entries[0].status = REPORTED;
+
     /* Report all but the first entry in the cluster */
-    for (entry = duplicates->next;  entry;  entry = entry->next)
+    for (i = 1;  i < duplicates->allocated;  i++)
     {
       if (null_terminate_flag)
       {
-	fputs(entry->path, stdout);
-	fputc('\0', stdout);
+        fputs(entries[i].path, stdout);
+        fputc('\0', stdout);
       }
       else
-	printf("%s\n", entry->path);
+        printf("%s\n", entries[i].path);
 
-      entry->status = REPORTED;
+      entries[i].status = REPORTED;
     }
   }
   else
@@ -373,13 +370,13 @@ static void report_cluster(Entry* duplicates,
     if (*header_format != '\0')
     {
       if (header_uses_digest)
-        generate_entry_digest(duplicates);
+        generate_entry_digest(entries);
 
       print_cluster_header(header_format,
-			   count,
+			   duplicates->allocated,
 			   index,
-			   duplicates->size,
-			   duplicates->digest);
+			   entries->size,
+			   entries->digest);
 
       if (null_terminate_flag)
 	fputc('\0', stdout);
@@ -387,17 +384,17 @@ static void report_cluster(Entry* duplicates,
 	fputc('\n', stdout);
     }
 
-    for (entry = duplicates;  entry;  entry = entry->next)
+    for (i = 0;  i < duplicates->allocated;  i++)
     {
       if (null_terminate_flag)
       {
-	fputs(entry->path, stdout);
+	fputs(entries[i].path, stdout);
 	fputc('\0', stdout);
       }
       else
-	printf("%s\n", entry->path);
+	printf("%s\n", entries[i].path);
 
-      entry->status = REPORTED;
+      entries[i].status = REPORTED;
     }
   }
 }
@@ -406,53 +403,50 @@ static void report_cluster(Entry* duplicates,
  */
 void report_clusters(void)
 {
-  int index = 1, count = 0;
-  Entry* base;
-  Entry* entry;
-  Entry* entry_next;
-  Entry* duplicates = NULL;
+  size_t i, first, second, index;
+  List duplicates;
 
-  while ((base = file_entries) != NULL)
+  entry_list_init(&duplicates);
+
+  for (first = 0;  first < files.allocated;  first++)
   {
-    if (base->status == INVALID)
-      continue;
-
-    count = 0;
-
-    for (entry = base->next;  entry;  entry = entry_next)
+    if (files.entries[first].status == INVALID ||
+        files.entries[first].status == REPORTED)
     {
-      entry_next = entry->next;
+      continue;
+    }
 
-      if (compare_entries(base, entry) == 0)
+    for (second = first + 1;  second < files.allocated;  second++)
+    {
+      if (files.entries[second].status == INVALID ||
+          files.entries[second].status == REPORTED)
       {
-	if (duplicates == NULL)
-	{
-	  unlink_entry(&file_entries, base);
-	  link_entry(&duplicates, base);
+          continue;
+      }
 
-	  base->status = DUPLICATE;
-	  count++;
-	}
+      if (compare_entries(&files.entries[first], &files.entries[second]) == 0)
+      {
+	if (duplicates.allocated == 0)
+          *entry_list_alloc(&duplicates) = files.entries[first];
 
-	unlink_entry(&file_entries, entry);
-	link_entry(&duplicates, entry);
-
-	entry->status = DUPLICATE;
-	count++;
+        *entry_list_alloc(&duplicates) = files.entries[second];
       }
     }
 
-    if (duplicates)
+    if (duplicates.allocated)
     {
-      report_cluster(duplicates, index, count);
-      free_entry_list(&duplicates);
+      report_cluster(&duplicates, index);
+      entry_list_empty(&duplicates);
+
       index++;
     }
-    else
-    {
-      unlink_entry(&file_entries, base);
-      free_entry(base);
-    }
   }
+
+  entry_list_free(&duplicates);
+
+  for (i = 0;  i < files.allocated;  i++)
+    free_entry(&files.entries[i]);
+
+  entry_list_free(&files);
 }
 

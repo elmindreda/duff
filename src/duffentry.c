@@ -81,15 +81,10 @@ static int compare_entry_digests(Entry* first, Entry* second);
 static int compare_entry_samples(Entry* first, Entry* second);
 static int compare_entry_contents(Entry* first, Entry* second);
 
-/* Allocates and initialises an entry.
+/* Initialises the specified entry.
  */
-Entry* make_entry(const char* path, const struct stat* sb)
+void fill_entry(Entry* entry, const char* path, const struct stat* sb)
 {
-  Entry* entry;
-
-  entry = (Entry*) malloc(sizeof(Entry));
-  entry->prev = NULL;
-  entry->next = NULL;
   entry->path = strdup(path);
   entry->size = sb->st_size;
   entry->device = sb->st_dev;
@@ -97,69 +92,15 @@ Entry* make_entry(const char* path, const struct stat* sb)
   entry->status = UNTOUCHED;
   entry->digest = NULL;
   entry->sample = NULL;
-
-  return entry;
 }
 
-/* Inserts an entry as the first item in a list.
- * Note that the entry must be detached from any previous list.
- */
-void link_entry(Entry** head, Entry* entry)
-{
-  assert(entry->prev == NULL);
-  assert(entry->next == NULL);
-
-  entry->prev = NULL;
-  entry->next = *head;
-
-  if (*head != NULL)
-    (*head)->prev = entry;
-
-  *head = entry;
-}
-
-/* Removes an entry from a list.
- * Note that the entry must be a member of the list.
- */
-void unlink_entry(Entry** head, Entry* entry)
-{
-  if (entry->prev != NULL)
-    entry->prev->next = entry->next;
-  else
-    *head = entry->next;
-
-  if (entry->next != NULL)
-    entry->next->prev = entry->prev;
-
-  entry->prev = entry->next = NULL;
-}
-
-/* Frees an entry and any dynamically allocated members.
+/* Frees any memory allocated for the specified entry.
  */
 void free_entry(Entry* entry)
 {
-  assert(entry->prev == NULL);
-  assert(entry->next == NULL);
-
-  free(entry->sample);
   free(entry->digest);
+  free(entry->sample);
   free(entry->path);
-  free(entry);
-}
-
-/* Frees a list of entries.
- * On exit, the specified head is set to NULL.
- */
-void free_entry_list(Entry** entries)
-{
-  Entry* entry;
-
-  while (*entries)
-  {
-    entry = *entries;
-    unlink_entry(entries, entry);
-    free_entry(entry);
-  }
 }
 
 /* Retrieves sample from a file, if needed.
@@ -311,6 +252,8 @@ int compare_entries(Entry* first, Entry* second)
   return 0;
 }
 
+/* Generates the digest for the specified entry if it's not already present.
+ */
 void generate_entry_digest(Entry* entry)
 {
   get_entry_digest(entry);

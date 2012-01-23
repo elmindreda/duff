@@ -86,6 +86,53 @@ union Context
 
 static union Context context;
 
+/* Initializes a list for use.
+ */
+void entry_list_init(List* list)
+{
+  list->entries = NULL;
+  list->allocated = 0;
+  list->available = 0;
+}
+
+/* Allocates and returns a single entry within the specified list, resizing the
+ * list as necessary.
+ */
+Entry* entry_list_alloc(List* list)
+{
+  if (list->allocated == list->available)
+  {
+    size_t count;
+
+    if (list->available)
+      count = list->available * 2;
+    else
+      count = 1024;
+
+    list->entries = realloc(list->entries, count * sizeof(Entry));
+    list->available = count;
+  }
+
+  Entry* entry = list->entries + list->allocated;
+  list->allocated++;
+  return entry;
+}
+
+/* Empties the list without freeing its allocated memory.
+ */
+void entry_list_empty(List* list)
+{
+  list->allocated = 0;
+}
+
+/* Frees the memory allocated by the list and reinitializes it.
+ */
+void entry_list_free(List* list)
+{
+  free(list->entries);
+  entry_list_init(list);
+}
+
 /* Reads a path name from stdin according to the specified flags.
  */
 int read_path(FILE* stream, char* path, size_t size)
