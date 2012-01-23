@@ -1,6 +1,12 @@
 User-visible changes in duff
 ============================
 
+Version 0.5.2
+
+ * Changed sampling use the first n bytes of a file.
+ * Changed default sampling limit to zero.
+ * Fixed broken manpage examples.
+
 Version 0.5.1
 
  * Fixed crash where thorough mode cluster header used digest.
