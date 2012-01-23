@@ -313,12 +313,7 @@ void process_args(int argc, char** argv)
   process_clusters();
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
-  {
-    for (j = 0;  j < buckets[i].allocated;  j++)
-      free_entry(&buckets[i].entries[j]);
-
     entry_list_free(&buckets[i]);
-  }
 }
 
 /* Processes a path name, whether from the command line or from
@@ -443,7 +438,7 @@ static void report_cluster(const List* duplicates, unsigned int index)
  */
 static void process_clusters(void)
 {
-  size_t i, first, second, index;
+  size_t i, j, first, second, index;
   Entry* entries;
   List duplicates;
 
@@ -490,6 +485,9 @@ static void process_clusters(void)
         index++;
       }
     }
+
+    for (j = 0;  j < buckets[i].allocated;  j++)
+      free_entry(&entries[j]);
   }
 
   entry_list_free(&duplicates);

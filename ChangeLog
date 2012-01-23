@@ -5,6 +5,8 @@ Maintained since version 0.3.1.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffdriver.c (process_args, process_clusters): Moved freeing of entries to
+ directly after each bucket has been processed.
  * duffdriver.c (process_clusters): Renamed from report_clusters.
  * duffdriver.c: Moved from single to BUCKET_COUNT entry lists, indexed by size.
  * duffdriver.c (process_args): Added function.
