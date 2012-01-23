@@ -234,7 +234,7 @@ void error(const char* format, ...)
 
   if (result > 0)
   {
-    fprintf(stderr, "%s\n", message);
+    fprintf(stderr, "%s: %s\n", PACKAGE_NAME, message);
     free(message);
   }
 
@@ -255,7 +255,7 @@ void warning(const char* format, ...)
 
   if (result > 0)
   {
-    fprintf(stderr, "%s\n", message);
+    fprintf(stderr, "%s: %s\n", PACKAGE_NAME, message);
     free(message);
   }
 }
