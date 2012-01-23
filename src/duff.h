@@ -33,7 +33,14 @@
 #define __attribute__(x)
 #endif
 
+/* The number of bytes to sample from the beginning of potential duplicates.
+ * NOTE: This must be one (1) or greater.
+ */
 #define SAMPLE_SIZE 512
+
+/* The number of bits of file size to use as bucket index.
+ * NOTE: This must be one (1) or greater.
+ */
 #define HASH_BITS 8
 
 /* Typedefs for structs and enums.
