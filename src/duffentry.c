@@ -219,42 +219,48 @@ static int get_entry_digest(Entry* entry)
   if (entry->digest)
     return 0;
 
-  file = fopen(entry->path, "rb");
-  if (!file)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", entry->path, strerror(errno));
-
-    entry->status = INVALID;
-    return -1;
-  }
-
   digest_init();
 
-  for (;;)
+  if (entry->sample && entry->size <= SAMPLE_SIZE)
+    digest_update(entry->sample, entry->size);
+  else
   {
-    size = fread(buffer, 1, sizeof(buffer), file);
-    if (ferror(file))
+    file = fopen(entry->path, "rb");
+    if (!file)
     {
       if (!quiet_flag)
         warning("%s: %s", entry->path, strerror(errno));
-
-      fclose(file);
 
       entry->status = INVALID;
       return -1;
     }
 
-    if (size == 0)
-      break;
+    for (;;)
+    {
+      size = fread(buffer, 1, sizeof(buffer), file);
+      if (ferror(file))
+      {
+        if (!quiet_flag)
+          warning("%s: %s", entry->path, strerror(errno));
 
-    digest_update(buffer, size);
+        fclose(file);
+
+        entry->status = INVALID;
+        return -1;
+      }
+
+      if (size == 0)
+        break;
+
+      digest_update(buffer, size);
+    }
+
+    fclose(file);
   }
 
   entry->digest = (uint8_t*) malloc(get_digest_size());
   digest_finish(entry->digest);
 
-  fclose(file);
   return 0;
 }
 

@@ -5,6 +5,7 @@ Maintained since version 0.3.1.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffentry.c (get_entry_digest): Hash sample if it contains entire file.
  * duffutil.c (error, warning): Prefixed program name to output.
  * duffutil.c (set_digest_function): Added function.
  * duffutil.c (digest_init): Added function.
