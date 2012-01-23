@@ -35,9 +35,17 @@
 
 #define SAMPLE_SIZE 512
 
+/* Typedefs for structs and enums.
+ */
+typedef enum Status Status;
+typedef enum SymlinkMode SymlinkMode;
+typedef enum Function Function;
+typedef struct Entry Entry;
+typedef struct Directory Directory;
+
 /* Status modes for entries.
  */
-typedef enum
+enum Status
 {
   /* The file has been stat:d but its data has not been touched.
    */
@@ -51,11 +59,11 @@ typedef enum
   /* The file has been reported as a duplicate.
    */
   REPORTED,
-} Status;
+};
 
 /* Symlink dereferencing modes.
  */
-typedef enum
+enum SymlinkMode
 {
   /* Do not dereference any directory symlinks.
    */
@@ -66,16 +74,11 @@ typedef enum
   /* Dereference only those directory symlinks listed on the command line.
    */
   ARG_SYMLINKS,
-} SymlinkMode;
-
-/* Typedefs for structs below.
- */
-typedef struct Entry_t Entry;
-typedef struct Directory_t Directory;
+};
 
 /* Represents a traversed directory.
  */
-struct Directory_t
+struct Directory
 {
   Directory* next;
   dev_t device;
@@ -84,7 +87,7 @@ struct Directory_t
 
 /* Represents a collected file and potential duplicate.
  */
-struct Entry_t
+struct Entry
 {
   Entry* prev;
   Entry* next;

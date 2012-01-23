@@ -70,7 +70,7 @@
 extern int quiet_flag;
 extern int thorough_flag;
 extern off_t sample_limit;
-extern enum Function digest_function;
+extern Function digest_function;
 
 /* These functions are documented below, where they are defined.
  */

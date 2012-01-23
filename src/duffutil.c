@@ -65,7 +65,7 @@
 /* These flags are defined and documented in duff.c.
  */
 extern int null_terminate_flag;
-extern enum Function digest_function;
+extern Function digest_function;
 
 /* Reads a path name from stdin according to the specified flags.
  */

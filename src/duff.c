@@ -134,7 +134,7 @@ off_t sample_limit = 0;
 
 /* The message digest function to use.
  */
-enum Function digest_function = SHA_1;
+Function digest_function = SHA_1;
 
 /* These functions are documented below, where they are defined.
  */
