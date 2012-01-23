@@ -225,7 +225,6 @@ int compare_entries(Entry* first, Entry* second)
       return 0;
   }
 
-#if SAMPLE_SIZE > 0
   if (first->size >= sample_limit)
   {
     if (compare_entry_samples(first, second) != 0)
@@ -234,7 +233,6 @@ int compare_entries(Entry* first, Entry* second)
     if (first->size <= SAMPLE_SIZE)
       return 0;
   }
-#endif
 
   if (thorough_flag)
   {
