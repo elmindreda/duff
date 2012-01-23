@@ -5,6 +5,9 @@ Maintained since version 0.3.1.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffdriver.c (process_args): Added function.
+ * duffdriver.c (process_path, report_clusters): Made private to duffdriver.
+ * duff.c duffdriver.c: Moved argument processing to duffdriver.
  * duffentry.c (fill_entry): Renamed function from make_entry.
  * duffdriver.c (free_entry_list): Removed function.
  * duffdriver.c: Replaced doubly linked lists with List.

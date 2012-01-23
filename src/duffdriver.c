@@ -99,7 +99,7 @@ extern int header_uses_digest;
 
 /* List of collected entries.
  */
-static List files = { NULL, 0, 0 };
+static List files;
 /* List head for traversed directories.
  */
 static Directory* directories = NULL;
@@ -112,7 +112,9 @@ static void recurse_directory(const char* path,
                               const struct stat* sb,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
+static void process_path(const char* path, int depth);
 static void report_cluster(List* duplicates, unsigned int index);
+static void report_clusters(void);
 
 /* Stat:s a file according to the specified options.
  */
@@ -275,6 +277,43 @@ static void process_file(const char* path, struct stat* sb)
   fill_entry(entry_list_alloc(&files), path, sb);
 }
 
+/* Initializes the driver, processes the specified arguments and reports the
+ * clusters found.
+ */
+void process_args(int argc, char** argv)
+{
+  size_t i;
+  char path[PATH_MAX];
+
+  entry_list_init(&files);
+
+  if (argc)
+  {
+    /* Read file names from command line */
+    for (i = 0;  i < argc;  i++)
+    {
+      kill_trailing_slashes(argv[i]);
+      process_path(argv[i], 0);
+    }
+  }
+  else
+  {
+    /* Read file names from stdin */
+    while (read_path(stdin, path, sizeof(path)) == 0)
+    {
+      kill_trailing_slashes(path);
+      process_path(path, 0);
+    }
+  }
+
+  report_clusters();
+
+  for (i = 0;  i < files.allocated;  i++)
+    free_entry(&files.entries[i]);
+
+  entry_list_free(&files);
+}
+
 /* Processes a path name, whether from the command line or from
  * directory recursion, according to its type.
  */
@@ -401,7 +440,7 @@ static void report_cluster(List* duplicates, unsigned int index)
 
 /* Finds and reports all duplicate clusters among the collected entries.
  */
-void report_clusters(void)
+static void report_clusters(void)
 {
   size_t i, first, second, index;
   List duplicates;
@@ -443,10 +482,5 @@ void report_clusters(void)
   }
 
   entry_list_free(&duplicates);
-
-  for (i = 0;  i < files.allocated;  i++)
-    free_entry(&files.entries[i]);
-
-  entry_list_free(&files);
 }
 

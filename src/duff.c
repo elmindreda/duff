@@ -195,10 +195,9 @@ static void bugs(void)
  */
 int main(int argc, char** argv)
 {
-  int i, ch;
+  int ch;
   char* temp;
   off_t limit;
-  char path[PATH_MAX];
 
   setlocale(LC_ALL, "");
   bindtextdomain(PACKAGE, LOCALEDIR);
@@ -293,26 +292,7 @@ int main(int argc, char** argv)
   if (thorough_flag && header_uses_digest)
     error(_("Digest (%%d) is not calculated in thorough mode (-t)"));
 
-  if (argc)
-  {
-    /* Read file names from command line */
-    for (i = 0;  i < argc;  i++)
-    {
-      kill_trailing_slashes(argv[i]);
-      process_path(argv[i], 0);
-    }
-  }
-  else
-  {
-    /* Read file names from stdin */
-    while (read_path(stdin, path, sizeof(path)) == 0)
-    {
-      kill_trailing_slashes(path);
-      process_path(path, 0);
-    }
-  }
-
-  report_clusters();
+  process_args(argc, argv);
 
   exit(EXIT_SUCCESS);
 }

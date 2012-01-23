@@ -146,6 +146,5 @@ void print_cluster_header(const char* format,
 			  const uint8_t* digest);
 
 /* These are defined and documented in duffdriver.c */
-void process_path(const char* path, int depth);
-void report_clusters(void);
+void process_args(int argc, char** argv);
 
