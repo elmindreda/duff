@@ -16,7 +16,6 @@ Documentation
 * Add more examples to manpage
 
 Optimisation
-* Make sampling digest use the first n bytes (nicer to cache)
 * Make directory cache less stupid and slow
 * Change linked lists into hash tables or trees
 * Do "smart stuff" to "make it go faster"

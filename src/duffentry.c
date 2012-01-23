@@ -74,7 +74,7 @@ extern enum Function digest_function;
 
 /* These functions are documented below, where they are defined.
  */
-static int get_entry_samples(Entry* entry);
+static int get_entry_sample(Entry* entry);
 static int get_entry_digest(Entry* entry);
 static int get_entry_digest_sha1(uint8_t** result, FILE* file);
 static int get_entry_digest_sha256(uint8_t** result, FILE* file);
@@ -99,7 +99,7 @@ Entry* make_entry(const char* path, const struct stat* sb)
   entry->inode = sb->st_ino;
   entry->status = UNTOUCHED;
   entry->digest = NULL;
-  entry->samples = NULL;
+  entry->sample = NULL;
 
   return entry;
 }
@@ -144,7 +144,7 @@ void free_entry(Entry* entry)
   assert(entry->prev == NULL);
   assert(entry->next == NULL);
 
-  free(entry->samples);
+  free(entry->sample);
   free(entry->digest);
   free(entry->path);
   free(entry);
@@ -165,17 +165,17 @@ void free_entry_list(Entry** entries)
   }
 }
 
-/* Retrieves samples from a file, if needed.
+/* Retrieves sample from a file, if needed.
  */
-static int get_entry_samples(Entry* entry)
+static int get_entry_sample(Entry* entry)
 {
-  int i;
   FILE* file;
-  uint8_t* samples;
+  size_t size;
+  uint8_t* sample;
 
   if (entry->status == INVALID)
     return -1;
-  if (entry->samples)
+  if (entry->sample)
     return 0;
 
   file = fopen(entry->path, "rb");
@@ -188,24 +188,23 @@ static int get_entry_samples(Entry* entry)
     return -1;
   }
 
-  samples = (uint8_t*) malloc(SAMPLE_COUNT);
+  size = SAMPLE_SIZE;
+  if (size > entry->size)
+    size = entry->size;
 
-  for (i = 0;  i < SAMPLE_COUNT;  i++)
+  sample = (uint8_t*) malloc(size);
+
+  if (fread(sample, size, 1, file) < 1)
   {
-    fseeko(file, i * entry->size / SAMPLE_COUNT, SEEK_SET);
+    if (!quiet_flag)
+      warning("%s: %s", entry->path, strerror(errno));
 
-    if (fread(samples + i, 1, 1, file) < 1)
-    {
-      if (!quiet_flag)
-        warning("%s: %s", entry->path, strerror(errno));
-
-      free(samples);
-      fclose(file);
-      return -1;
-    }
+    free(sample);
+    fclose(file);
+    return -1;
   }
 
-  entry->samples = samples;
+  entry->sample = sample;
 
   fclose(file);
   return 0;
@@ -387,11 +386,13 @@ int compare_entries(Entry* first, Entry* second)
   if (first->size != second->size)
     return -1;
 
+#if SAMPLE_SIZE > 0
   if (first->size >= sample_limit)
   {
     if (compare_entry_samples(first, second) != 0)
       return -1;
   }
+#endif
 
   if (thorough_flag)
   {
@@ -433,17 +434,18 @@ static int compare_entry_digests(Entry* first, Entry* second)
  */
 static int compare_entry_samples(Entry* first, Entry* second)
 {
-  int i;
-
-  if (get_entry_samples(first) != 0)
+  if (get_entry_sample(first) != 0)
     return -1;
 
-  if (get_entry_samples(second) != 0)
+  if (get_entry_sample(second) != 0)
     return -1;
 
-  for (i = 0;  i < SAMPLE_COUNT;  i++)
-    if (first->samples[i] != second->samples[i])
-      return -1;
+  size_t size = SAMPLE_SIZE;
+  if (size > first->size)
+    size = first->size;
+
+  if (memcmp(first->sample, second->sample, size) != 0)
+    return -1;
 
   return 0;
 }

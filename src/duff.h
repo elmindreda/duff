@@ -33,7 +33,7 @@
 #define __attribute__(x)
 #endif
 
-#define SAMPLE_COUNT 10
+#define SAMPLE_SIZE 512
 
 /* Status modes for entries.
  */
@@ -94,7 +94,7 @@ struct Entry_t
   ino_t inode;
   Status status;
   uint8_t* digest;
-  uint8_t* samples;
+  uint8_t* sample;
 };
 
 /* Message digest functions.

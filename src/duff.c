@@ -250,12 +250,7 @@ int main(int argc, char** argv)
 	if (temp == optarg || errno == ERANGE || errno == EINVAL)
 	  warning(_("Ignoring invalid sample limit %s"), optarg);
 	else
-	{
-	  if (limit < SAMPLE_COUNT)
-	    warning(_("Sample limit must be at least %u bytes"), SAMPLE_COUNT);
-	  else
-	    sample_limit = limit;
-	}
+	  sample_limit = limit;
 	break;
       case 'p':
 	physical_flag = 1;

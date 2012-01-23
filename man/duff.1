@@ -130,8 +130,8 @@ Display help information and exit.
 The minimum size of files to be sampled.
 If the size of files in a cluster is equal or greater than the specified limit,
 .Nm
-will sample and compare a few bytes from each file before calculating a full digest.
-This is merely an optimization for larger files and does not affect which files are considered by duff.
+will sample and compare a few bytes from the start of each file before calculating a full digest.
+This is stricly an optimization and does not affect which files are considered by duff.
 The default limit is 1 MB (1048576 bytes).
 .It Fl q
 Quiet mode.
