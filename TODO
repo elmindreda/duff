@@ -8,7 +8,6 @@ Functionality
   - is that even possible to do in a sane fashion?
 * Detect duplicate directory subtrees
   - in the upcoming treeduff, not plain duff
-* Prepend program name to error and warning output
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage
@@ -17,7 +16,6 @@ Documentation
 
 Optimisation
 * Make directory cache less stupid and slow
-* Change linked lists into hash tables or trees
 * Do "smart stuff" to "make it go faster"
   - people use duff on millions of files; optimise for that
 
