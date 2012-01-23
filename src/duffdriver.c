@@ -117,7 +117,7 @@ static void recurse_directory(const char* path,
 static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
 static void report_cluster(const List* duplicates, unsigned int index);
-static void report_clusters(void);
+static void process_clusters(void);
 
 /* Stat:s a file according to the specified options.
  */
@@ -310,7 +310,7 @@ void process_args(int argc, char** argv)
     }
   }
 
-  report_clusters();
+  process_clusters();
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
   {
@@ -441,7 +441,7 @@ static void report_cluster(const List* duplicates, unsigned int index)
 
 /* Finds and reports all duplicate clusters among the collected entries.
  */
-static void report_clusters(void)
+static void process_clusters(void)
 {
   size_t i, first, second, index;
   Entry* entries;
