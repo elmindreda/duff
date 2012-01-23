@@ -180,6 +180,8 @@ void kill_trailing_slashes(char* path)
   }
 }
 
+/* Sets the SHA family function to be used by the digest helpers.
+ */
 void set_digest_function(Function function)
 {
   digest_function = function;
@@ -204,6 +206,8 @@ size_t get_digest_size(void)
   error(_("This cannot happen"));
 }
 
+/* Initializes the context for the current function.
+ */
 void digest_init(void)
 {
   switch (digest_function)
@@ -225,6 +229,8 @@ void digest_init(void)
   error(_("This cannot happen"));
 }
 
+/* Updates the context for the current function.
+ */
 void digest_update(const void* data, size_t size)
 {
   switch (digest_function)
@@ -246,6 +252,8 @@ void digest_update(const void* data, size_t size)
   error(_("This cannot happen"));
 }
 
+/* Finalizes the digest of the chosen function.
+ */
 void digest_finish(uint8_t* digest)
 {
   switch (digest_function)
