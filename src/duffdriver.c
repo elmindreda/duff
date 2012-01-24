@@ -145,6 +145,7 @@ static void process_directory(const char* path,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
+static void print_terminator(void);
 static void report_cluster(const FileList* duplicates, unsigned int index);
 static void process_clusters(void);
 
@@ -426,6 +427,16 @@ void process_path(const char* path, int depth)
   }
 }
 
+/* Prints the output field terminator, according to the specified options.
+ */
+static void print_terminator(void)
+{
+  if (null_terminate_flag)
+    putchar('\0');
+  else
+    putchar('\n');
+}
+
 /* Reports a cluster to stdout, according to the specified options.
  */
 static void report_cluster(const FileList* duplicates, unsigned int index)
@@ -438,13 +449,8 @@ static void report_cluster(const FileList* duplicates, unsigned int index)
     /* Report all but the first file in the cluster */
     for (i = 1;  i < duplicates->allocated;  i++)
     {
-      if (null_terminate_flag)
-      {
-        fputs(files[i].path, stdout);
-        fputc('\0', stdout);
-      }
-      else
-        printf("%s\n", files[i].path);
+      printf("%s", files[i].path);
+      print_terminator();
     }
   }
   else
@@ -462,21 +468,13 @@ static void report_cluster(const FileList* duplicates, unsigned int index)
 			   files->size,
 			   files->digest);
 
-      if (null_terminate_flag)
-	fputc('\0', stdout);
-      else
-	fputc('\n', stdout);
+      print_terminator();
     }
 
     for (i = 0;  i < duplicates->allocated;  i++)
     {
-      if (null_terminate_flag)
-      {
-	fputs(files[i].path, stdout);
-	fputc('\0', stdout);
-      }
-      else
-	printf("%s\n", files[i].path);
+      printf("%s", files[i].path);
+      print_terminator();
     }
   }
 }
