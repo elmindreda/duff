@@ -76,6 +76,8 @@ extern int null_terminate_flag;
  */
 static Function digest_function = SHA_1;
 
+/* Union of all used SHA family contexts.
+ */
 union Context
 {
   SHA1Context sha1;
@@ -84,6 +86,8 @@ union Context
   SHA512Context sha512;
 };
 
+/* The context(s) used by the digest helper functions.
+ */
 static union Context context;
 
 /* Initializes a list for use.
