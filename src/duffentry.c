@@ -154,7 +154,7 @@ static int get_entry_digest(Entry* entry)
 {
   FILE* file;
   size_t size;
-  char buffer[8192];
+  char buffer[BUFFER_SIZE];
 
   if (entry->status == INVALID)
     return -1;

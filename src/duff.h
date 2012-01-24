@@ -33,6 +33,10 @@
 #define __attribute__(x)
 #endif
 
+/* The number of bytes to use as read buffer when reading files.
+ */
+#define BUFFER_SIZE 8192
+
 /* The number of bytes to sample from the beginning of potential duplicates.
  * NOTE: This must be one (1) or greater.
  */
