@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-01-24 14:22+0100\n"
+"POT-Creation-Date: 2012-01-24 14:38+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -151,6 +151,16 @@ msgstr "%n files in cluster %i (%s bytes, digest %d)"
 #, c-format
 msgid "Digest (%%d) is not calculated in thorough mode (-t)"
 msgstr "Digest (%%d) is not calculated in thorough mode (-t)"
+
+#: src/duffdriver.c:137 src/duffdriver.c:150
+#, fuzzy, c-format
+msgid "failed to stat %s: %s"
+msgstr "failed to stat %s: %s"
+
+#: src/duffdriver.c:216
+#, fuzzy, c-format
+msgid "failed to open directory %s: %s"
+msgstr "failed to open directory %s: %s"
 
 #: src/duffdriver.c:360
 #, c-format

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-01-24 14:22+0100\n"
+"POT-Creation-Date: 2012-01-24 14:38+0100\n"
 "PO-Revision-Date: 2011-04-11 18:11+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -153,6 +153,16 @@ msgstr "%n filer i grupp %i (%s byte, hash %d)"
 msgid "Digest (%%d) is not calculated in thorough mode (-t)"
 msgstr "Hash (%%d) beräknas inte i byte-för-byte läge (-t)"
 
+#: src/duffdriver.c:137 src/duffdriver.c:150
+#, fuzzy, c-format
+msgid "failed to stat %s: %s"
+msgstr "misslyckades att stat:a %s: %s"
+
+#: src/duffdriver.c:216
+#, fuzzy, c-format
+msgid "failed to open directory %s: %s"
+msgstr "misslyckades att öppna katalog %s: %s"
+
 #: src/duffdriver.c:360
 #, c-format
 msgid "%s is a symbolic link; skipping"
@@ -203,4 +213,3 @@ msgstr "misslyckades att läsa fil %s: %s"
 #: src/duffutil.c:118
 msgid "Out of memory"
 msgstr "Slut på minne"
-
