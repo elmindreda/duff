@@ -52,10 +52,10 @@
 typedef enum Status Status;
 typedef enum SymlinkMode SymlinkMode;
 typedef enum Function Function;
-typedef struct Entry Entry;
-typedef struct EntryList EntryList;
+typedef struct File File;
+typedef struct FileList FileList;
 
-/* Status modes for entries.
+/* Status modes for files.
  */
 enum Status
 {
@@ -90,7 +90,7 @@ enum SymlinkMode
 
 /* Represents a collected file and potential duplicate.
  */
-struct Entry
+struct File
 {
   char* path;
   off_t size;
@@ -101,11 +101,11 @@ struct Entry
   uint8_t* sample;
 };
 
-/* Represents a list of entries.
+/* Represents a list of files.
  */
-struct EntryList
+struct FileList
 {
-  Entry* entries;
+  File* files;
   size_t allocated;
   size_t available;
 };
@@ -120,17 +120,17 @@ enum Function
   SHA_512,
 };
 
-/* These are defined and documented in duffentry.c */
-void fill_entry(Entry* entry, const char* path, const struct stat* sb);
-void free_entry(Entry* entry);
-int compare_entries(Entry* first, Entry* second);
-void generate_entry_digest(Entry* entry);
+/* These are defined and documented in dufffile.c */
+void init_file(File* file, const char* path, const struct stat* sb);
+void free_file(File* file);
+int compare_files(File* first, File* second);
+void generate_file_digest(File* file);
 
 /* These are defined and documented in duffutil.c */
-void entry_list_init(EntryList* list);
-Entry* entry_list_alloc(EntryList* list);
-void entry_list_empty(EntryList* list);
-void entry_list_free(EntryList* list);
+void file_list_init(FileList* list);
+File* file_list_alloc(FileList* list);
+void file_list_empty(FileList* list);
+void file_list_free(FileList* list);
 int read_path(FILE* stream, char* path, size_t size);
 void kill_trailing_slashes(char* path);
 void set_digest_function(Function function);

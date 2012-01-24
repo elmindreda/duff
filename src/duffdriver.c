@@ -84,11 +84,11 @@
 #include "duffstring.h"
 #include "duff.h"
 
-/* The number of buckets to use for entries.
+/* The number of buckets to use for files.
  */
 #define BUCKET_COUNT (1 << HASH_BITS)
 
-/* Calculates the bucket index corresponding to the specified entry size.
+/* Calculates the bucket index corresponding to the specified file size.
  */
 #define BUCKET_INDEX(size) ((size) & (BUCKET_COUNT - 1))
 
@@ -131,9 +131,9 @@ struct DirList
  */
 static DirList recorded_dirs;
 
-/* Buckets of list of collected entries.
+/* Buckets of lists of collected files.
  */
-static EntryList buckets[BUCKET_COUNT];
+static FileList buckets[BUCKET_COUNT];
 
 /* These functions are documented below, where they are defined.
  */
@@ -145,7 +145,7 @@ static void process_directory(const char* path,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
-static void report_cluster(const EntryList* duplicates, unsigned int index);
+static void report_cluster(const FileList* duplicates, unsigned int index);
 static void process_clusters(void);
 
 /* Stat:s a file according to the specified options.
@@ -309,15 +309,15 @@ static void process_file(const char* path, struct stat* sb)
 
     for (i = 0;  i < buckets[bucket].allocated;  i++)
     {
-      if (buckets[bucket].entries[i].device == sb->st_dev &&
-          buckets[bucket].entries[i].inode == sb->st_ino)
+      if (buckets[bucket].files[i].device == sb->st_dev &&
+          buckets[bucket].files[i].inode == sb->st_ino)
       {
         return;
       }
     }
   }
 
-  fill_entry(entry_list_alloc(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
+  init_file(file_list_alloc(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
 }
 
 /* Initializes the driver, processes the specified arguments and reports the
@@ -331,7 +331,7 @@ void process_args(int argc, char** argv)
   memset(&recorded_dirs, 0, sizeof(DirList));
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
-    entry_list_init(&buckets[i]);
+    file_list_init(&buckets[i]);
 
   if (argc)
   {
@@ -355,7 +355,7 @@ void process_args(int argc, char** argv)
   process_clusters();
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
-    entry_list_free(&buckets[i]);
+    file_list_free(&buckets[i]);
 
   free(recorded_dirs.dirs);
   memset(&recorded_dirs, 0, sizeof(DirList));
@@ -428,39 +428,39 @@ void process_path(const char* path, int depth)
 
 /* Reports a cluster to stdout, according to the specified options.
  */
-static void report_cluster(const EntryList* duplicates, unsigned int index)
+static void report_cluster(const FileList* duplicates, unsigned int index)
 {
   size_t i;
-  Entry* entries = duplicates->entries;
+  File* files = duplicates->files;
 
   if (excess_flag)
   {
-    /* Report all but the first entry in the cluster */
+    /* Report all but the first file in the cluster */
     for (i = 1;  i < duplicates->allocated;  i++)
     {
       if (null_terminate_flag)
       {
-        fputs(entries[i].path, stdout);
+        fputs(files[i].path, stdout);
         fputc('\0', stdout);
       }
       else
-        printf("%s\n", entries[i].path);
+        printf("%s\n", files[i].path);
     }
   }
   else
   {
-    /* Print header and report all entries in the cluster */
+    /* Print header and report all files in the cluster */
 
     if (*header_format != '\0')
     {
       if (header_uses_digest)
-        generate_entry_digest(entries);
+        generate_file_digest(files);
 
       print_cluster_header(header_format,
 			   duplicates->allocated,
 			   index,
-			   entries->size,
-			   entries->digest);
+			   files->size,
+			   files->digest);
 
       if (null_terminate_flag)
 	fputc('\0', stdout);
@@ -472,71 +472,71 @@ static void report_cluster(const EntryList* duplicates, unsigned int index)
     {
       if (null_terminate_flag)
       {
-	fputs(entries[i].path, stdout);
+	fputs(files[i].path, stdout);
 	fputc('\0', stdout);
       }
       else
-	printf("%s\n", entries[i].path);
+	printf("%s\n", files[i].path);
     }
   }
 }
 
-/* Finds and reports all duplicate clusters among the collected entries.
+/* Finds and reports all duplicate clusters among the collected files.
  */
 static void process_clusters(void)
 {
   size_t i, j, first, second, index;
-  Entry* entries;
-  EntryList duplicates;
+  File* files;
+  FileList duplicates;
 
-  entry_list_init(&duplicates);
+  file_list_init(&duplicates);
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
   {
-    entries = buckets[i].entries;
+    files = buckets[i].files;
 
     for (first = 0;  first < buckets[i].allocated;  first++)
     {
-      if (entries[first].status == INVALID ||
-          entries[first].status == REPORTED)
+      if (files[first].status == INVALID ||
+          files[first].status == REPORTED)
       {
         continue;
       }
 
       for (second = first + 1;  second < buckets[i].allocated;  second++)
       {
-        if (entries[second].status == INVALID ||
-            entries[second].status == REPORTED)
+        if (files[second].status == INVALID ||
+            files[second].status == REPORTED)
         {
             continue;
         }
 
-        if (compare_entries(&entries[first], &entries[second]) == 0)
+        if (compare_files(&files[first], &files[second]) == 0)
         {
           if (duplicates.allocated == 0)
           {
-            *entry_list_alloc(&duplicates) = entries[first];
-            entries[first].status = REPORTED;
+            *file_list_alloc(&duplicates) = files[first];
+            files[first].status = REPORTED;
           }
 
-          *entry_list_alloc(&duplicates) = entries[second];
-          entries[second].status = REPORTED;
+          *file_list_alloc(&duplicates) = files[second];
+          files[second].status = REPORTED;
         }
       }
 
       if (duplicates.allocated)
       {
         report_cluster(&duplicates, index);
-        entry_list_empty(&duplicates);
+        file_list_empty(&duplicates);
 
         index++;
       }
     }
 
     for (j = 0;  j < buckets[i].allocated;  j++)
-      free_entry(&entries[j]);
+      free_file(&files[j]);
   }
 
-  entry_list_free(&duplicates);
+  file_list_free(&duplicates);
 }
 

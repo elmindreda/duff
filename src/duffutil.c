@@ -92,17 +92,15 @@ static union Context context;
 
 /* Initializes a list for use.
  */
-void entry_list_init(EntryList* list)
+void file_list_init(FileList* list)
 {
-  list->entries = NULL;
-  list->allocated = 0;
-  list->available = 0;
+  memset(list, 0, sizeof(FileList));
 }
 
-/* Allocates and returns a single entry within the specified list, resizing the
+/* Allocates and returns a single file within the specified list, resizing the
  * list as necessary.
  */
-Entry* entry_list_alloc(EntryList* list)
+File* file_list_alloc(FileList* list)
 {
   if (list->allocated == list->available)
   {
@@ -113,31 +111,31 @@ Entry* entry_list_alloc(EntryList* list)
     else
       count = 1024;
 
-    list->entries = realloc(list->entries, count * sizeof(Entry));
-    if (list->entries == NULL)
+    list->files = realloc(list->files, count * sizeof(File));
+    if (list->files == NULL)
       error(_("Out of memory"));
 
     list->available = count;
   }
 
-  Entry* entry = list->entries + list->allocated;
+  File* file = list->files + list->allocated;
   list->allocated++;
-  return entry;
+  return file;
 }
 
 /* Empties the list without freeing its allocated memory.
  */
-void entry_list_empty(EntryList* list)
+void file_list_empty(FileList* list)
 {
   list->allocated = 0;
 }
 
 /* Frees the memory allocated by the list and reinitializes it.
  */
-void entry_list_free(EntryList* list)
+void file_list_free(FileList* list)
 {
-  free(list->entries);
-  entry_list_init(list);
+  free(list->files);
+  file_list_init(list);
 }
 
 /* Reads a path name from stdin according to the specified flags.

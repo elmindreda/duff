@@ -75,119 +75,119 @@ extern off_t sample_limit;
 
 /* These functions are documented below, where they are defined.
  */
-static int get_entry_sample(Entry* entry);
-static int get_entry_digest(Entry* entry);
-static int compare_entry_digests(Entry* first, Entry* second);
-static int compare_entry_samples(Entry* first, Entry* second);
-static int compare_entry_contents(Entry* first, Entry* second);
+static int get_file_sample(File* file);
+static int get_file_digest(File* file);
+static int compare_file_digests(File* first, File* second);
+static int compare_file_samples(File* first, File* second);
+static int compare_file_contents(File* first, File* second);
 
-/* Initialises the specified entry.
+/* Initialises the specified file.
  */
-void fill_entry(Entry* entry, const char* path, const struct stat* sb)
+void init_file(File* file, const char* path, const struct stat* sb)
 {
-  entry->path = strdup(path);
-  entry->size = sb->st_size;
-  entry->device = sb->st_dev;
-  entry->inode = sb->st_ino;
-  entry->status = UNTOUCHED;
-  entry->digest = NULL;
-  entry->sample = NULL;
+  file->path = strdup(path);
+  file->size = sb->st_size;
+  file->device = sb->st_dev;
+  file->inode = sb->st_ino;
+  file->status = UNTOUCHED;
+  file->digest = NULL;
+  file->sample = NULL;
 }
 
-/* Frees any memory allocated for the specified entry.
+/* Frees any memory allocated for the specified file.
  */
-void free_entry(Entry* entry)
+void free_file(File* file)
 {
-  free(entry->digest);
-  free(entry->sample);
-  free(entry->path);
+  free(file->digest);
+  free(file->sample);
+  free(file->path);
 }
 
 /* Retrieves sample from a file, if needed.
  */
-static int get_entry_sample(Entry* entry)
+static int get_file_sample(File* file)
 {
-  FILE* file;
+  FILE* stream;
   size_t size;
   uint8_t* sample;
 
-  if (entry->status == INVALID)
+  if (file->status == INVALID)
     return -1;
-  if (entry->sample)
+  if (file->sample)
     return 0;
 
-  file = fopen(entry->path, "rb");
-  if (!file)
+  stream = fopen(file->path, "rb");
+  if (!stream)
   {
     if (!quiet_flag)
-      warning(_("failed to open file %s: %s"), entry->path, strerror(errno));
+      warning(_("failed to open file %s: %s"), file->path, strerror(errno));
 
-    entry->status = INVALID;
+    file->status = INVALID;
     return -1;
   }
 
   size = SAMPLE_SIZE;
-  if (size > entry->size)
-    size = entry->size;
+  if (size > file->size)
+    size = file->size;
 
   sample = (uint8_t*) malloc(size);
 
-  if (fread(sample, size, 1, file) < 1)
+  if (fread(sample, size, 1, stream) < 1)
   {
     if (!quiet_flag)
-      warning(_("failed to read file %s: %s"), entry->path, strerror(errno));
+      warning(_("failed to read file %s: %s"), file->path, strerror(errno));
 
     free(sample);
-    fclose(file);
+    fclose(stream);
     return -1;
   }
 
-  entry->sample = sample;
+  file->sample = sample;
 
-  fclose(file);
+  fclose(stream);
   return 0;
 }
 
 /* Calculates the digest of a file, if needed.
  */
-static int get_entry_digest(Entry* entry)
+static int get_file_digest(File* file)
 {
-  FILE* file;
+  FILE* stream;
   size_t size;
   char buffer[BUFFER_SIZE];
 
-  if (entry->status == INVALID)
+  if (file->status == INVALID)
     return -1;
-  if (entry->digest)
+  if (file->digest)
     return 0;
 
   digest_init();
 
-  if (entry->sample && entry->size <= SAMPLE_SIZE)
-    digest_update(entry->sample, entry->size);
-  else if (entry->size > 0)
+  if (file->sample && file->size <= SAMPLE_SIZE)
+    digest_update(file->sample, file->size);
+  else if (file->size > 0)
   {
-    file = fopen(entry->path, "rb");
-    if (!file)
+    stream = fopen(file->path, "rb");
+    if (!stream)
     {
       if (!quiet_flag)
-        warning(_("failed to open file %s: %s"), entry->path, strerror(errno));
+        warning(_("failed to open file %s: %s"), file->path, strerror(errno));
 
-      entry->status = INVALID;
+      file->status = INVALID;
       return -1;
     }
 
     for (;;)
     {
-      size = fread(buffer, 1, sizeof(buffer), file);
-      if (ferror(file))
+      size = fread(buffer, 1, sizeof(buffer), stream);
+      if (ferror(stream))
       {
         if (!quiet_flag)
-          warning(_("failed to read file %s: %s"), entry->path, strerror(errno));
+          warning(_("failed to read file %s: %s"), file->path, strerror(errno));
 
-        fclose(file);
+        fclose(stream);
 
-        entry->status = INVALID;
+        file->status = INVALID;
         return -1;
       }
 
@@ -197,11 +197,11 @@ static int get_entry_digest(Entry* entry)
       digest_update(buffer, size);
     }
 
-    fclose(file);
+    fclose(stream);
   }
 
-  entry->digest = (uint8_t*) malloc(get_digest_size());
-  digest_finish(entry->digest);
+  file->digest = (uint8_t*) malloc(get_digest_size());
+  digest_finish(file->digest);
 
   return 0;
 }
@@ -211,7 +211,7 @@ static int get_entry_digest(Entry* entry)
  * calls to comparison modes.  The general idea is to find proof of
  * equality or un-equality as early and as quickly as possible.
  */
-int compare_entries(Entry* first, Entry* second)
+int compare_files(File* first, File* second)
 {
   if (first->size != second->size)
     return -1;
@@ -227,7 +227,7 @@ int compare_entries(Entry* first, Entry* second)
 
   if (first->size >= sample_limit)
   {
-    if (compare_entry_samples(first, second) != 0)
+    if (compare_file_samples(first, second) != 0)
       return -1;
 
     if (first->size <= SAMPLE_SIZE)
@@ -236,37 +236,37 @@ int compare_entries(Entry* first, Entry* second)
 
   if (thorough_flag)
   {
-    if (compare_entry_contents(first, second) != 0)
+    if (compare_file_contents(first, second) != 0)
       return -1;
   }
   else
   {
-    /* NOTE: Skip calculating digests if potential cluster only has two entries?
+    /* NOTE: Skip calculating digests if potential cluster only has two files?
      * NOTE: Requires knowledge from higher level */
-    if (compare_entry_digests(first, second) != 0)
+    if (compare_file_digests(first, second) != 0)
       return -1;
   }
 
   return 0;
 }
 
-/* Generates the digest for the specified entry if it's not already present.
+/* Generates the digest for the specified file if it's not already present.
  */
-void generate_entry_digest(Entry* entry)
+void generate_file_digest(File* file)
 {
-  get_entry_digest(entry);
+  get_file_digest(file);
 }
 
 /* Compares the digests of two files, calculating them if neccessary.
  */
-static int compare_entry_digests(Entry* first, Entry* second)
+static int compare_file_digests(File* first, File* second)
 {
   int i, digest_size;
 
-  if (get_entry_digest(first) != 0)
+  if (get_file_digest(first) != 0)
     return -1;
 
-  if (get_entry_digest(second) != 0)
+  if (get_file_digest(second) != 0)
     return -1;
 
   digest_size = get_digest_size();
@@ -279,12 +279,12 @@ static int compare_entry_digests(Entry* first, Entry* second)
 
 /* Compares the samples of two files, retrieving them if neccessary.
  */
-static int compare_entry_samples(Entry* first, Entry* second)
+static int compare_file_samples(File* first, File* second)
 {
-  if (get_entry_sample(first) != 0)
+  if (get_file_sample(first) != 0)
     return -1;
 
-  if (get_entry_sample(second) != 0)
+  if (get_file_sample(second) != 0)
     return -1;
 
   size_t size = SAMPLE_SIZE;
@@ -304,7 +304,7 @@ static int compare_entry_samples(Entry* first, Entry* second)
  * there's little point in calling it otherwise.
  * TODO: Use a read buffer.
  */
-static int compare_entry_contents(Entry* first, Entry* second)
+static int compare_file_contents(File* first, File* second)
 {
   int fc, sc;
   off_t count = 0;

@@ -5,6 +5,12 @@ Maintained since version 0.3.1.
 
 2012-01-24  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duff.h duffdriver.c dufffile.c (file_list_*): Renamed from entry_list_*.
+ * duff.h duffdriver.c dufffile.c (free_file): Renamed from free_entry.
+ * duff.h duffdriver.c dufffile.c (init_file): Renamed from fill_entry.
+ * duff.h duffdriver.c dufffile.c duffutil.c (FileList): Renamed from EntryList.
+ * duff.h duffdriver.c dufffile.c duffutil.c (File): Renamed from Entry.
+ * dufffile.c: Renamed from duffentry.c.
  * duffdriver.c (has_recorded_directory): Renamed from has_recursed_directory.
  * duffdriver.c (DirList): Added array of Dir structs.
  * duffdriver.c (Dir): Renamed from Directory and removed list link.

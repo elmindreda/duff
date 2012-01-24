@@ -4,23 +4,22 @@ Brief hacking guide to duff
 Basic nomenclature
 ==================
 
-Entry n.
+File n.
   A file, specified on the command line or found via directory recursion,
   included in the set of files checked for duplicates.
 
 Cluster n.
-  A collection of entries which represent files with equal contents, i.e. a
-  collection of duplicate files.
+  A collection of files with equal contents, i.e. duplicates.
 
 Directory n.
-  A physical directory (inode, not link) which has been searched for entries.
+  A physical directory (inode, not link) which has been searched for files.
 
 Function n.
   A specific message digest function.
 
 Invalid a.
-  An entry becomes invalid if any stage of data gathering failed on it.  An
-  invalid entry should not be modified or operated upon.
+  A file becomes invalid if any stage of data gathering failed on it.  An
+  invalid file should not be modified or operated upon.
 
 
 Important files
@@ -30,10 +29,10 @@ duff.c
   Program main, information printing and option handling.
   
 duffdriver.c
-  Primary program logic; entry collection and cluster reporting.
+  Primary program logic; file collection and cluster reporting.
 
-duffentry.c
-  Functions for working with entries.
+dufffile.c
+  Functions for working with files.
 
 duffstring.c duffstring.h
   Replacement implementations of various libc string functions.
@@ -51,24 +50,23 @@ sha1.c sha1.h sha256.c sha256.h sha384.c sha384.h sha512.c sha512.h
 Important functions
 ===================
 
-duffentry.c: compare_entries()
-  The main comparison function for entries.  Start here if you wish to hack
-  the comparison algorithm.
+dufffile.c: compare_files()
+  The main comparison function for files.  Start here if you wish to modify the
+  comparison algorithm.
 
-duffentry.c: compare_entry_*() and get_entry_*()
-  Calculates and compares various entry attributes, respectively.  Start here
-  if you wish to modify one of the existing comparison methods.
+dufffile.c: compare_file_*() and get_file_*()
+  Calculates and compares various file attributes, respectively.  Start here if
+  you wish to modify one of the existing comparison methods.
 
 duffdriver.c: process_path(), process_file() and process_directory()
-  The main functions for collecting files and making entries.  Start here if
-  you wish to hack the traversal algorithm.
+  The main functions for collecting files.  Start here if you wish to modify the
+  traversal algorithm.
 
-duffdriver.c: report_clusters()
-  Finds and reports the clusters of duplicate files in the list of entries, or
-  collected files.  Start here if you wish to optimise list traversal or alter
-  normal program output.
+duffdriver.c: process_clusters()
+  Finds and reports the clusters of duplicates in the list of files.  Start here
+  if you wish to optimise list traversal or alter program output.
 
-duffdriver.c: has_recursed_directory() and record_directory()
+duffdriver.c: has_recorded_directory() and record_directory()
   Records traversed directories (in a very primitive way).  Start here if you
-  wish to modify the 'loop detection' algorithm.
+  wish to modify the directory loop detection algorithm.
 
