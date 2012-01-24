@@ -5,6 +5,8 @@ Maintained since version 0.3.1.
 
 2012-01-24  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duff.1: Improved grammar for -z flag.
+ * duff.1: Clarified language for -e flag.
  * duff.1: Fixed statement claiming digests are calculated in thorough mode.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
