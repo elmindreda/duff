@@ -244,8 +244,6 @@ static void recurse_directory(const char* path,
  */
 static void process_file(const char* path, struct stat* sb)
 {
-  Entry* entry;
-
   if (sb->st_size == 0)
   {
     if (ignore_empty_flag)
@@ -290,7 +288,7 @@ static void process_file(const char* path, struct stat* sb)
  */
 void process_args(int argc, char** argv)
 {
-  size_t i, j;
+  size_t i;
   char path[PATH_MAX];
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
