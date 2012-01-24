@@ -105,17 +105,39 @@ extern int excess_flag;
 extern const char* header_format;
 extern int header_uses_digest;
 
+typedef struct Dir Dir;
+typedef struct DirList DirList;
+
+/* Represents a single recorded physical directory.
+ */
+struct Dir
+{
+  dev_t device;
+  ino_t inode;
+};
+
+/* Represents a list of recorded directories.
+ */
+struct DirList
+{
+  Dir* dirs;
+  size_t allocated;
+  size_t available;
+};
+
+/* List head for traversed directories.
+ */
+static DirList recorded_dirs;
+
 /* Buckets of list of collected entries.
  */
 static EntryList buckets[1 << HASH_BITS];
-/* List head for traversed directories.
- */
-static Directory* directories = NULL;
 
 /* These functions are documented below, where they are defined.
  */
 static int stat_path(const char* path, struct stat* sb, int depth);
-static int has_recursed_directory(dev_t device, ino_t inode);
+static int has_recorded_directory(dev_t device, ino_t inode);
+static void record_directory(dev_t device, ino_t inode);
 static void process_directory(const char* path,
                               const struct stat* sb,
 			      int depth);
@@ -162,34 +184,47 @@ static int stat_path(const char* path, struct stat* sb, int depth)
   return 0;
 }
 
-/* Returns true if the directory has already been recursed into.
+/* Returns true if the directory has already been recorded.
  * TODO: Implement a more efficient data structure.
  */
-static int has_recursed_directory(dev_t device, ino_t inode)
+static int has_recorded_directory(dev_t device, ino_t inode)
 {
-  Directory* dir;
+  size_t i;
+  const Dir* dirs = recorded_dirs.dirs;
 
-  for (dir = directories;  dir;  dir = dir->next)
+  for (i = 0;  i < recorded_dirs.allocated;  i++)
   {
-    if (dir->device == device && dir->inode == inode)
+    if (dirs[i].device == device && dirs[i].inode == inode)
       return 1;
   }
 
   return 0;
 }
 
-/* Records the specified directory as recursed.
+/* Records the specified directory.
  * TODO: Implement a more efficient data structure.
  */
 static void record_directory(dev_t device, ino_t inode)
 {
-  Directory* dir;
+  if (recorded_dirs.allocated == recorded_dirs.available)
+  {
+    size_t count;
 
-  dir = (Directory*) malloc(sizeof(Directory));
-  dir->device = device;
-  dir->inode = inode;
-  dir->next = directories;
-  directories = dir;
+    if (recorded_dirs.available)
+      count = recorded_dirs.available * 2;
+    else
+      count = 1024;
+
+    recorded_dirs.dirs = realloc(recorded_dirs.dirs, count * sizeof(Dir));
+    if (recorded_dirs.dirs == NULL)
+      error(_("Out of memory"));
+
+    recorded_dirs.available = count;
+  }
+
+  recorded_dirs.dirs[recorded_dirs.allocated].device = device;
+  recorded_dirs.dirs[recorded_dirs.allocated].inode = inode;
+  recorded_dirs.allocated++;
 }
 
 /* Recurses into a directory, collecting all or all non-hidden files,
@@ -204,7 +239,7 @@ static void process_directory(const char* path,
   char* child_path;
   const char* name;
 
-  if (has_recursed_directory(sb->st_dev, sb->st_ino))
+  if (has_recorded_directory(sb->st_dev, sb->st_ino))
     return;
 
   record_directory(sb->st_dev, sb->st_ino);
@@ -291,6 +326,8 @@ void process_args(int argc, char** argv)
   size_t i;
   char path[PATH_MAX];
 
+  memset(&recorded_dirs, 0, sizeof(DirList));
+
   for (i = 0;  i < BUCKET_COUNT;  i++)
     entry_list_init(&buckets[i]);
 
@@ -317,10 +354,15 @@ void process_args(int argc, char** argv)
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
     entry_list_free(&buckets[i]);
+
+  free(recorded_dirs.dirs);
+  memset(&recorded_dirs, 0, sizeof(DirList));
 }
 
-/* Processes a path name, whether from the command line or from
- * directory recursion, according to its type.
+/* Processes a path name according to its type, whether from the command line or
+ * from directory recursion.
+ *
+ * This function calls process_file and process_directory as needed.
  */
 void process_path(const char* path, int depth)
 {

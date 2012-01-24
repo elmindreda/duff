@@ -5,6 +5,10 @@ Maintained since version 0.3.1.
 
 2012-01-24  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffdriver.c (has_recorded_directory): Renamed from has_recursed_directory.
+ * duffdriver.c (DirList): Added array of Dir structs.
+ * duffdriver.c (Dir): Renamed from Directory and removed list link.
+ * duff.h duffdriver.c: Moved Directory to duffdriver.
  * duffdriver.c (process_directory): Renamed from recurse_directory.
  * duff.h (EntryList): Renamed from List.
  * duffentry.c (get_entry_sample, get_entry_digest, compare_entry_contents):

@@ -54,7 +54,6 @@ typedef enum SymlinkMode SymlinkMode;
 typedef enum Function Function;
 typedef struct Entry Entry;
 typedef struct EntryList EntryList;
-typedef struct Directory Directory;
 
 /* Status modes for entries.
  */
@@ -87,15 +86,6 @@ enum SymlinkMode
   /* Dereference only those directory symlinks listed on the command line.
    */
   ARG_SYMLINKS,
-};
-
-/* Represents a traversed directory.
- */
-struct Directory
-{
-  Directory* next;
-  dev_t device;
-  ino_t inode;
 };
 
 /* Represents a collected file and potential duplicate.
