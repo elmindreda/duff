@@ -131,7 +131,7 @@ static DirList recorded_dirs;
 
 /* Buckets of list of collected entries.
  */
-static EntryList buckets[1 << HASH_BITS];
+static EntryList buckets[BUCKET_COUNT];
 
 /* These functions are documented below, where they are defined.
  */
