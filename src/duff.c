@@ -104,8 +104,7 @@ int null_terminate_flag = 0;
  */
 int quiet_flag = 0;
 
-/* Makes the program consider entries to be physical files instead of hard
- * links.
+/* Makes the program not consider hard-links to be duplicate files.
  */
 int physical_flag = 0;
 
