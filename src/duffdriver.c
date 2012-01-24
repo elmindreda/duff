@@ -522,7 +522,7 @@ static void process_clusters(void)
         }
       }
 
-      if (duplicates.allocated)
+      if (duplicates.allocated > 0)
       {
         report_cluster(&duplicates, index);
         file_list_empty(&duplicates);
