@@ -5,6 +5,8 @@ Maintained since version 0.3.1.
 
 2012-01-24  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffentry.c (get_entry_sample, get_entry_digest, compare_entry_contents):
+ Improved error reporting.
  * duff.h duffentry.c: Added BUFFER_SIZE macro for size of read buffers.
  * duff.1: Improved grammar for -z flag.
  * duff.1: Clarified language for -e flag.

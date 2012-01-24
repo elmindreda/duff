@@ -120,7 +120,7 @@ static int get_entry_sample(Entry* entry)
   if (!file)
   {
     if (!quiet_flag)
-      warning("%s: %s", entry->path, strerror(errno));
+      warning(_("failed to open file %s: %s"), entry->path, strerror(errno));
 
     entry->status = INVALID;
     return -1;
@@ -135,7 +135,7 @@ static int get_entry_sample(Entry* entry)
   if (fread(sample, size, 1, file) < 1)
   {
     if (!quiet_flag)
-      warning("%s: %s", entry->path, strerror(errno));
+      warning(_("failed to read file %s: %s"), entry->path, strerror(errno));
 
     free(sample);
     fclose(file);
@@ -171,7 +171,7 @@ static int get_entry_digest(Entry* entry)
     if (!file)
     {
       if (!quiet_flag)
-        warning("%s: %s", entry->path, strerror(errno));
+        warning(_("failed to open file %s: %s"), entry->path, strerror(errno));
 
       entry->status = INVALID;
       return -1;
@@ -183,7 +183,7 @@ static int get_entry_digest(Entry* entry)
       if (ferror(file))
       {
         if (!quiet_flag)
-          warning("%s: %s", entry->path, strerror(errno));
+          warning(_("failed to read file %s: %s"), entry->path, strerror(errno));
 
         fclose(file);
 
@@ -306,39 +306,58 @@ static int compare_entry_samples(Entry* first, Entry* second)
  */
 static int compare_entry_contents(Entry* first, Entry* second)
 {
-  int fc, sc, result = 0;
+  int fc, sc;
+  off_t count = 0;
   FILE* first_stream;
   FILE* second_stream;
 
-  if (first->size == 0)
-    return 0;
-
   first_stream = fopen(first->path, "rb");
-  second_stream = fopen(second->path, "rb");
-
-  if (!first_stream || !second_stream)
+  if (!first_stream)
   {
-    if (first_stream)
-      fclose(first_stream);
-    if (second_stream)
-      fclose(second_stream);
+    warning(_("failed to open file %s: %s"), first->path, strerror(errno));
+    first->status = INVALID;
     return -1;
   }
 
-  do
+  second_stream = fopen(second->path, "rb");
+  if (!second_stream)
+  {
+    fclose(first_stream);
+
+    warning(_("failed to open file %s: %s"), second->path, strerror(errno));
+    second->status = INVALID;
+    return -1;
+  }
+
+  for (;;)
   {
     fc = fgetc(first_stream);
     sc = fgetc(second_stream);
-    if (fc != sc)
-    {
-      result = -1;
+
+    if (fc != sc || fc == EOF)
       break;
-    }
+
+    count++;
   }
-  while (fc != EOF);
+
+  if (ferror(first_stream))
+  {
+    warning(_("failed to read file %s: %s"), first->path, strerror(errno));
+    first->status = INVALID;
+  }
+
+  if (ferror(second_stream))
+  {
+    warning(_("failed to read file %s: %s"), second->path, strerror(errno));
+    second->status = INVALID;
+  }
 
   fclose(first_stream);
   fclose(second_stream);
-  return result;
+
+  if (count != first->size)
+    return -1;
+
+  return 0;
 }
 
