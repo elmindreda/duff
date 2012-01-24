@@ -5,7 +5,7 @@ Functionality
 * Change to getopt_long and add long options?
   - which would require adding gnulib
 * Detect duplicate file arguments?
-  - is that even possible to do in a sane fashion?
+  - possibly by comparing normalized paths
 * Detect duplicate directory subtrees
   - in the upcoming treeduff, not plain duff
 * Stop using fixed buffer size for reading paths from stdin
