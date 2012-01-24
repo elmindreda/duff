@@ -479,7 +479,7 @@ static void report_cluster(const FileList* duplicates, unsigned int index)
   }
 }
 
-/* Finds and reports all duplicate clusters among the collected files.
+/* Finds and reports all duplicate clusters in each bucket of collected files.
  */
 static void process_clusters(void)
 {
