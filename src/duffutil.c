@@ -114,6 +114,9 @@ Entry* entry_list_alloc(List* list)
       count = 1024;
 
     list->entries = realloc(list->entries, count * sizeof(Entry));
+    if (list->entries == NULL)
+      error(_("Out of memory"));
+
     list->available = count;
   }
 
