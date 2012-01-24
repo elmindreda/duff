@@ -116,7 +116,7 @@ static Directory* directories = NULL;
  */
 static int stat_path(const char* path, struct stat* sb, int depth);
 static int has_recursed_directory(dev_t device, ino_t inode);
-static void recurse_directory(const char* path,
+static void process_directory(const char* path,
                               const struct stat* sb,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
@@ -195,7 +195,7 @@ static void record_directory(dev_t device, ino_t inode)
 /* Recurses into a directory, collecting all or all non-hidden files,
  * according to the specified options.
  */
-static void recurse_directory(const char* path,
+static void process_directory(const char* path,
                               const struct stat* sb,
 			      int depth)
 {
@@ -343,7 +343,7 @@ void process_path(const char* path, int depth)
     {
       if (recursive_flag)
       {
-	recurse_directory(path, &sb, depth + 1);
+	process_directory(path, &sb, depth + 1);
         break;
       }
 

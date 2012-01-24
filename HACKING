@@ -59,7 +59,7 @@ duffentry.c: compare_entry_*() and get_entry_*()
   Calculates and compares various entry attributes, respectively.  Start here
   if you wish to modify one of the existing comparison methods.
 
-duffdriver.c: process_path(), process_file() and recurse_directory()
+duffdriver.c: process_path(), process_file() and process_directory()
   The main functions for collecting files and making entries.  Start here if
   you wish to hack the traversal algorithm.
 
