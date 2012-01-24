@@ -3,8 +3,10 @@ User-visible changes in duff
 
 Version 0.5.2
 
+ * Improved performance for both small and large file sets.
+ * Improved error and warning messages.
  * Changed sampling use the first n bytes of a file.
- * Changed default sampling limit to zero.
+ * Changed default sampling limit to zero (sample all files).
  * Fixed broken manpage examples.
 
 Version 0.5.1
