@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-01-23 02:03+0100\n"
+"POT-Creation-Date: 2012-01-24 14:22+0100\n"
 "PO-Revision-Date: 2011-04-11 18:11+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -128,64 +128,79 @@ msgstr "  -z  rapportera inte tomma filer\n"
 msgid "Report bugs to <%s>\n"
 msgstr "Rapportera fel till <%s>\n"
 
-#: src/duff.c:236
+#: src/duff.c:235
 #, c-format
 msgid "%s is not a supported digest function"
 msgstr "%s är inte en stödd hash-funktion"
 
-#: src/duff.c:251
+#: src/duff.c:250
 #, c-format
 msgid "Ignoring invalid sample limit %s"
 msgstr "Ignorerar den ogiltiga samplings-gränsen %s"
 
-#: src/duff.c:286
+#: src/duff.c:285
 #, fuzzy, c-format
 msgid "%n files in cluster %i (%s bytes)"
 msgstr "%n filer i grupp %i (%s byte)"
 
-#: src/duff.c:288
+#: src/duff.c:287
 #, c-format
 msgid "%n files in cluster %i (%s bytes, digest %d)"
 msgstr "%n filer i grupp %i (%s byte, hash %d)"
 
-#: src/duff.c:292
+#: src/duff.c:293
 #, c-format
 msgid "Digest (%%d) is not calculated in thorough mode (-t)"
 msgstr "Hash (%%d) beräknas inte i byte-för-byte läge (-t)"
 
-#: src/duffdriver.c:321
+#: src/duffdriver.c:360
 #, c-format
 msgid "%s is a symbolic link; skipping"
 msgstr "%s är en symbolisk länk; hoppar över"
 
-#: src/duffdriver.c:324
+#: src/duffdriver.c:363
 #, c-format
 msgid "%s is a named pipe; skipping"
 msgstr "%s är ett namngivet rör (named pipe); hoppar över"
 
-#: src/duffdriver.c:327
+#: src/duffdriver.c:366
 #, c-format
 msgid "%s is a block device; skipping"
 msgstr "%s är en blockspecialfil (block device); hoppar över"
 
-#: src/duffdriver.c:330
+#: src/duffdriver.c:369
 #, c-format
 msgid "%s is a character device; skipping"
 msgstr "%s är en teckenspecialfil (character device); hoppar över"
 
-#: src/duffdriver.c:333
+#: src/duffdriver.c:372
 #, c-format
 msgid "%s is a directory; skipping"
 msgstr "%s är en katalog; hoppar över"
 
-#: src/duffdriver.c:336
+#: src/duffdriver.c:375
 #, c-format
 msgid "%s is a socket; skipping"
 msgstr "%s är ett uttag (socket); hoppar över"
 
-#: src/duffdriver.c:339 src/duffentry.c:254 src/duffutil.c:133
+#: src/duffdriver.c:378 src/duffutil.c:213 src/duffutil.c:236
+#: src/duffutil.c:259 src/duffutil.c:282
 msgid "This cannot happen"
 msgstr "Detta kan inte hända"
 
-#~ msgid "Sample limit must be at least %u bytes"
-#~ msgstr "Samplings-gränsen måste vara åtminstone %u byte"
+#: src/duffentry.c:123 src/duffentry.c:174 src/duffentry.c:317
+#: src/duffentry.c:327
+#, c-format
+msgid "failed to open file %s: %s"
+msgstr "misslyckades att öppna fil %s: %s"
+
+#: src/duffentry.c:138 src/duffentry.c:186 src/duffentry.c:345
+#: src/duffentry.c:351
+#, c-format
+msgid "failed to read file %s: %s"
+msgstr "misslyckades att läsa fil %s: %s"
+
+#: src/duffutil.c:118
+msgid "Out of memory"
+msgstr "Slut på minne"
+
