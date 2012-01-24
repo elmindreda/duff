@@ -34,16 +34,17 @@
 #endif
 
 /* The number of bytes to use as read buffer when reading files.
+ * NOTE: This must be at least 1 and should likely be multiples of 4096.
  */
 #define BUFFER_SIZE 8192
 
 /* The number of bytes to sample from the beginning of potential duplicates.
- * NOTE: This must be one (1) or greater.
+ * NOTE: This must be at least 1 but likely not larger than 4096.
  */
 #define SAMPLE_SIZE 512
 
 /* The number of bits of file size to use as bucket index.
- * NOTE: This must be one (1) or greater.
+ * NOTE: This must be at least 1.
  */
 #define HASH_BITS 10
 
