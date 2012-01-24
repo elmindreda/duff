@@ -484,14 +484,13 @@ static void report_cluster(const FileList* duplicates, unsigned int index)
 static void process_clusters(void)
 {
   size_t i, j, first, second, index;
-  File* files;
   FileList duplicates;
 
   file_list_init(&duplicates);
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
   {
-    files = buckets[i].files;
+    File* files = buckets[i].files;
 
     for (first = 0;  first < buckets[i].allocated;  first++)
     {
