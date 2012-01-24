@@ -3,6 +3,10 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-01-24  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.1: Fixed statement claiming digests are calculated in thorough mode.
+
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duffdriver.c (process_args, process_clusters): Moved freeing of entries to
