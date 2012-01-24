@@ -5,6 +5,7 @@ Maintained since version 0.3.1.
 
 2012-01-24  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duff.h (HASH_BITS): Increased to 10.
  * duffdriver.c (print_terminator): Added function.
  * duff.h duffdriver.c dufffile.c (file_list_*): Renamed from entry_list_*.
  * duff.h duffdriver.c dufffile.c (free_file): Renamed from free_entry.

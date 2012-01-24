@@ -45,7 +45,7 @@
 /* The number of bits of file size to use as bucket index.
  * NOTE: This must be one (1) or greater.
  */
-#define HASH_BITS 8
+#define HASH_BITS 10
 
 /* Typedefs for structs and enums.
  */
