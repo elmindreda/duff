@@ -169,12 +169,20 @@ The command:
 .Dl duff -e0 * \&| xargs -0 rm
 .Pp
 removes all duplicate files in the current directory.
-Note that you have no control over which files in each duplicate are listed in excess mode.
-.P 
+Note that you have no control over which files in each cluster that are selected by
+.Fl e
+(excess mode).  Use with care.
+.Pp
 The command:
-.Dl find \&. -name '*.h' -type f -print0 \&| duff -0 | xargs -0 -n1 echo
+.Dl find \&. -name '*.h' -type f \&| duff
+.Pp
+lists all duplicate header files in the current directory and its subdirectories.
+.Pp
+The command:
+.Dl find \&. -name '*.h' -type f -print0 \&| duff -0 \&| xargs -0 -n1 echo
 .Pp
 lists all duplicate header files in the current directory and its subdirectories, correctly handling file names containing whitespace.
+Note the use of xargs and echo to remove the null separators again before listing.
 .Sh DIAGNOSTICS
 .Ex -std
 .Sh "SEE ALSO"
@@ -185,8 +193,10 @@ lists all duplicate header files in the current directory and its subdirectories
 .Sh BUGS
 .Nm
 doesn't check whether the same file has been specified twice on the command line.
-This may lead it to report single files as duplicates.
-Note that this problem does not affect directories.
+This will lead it to report files listed multiple times as duplicates when not using
+.Fl p
+(physical mode).
+Note that this problem only affects files, not directories.
 .Pp
 .Nm
 no longer (as of version 0.4) reports symbolic links to files as duplicates, as they're by definition always duplicates.
