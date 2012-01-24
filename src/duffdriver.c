@@ -105,6 +105,8 @@ extern int excess_flag;
 extern const char* header_format;
 extern int header_uses_digest;
 
+/* Typedefs for the structs below.
+ */
 typedef struct Dir Dir;
 typedef struct DirList DirList;
 
