@@ -294,7 +294,7 @@ static void process_file(const char* path, struct stat* sb)
       /* We can't read the file, so we fail here */
 
       if (!quiet_flag)
-        warning("%s: %s", path, strerror(errno));
+        warning(_("cannot read file %s: %s"), path, strerror(errno));
 
       return;
     }
