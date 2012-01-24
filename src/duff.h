@@ -53,7 +53,7 @@ typedef enum Status Status;
 typedef enum SymlinkMode SymlinkMode;
 typedef enum Function Function;
 typedef struct Entry Entry;
-typedef struct List List;
+typedef struct EntryList EntryList;
 typedef struct Directory Directory;
 
 /* Status modes for entries.
@@ -111,9 +111,9 @@ struct Entry
   uint8_t* sample;
 };
 
-/* Represents a list of files.
+/* Represents a list of entries.
  */
-struct List
+struct EntryList
 {
   Entry* entries;
   size_t allocated;
@@ -137,10 +137,10 @@ int compare_entries(Entry* first, Entry* second);
 void generate_entry_digest(Entry* entry);
 
 /* These are defined and documented in duffutil.c */
-void entry_list_init(List* list);
-Entry* entry_list_alloc(List* list);
-void entry_list_empty(List* list);
-void entry_list_free(List* list);
+void entry_list_init(EntryList* list);
+Entry* entry_list_alloc(EntryList* list);
+void entry_list_empty(EntryList* list);
+void entry_list_free(EntryList* list);
 int read_path(FILE* stream, char* path, size_t size);
 void kill_trailing_slashes(char* path);
 void set_digest_function(Function function);

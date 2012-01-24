@@ -92,7 +92,7 @@ static union Context context;
 
 /* Initializes a list for use.
  */
-void entry_list_init(List* list)
+void entry_list_init(EntryList* list)
 {
   list->entries = NULL;
   list->allocated = 0;
@@ -102,7 +102,7 @@ void entry_list_init(List* list)
 /* Allocates and returns a single entry within the specified list, resizing the
  * list as necessary.
  */
-Entry* entry_list_alloc(List* list)
+Entry* entry_list_alloc(EntryList* list)
 {
   if (list->allocated == list->available)
   {
@@ -127,14 +127,14 @@ Entry* entry_list_alloc(List* list)
 
 /* Empties the list without freeing its allocated memory.
  */
-void entry_list_empty(List* list)
+void entry_list_empty(EntryList* list)
 {
   list->allocated = 0;
 }
 
 /* Frees the memory allocated by the list and reinitializes it.
  */
-void entry_list_free(List* list)
+void entry_list_free(EntryList* list)
 {
   free(list->entries);
   entry_list_init(list);

@@ -107,7 +107,7 @@ extern int header_uses_digest;
 
 /* Buckets of list of collected entries.
  */
-static List buckets[1 << HASH_BITS];
+static EntryList buckets[1 << HASH_BITS];
 /* List head for traversed directories.
  */
 static Directory* directories = NULL;
@@ -121,7 +121,7 @@ static void recurse_directory(const char* path,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
-static void report_cluster(const List* duplicates, unsigned int index);
+static void report_cluster(const EntryList* duplicates, unsigned int index);
 static void process_clusters(void);
 
 /* Stat:s a file according to the specified options.
@@ -384,7 +384,7 @@ void process_path(const char* path, int depth)
 
 /* Reports a cluster to stdout, according to the specified options.
  */
-static void report_cluster(const List* duplicates, unsigned int index)
+static void report_cluster(const EntryList* duplicates, unsigned int index)
 {
   size_t i;
   Entry* entries = duplicates->entries;
@@ -443,7 +443,7 @@ static void process_clusters(void)
 {
   size_t i, j, first, second, index;
   Entry* entries;
-  List duplicates;
+  EntryList duplicates;
 
   entry_list_init(&duplicates);
 
