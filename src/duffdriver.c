@@ -84,7 +84,12 @@
 #include "duffstring.h"
 #include "duff.h"
 
+/* The number of buckets to use for entries.
+ */
 #define BUCKET_COUNT (1 << HASH_BITS)
+
+/* Calculates the bucket index corresponding to the specified entry size.
+ */
 #define BUCKET_INDEX(size) ((size) & (BUCKET_COUNT - 1))
 
 /* These flags are defined and documented in duff.c.
