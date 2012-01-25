@@ -60,10 +60,6 @@
 #include <stdint.h>
 #endif
 
-#if HAVE_ASSERT_H
-#include <assert.h>
-#endif
-
 #include "duff.h"
 
 /* These flags are defined and documented in duff.c.
