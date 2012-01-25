@@ -159,7 +159,7 @@ static int stat_path(const char* path, struct stat* sb, int depth)
   if (lstat(path, sb) != 0)
   {
     if (!quiet_flag)
-      warning(_("failed to stat %s: %s"), path, strerror(errno));
+      warning("%s: %s", path, strerror(errno));
 
     return -1;
   }
@@ -172,7 +172,7 @@ static int stat_path(const char* path, struct stat* sb, int depth)
       if (stat(path, sb) != 0)
       {
 	if (!quiet_flag)
-	  warning(_("failed to stat %s: %s"), path, strerror(errno));
+	  warning("%s: %s", path, strerror(errno));
 
 	return -1;
       }
@@ -251,7 +251,7 @@ static void process_directory(const char* path,
   if (!dir)
   {
     if (!quiet_flag)
-      warning(_("failed to open directory %s: %s"), path, strerror(errno));
+      warning("%s: %s", path, strerror(errno));
 
     return;
   }

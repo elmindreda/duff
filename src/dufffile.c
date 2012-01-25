@@ -120,7 +120,7 @@ static int get_file_sample(File* file)
   if (!stream)
   {
     if (!quiet_flag)
-      warning(_("failed to open file %s: %s"), file->path, strerror(errno));
+      warning("%s: %s", file->path, strerror(errno));
 
     file->status = INVALID;
     return -1;
@@ -135,7 +135,7 @@ static int get_file_sample(File* file)
   if (fread(sample, size, 1, stream) < 1)
   {
     if (!quiet_flag)
-      warning(_("failed to read file %s: %s"), file->path, strerror(errno));
+      warning("%s: %s", file->path, strerror(errno));
 
     free(sample);
     fclose(stream);
@@ -171,7 +171,7 @@ static int get_file_digest(File* file)
     if (!stream)
     {
       if (!quiet_flag)
-        warning(_("failed to open file %s: %s"), file->path, strerror(errno));
+        warning("%s: %s", file->path, strerror(errno));
 
       file->status = INVALID;
       return -1;
@@ -183,7 +183,7 @@ static int get_file_digest(File* file)
       if (ferror(stream))
       {
         if (!quiet_flag)
-          warning(_("failed to read file %s: %s"), file->path, strerror(errno));
+          warning("%s: %s", file->path, strerror(errno));
 
         fclose(stream);
 
@@ -314,7 +314,7 @@ static int compare_file_contents(File* first, File* second)
   first_stream = fopen(first->path, "rb");
   if (!first_stream)
   {
-    warning(_("failed to open file %s: %s"), first->path, strerror(errno));
+    warning("%s: %s", first->path, strerror(errno));
     first->status = INVALID;
     return -1;
   }
@@ -324,7 +324,7 @@ static int compare_file_contents(File* first, File* second)
   {
     fclose(first_stream);
 
-    warning(_("failed to open file %s: %s"), second->path, strerror(errno));
+    warning("%s: %s", second->path, strerror(errno));
     second->status = INVALID;
     return -1;
   }
@@ -342,13 +342,13 @@ static int compare_file_contents(File* first, File* second)
 
   if (ferror(first_stream))
   {
-    warning(_("failed to read file %s: %s"), first->path, strerror(errno));
+    warning("%s: %s", first->path, strerror(errno));
     first->status = INVALID;
   }
 
   if (ferror(second_stream))
   {
-    warning(_("failed to read file %s: %s"), second->path, strerror(errno));
+    warning("%s: %s", second->path, strerror(errno));
     second->status = INVALID;
   }
 
