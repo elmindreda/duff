@@ -68,7 +68,7 @@ enum Status
   INVALID,
   /* The file has been reported as a duplicate.
    */
-  REPORTED,
+  REPORTED
 };
 
 /* Symlink dereferencing modes.
@@ -83,7 +83,7 @@ enum SymlinkMode
   ALL_SYMLINKS,
   /* Dereference only those directory symlinks listed on the command line.
    */
-  ARG_SYMLINKS,
+  ARG_SYMLINKS
 };
 
 /* Represents a collected file and potential duplicate.
