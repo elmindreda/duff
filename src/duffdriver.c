@@ -287,18 +287,6 @@ static void process_file(const char* path, struct stat* sb)
     if (ignore_empty_flag)
       return;
   }
-  else
-  {
-    if (access(path, R_OK) != 0)
-    {
-      /* We can't read the file, so we fail here */
-
-      if (!quiet_flag)
-        warning(_("cannot read file %s: %s"), path, strerror(errno));
-
-      return;
-    }
-  }
 
   /* NOTE: Check for duplicate arguments? */
 
