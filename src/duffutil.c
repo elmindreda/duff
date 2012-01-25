@@ -109,7 +109,7 @@ File* file_list_alloc(FileList* list)
     if (list->available)
       count = list->available * 2;
     else
-      count = 1024;
+      count = 128;
 
     list->files = realloc(list->files, count * sizeof(File));
     if (list->files == NULL)
