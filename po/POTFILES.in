@@ -1,5 +1,5 @@
 # List of source files which contain translatable strings.
 src/duff.c
 src/duffdriver.c
-src/duffentry.c
+src/dufffile.c
 src/duffutil.c

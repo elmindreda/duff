@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-01-24 14:38+0100\n"
+"POT-Creation-Date: 2012-01-25 00:46+0100\n"
 "PO-Revision-Date: 2011-04-11 18:11+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -13,22 +13,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/duff.c:150
+#: src/duff.c:149
 #, c-format
 msgid "Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.org>\n"
 msgstr "Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.se>\n"
 
-#: src/duff.c:151
+#: src/duff.c:150
 #, c-format
 msgid "%s contains shaX-asaddi\n"
 msgstr "%s innehåller shaX-asaddi\n"
 
-#: src/duff.c:152
+#: src/duff.c:151
 #, c-format
 msgid "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"
 msgstr "Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"
 
-#: src/duff.c:161
+#: src/duff.c:160
 #, c-format
 msgid ""
 "Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"
@@ -36,180 +36,183 @@ msgstr ""
 "Användning: %s [-0HLPaepqrtz] [-d funktion] [-f format] [-l storlek] "
 "[fil ...]\n"
 
-#: src/duff.c:167
+#: src/duff.c:166
 #, c-format
 msgid "Options:\n"
 msgstr "Flaggor:\n"
 
-#: src/duff.c:168
+#: src/duff.c:167
 #, c-format
 msgid "  -0  read and write file names terminated by a null character\n"
 msgstr "  -0  läs och skriv filnamn avslutade med nulltecken\n"
 
-#: src/duff.c:169
+#: src/duff.c:168
 #, fuzzy, c-format
 msgid "  -H  follow symbolic links to directories on the command line\n"
 msgstr "  -H  följ symboliska länkar till kataloger på kommandoraden\n"
 
-#: src/duff.c:170
+#: src/duff.c:169
 #, fuzzy, c-format
 msgid "  -L  follow all symbolic links to directories\n"
 msgstr "  -L  följ alla symboliska länkar till kataloger\n"
 
-#: src/duff.c:171
+#: src/duff.c:170
 #, c-format
 msgid "  -P  do not follow any symbolic links (default)\n"
 msgstr "  -P  följ inga symboliska länkar (normalt)\n"
 
-#: src/duff.c:172
+#: src/duff.c:171
 #, c-format
 msgid "  -a  include hidden files when searching recursively\n"
 msgstr "  -a  inkludera dolda filer vid rekursiv sökning\n"
 
-#: src/duff.c:173
+#: src/duff.c:172
 #, fuzzy, c-format
 msgid "  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"
 msgstr "  -d  välj en specifik hash-funktion: sha1 sha256 sha384 sha512\n"
 
-#: src/duff.c:174
+#: src/duff.c:173
 #, c-format
 msgid ""
 "  -e  excess mode; list all but one file from each cluster (no headers)\n"
 msgstr ""
 "  -e  lista alla filer utom en från varje grupp dubletter (inga headers)\n"
 
-#: src/duff.c:175
+#: src/duff.c:174
 #, c-format
 msgid "  -f  format for cluster headers\n"
 msgstr "  -f  format för headern innan varje grupp dubletter\n"
 
-#: src/duff.c:176
+#: src/duff.c:175
 #, c-format
 msgid "  -h  show this help\n"
 msgstr "  -h  visa denna hjälptext\n"
 
-#: src/duff.c:177
+#: src/duff.c:176
 #, c-format
 msgid "  -l  the minimum size that activates sampling\n"
 msgstr "  -l  den minsta filstorleken som aktiverar sampling\n"
 
-#: src/duff.c:178
+#: src/duff.c:177
 #, c-format
 msgid "  -q  quiet; suppress warnings and error messages\n"
 msgstr "  -q  utelämna de flesta felmeddelanden\n"
 
-#: src/duff.c:179
+#: src/duff.c:178
 #, c-format
 msgid "  -p  physical mode; do not report multiple links as duplicates\n"
 msgstr "  -p  rapportera inte multipla fysiska länkar som dubletter\n"
 
-#: src/duff.c:180
+#: src/duff.c:179
 #, c-format
 msgid "  -r  search recursively through specified directories\n"
 msgstr "  -r  sök rekursivt genom angivna kataloger\n"
 
-#: src/duff.c:181
+#: src/duff.c:180
 #, c-format
 msgid "  -t  thorough; force byte-by-byte comparison of files\n"
 msgstr "  -t  tvinga byte-för-byte-jämförelse av filer\n"
 
-#: src/duff.c:182
+#: src/duff.c:181
 #, c-format
 msgid "  -v  show version information\n"
 msgstr "  -v  visa versionsinformation\n"
 
-#: src/duff.c:183
+#: src/duff.c:182
 #, c-format
 msgid "  -z  do not report empty files\n"
 msgstr "  -z  rapportera inte tomma filer\n"
 
-#: src/duff.c:190
+#: src/duff.c:189
 #, c-format
 msgid "Report bugs to <%s>\n"
 msgstr "Rapportera fel till <%s>\n"
 
-#: src/duff.c:235
+#: src/duff.c:234
 #, c-format
 msgid "%s is not a supported digest function"
 msgstr "%s är inte en stödd hash-funktion"
 
-#: src/duff.c:250
+#: src/duff.c:249
 #, c-format
 msgid "Ignoring invalid sample limit %s"
 msgstr "Ignorerar den ogiltiga samplings-gränsen %s"
 
-#: src/duff.c:285
+#: src/duff.c:284
 #, fuzzy, c-format
 msgid "%n files in cluster %i (%s bytes)"
 msgstr "%n filer i grupp %i (%s byte)"
 
-#: src/duff.c:287
+#: src/duff.c:286
 #, c-format
 msgid "%n files in cluster %i (%s bytes, digest %d)"
 msgstr "%n filer i grupp %i (%s byte, hash %d)"
 
-#: src/duff.c:293
+#: src/duff.c:292
 #, c-format
 msgid "Digest (%%d) is not calculated in thorough mode (-t)"
 msgstr "Hash (%%d) beräknas inte i byte-för-byte läge (-t)"
 
-#: src/duffdriver.c:137 src/duffdriver.c:150
+#: src/duffdriver.c:162 src/duffdriver.c:175
 #, fuzzy, c-format
 msgid "failed to stat %s: %s"
 msgstr "misslyckades att stat:a %s: %s"
 
-#: src/duffdriver.c:216
+#: src/duffdriver.c:223 src/duffutil.c:116
+msgid "Out of memory"
+msgstr "Slut på minne"
+
+#: src/duffdriver.c:254
 #, fuzzy, c-format
 msgid "failed to open directory %s: %s"
 msgstr "misslyckades att öppna katalog %s: %s"
 
-#: src/duffdriver.c:360
+#: src/duffdriver.c:297
+#, fuzzy, c-format
+msgid "cannot read file %s: %s"
+msgstr "kan inte läsa fil %s: %s"
+
+#: src/duffdriver.c:405
 #, c-format
 msgid "%s is a symbolic link; skipping"
 msgstr "%s är en symbolisk länk; hoppar över"
 
-#: src/duffdriver.c:363
+#: src/duffdriver.c:408
 #, c-format
 msgid "%s is a named pipe; skipping"
 msgstr "%s är ett namngivet rör (named pipe); hoppar över"
 
-#: src/duffdriver.c:366
+#: src/duffdriver.c:411
 #, c-format
 msgid "%s is a block device; skipping"
 msgstr "%s är en blockspecialfil (block device); hoppar över"
 
-#: src/duffdriver.c:369
+#: src/duffdriver.c:414
 #, c-format
 msgid "%s is a character device; skipping"
 msgstr "%s är en teckenspecialfil (character device); hoppar över"
 
-#: src/duffdriver.c:372
+#: src/duffdriver.c:417
 #, c-format
 msgid "%s is a directory; skipping"
 msgstr "%s är en katalog; hoppar över"
 
-#: src/duffdriver.c:375
+#: src/duffdriver.c:420
 #, c-format
 msgid "%s is a socket; skipping"
 msgstr "%s är ett uttag (socket); hoppar över"
 
-#: src/duffdriver.c:378 src/duffutil.c:213 src/duffutil.c:236
-#: src/duffutil.c:259 src/duffutil.c:282
+#: src/duffdriver.c:423 src/duffutil.c:211 src/duffutil.c:234
+#: src/duffutil.c:257 src/duffutil.c:280
 msgid "This cannot happen"
 msgstr "Detta kan inte hända"
 
-#: src/duffentry.c:123 src/duffentry.c:174 src/duffentry.c:317
-#: src/duffentry.c:327
+#: src/dufffile.c:123 src/dufffile.c:174 src/dufffile.c:317 src/dufffile.c:327
 #, c-format
 msgid "failed to open file %s: %s"
 msgstr "misslyckades att öppna fil %s: %s"
 
-#: src/duffentry.c:138 src/duffentry.c:186 src/duffentry.c:345
-#: src/duffentry.c:351
+#: src/dufffile.c:138 src/dufffile.c:186 src/dufffile.c:345 src/dufffile.c:351
 #, c-format
 msgid "failed to read file %s: %s"
 msgstr "misslyckades att läsa fil %s: %s"
-
-#: src/duffutil.c:118
-msgid "Out of memory"
-msgstr "Slut på minne"
