@@ -41,7 +41,7 @@
 /* The number of bytes to sample from the beginning of potential duplicates.
  * NOTE: This must be at least 1 but likely not larger than 4096.
  */
-#define SAMPLE_SIZE 512
+#define SAMPLE_SIZE 4096
 
 /* The number of bits of file size to use as bucket index.
  * NOTE: This must be at least 1.
@@ -66,9 +66,6 @@ enum Status
   /* An error ocurred when reading from the file.
    */
   INVALID,
-  /* The file is a member of a cluster of duplicates.
-   */
-  DUPLICATE,
   /* The file has been reported as a duplicate.
    */
   REPORTED,
