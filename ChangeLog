@@ -6,7 +6,8 @@ Maintained since version 0.3.1.
 2012-01-25  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.h (Status): Removed unused DUPLICATE status.
- * duffdriver.c (process_file): Removed read permission check.
+ * duffdriver.c (process_file): Removed read permission check on files (credits
+ to Kamal Mostafa).
 
 2012-01-24  Camilla Berglund  <elmindreda@elmindreda.org>
 
