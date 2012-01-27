@@ -146,7 +146,7 @@ static void process_directory(const char* path,
 static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
 static void print_terminator(void);
-static void report_cluster(const FileList* duplicates, unsigned int index);
+static void report_cluster(const FileList* cluster, unsigned int index);
 static void process_clusters(void);
 
 /* Stat:s a file according to the specified options.
@@ -427,15 +427,15 @@ static void print_terminator(void)
 
 /* Reports a cluster to stdout, according to the specified options.
  */
-static void report_cluster(const FileList* duplicates, unsigned int index)
+static void report_cluster(const FileList* cluster, unsigned int index)
 {
   size_t i;
-  File* files = duplicates->files;
+  File* files = cluster->files;
 
   if (excess_flag)
   {
     /* Report all but the first file in the cluster */
-    for (i = 1;  i < duplicates->allocated;  i++)
+    for (i = 1;  i < cluster->allocated;  i++)
     {
       printf("%s", files[i].path);
       print_terminator();
@@ -451,7 +451,7 @@ static void report_cluster(const FileList* duplicates, unsigned int index)
         generate_file_digest(files);
 
       print_cluster_header(header_format,
-			   duplicates->allocated,
+			   cluster->allocated,
 			   index,
 			   files->size,
 			   files->digest);
@@ -459,7 +459,7 @@ static void report_cluster(const FileList* duplicates, unsigned int index)
       print_terminator();
     }
 
-    for (i = 0;  i < duplicates->allocated;  i++)
+    for (i = 0;  i < cluster->allocated;  i++)
     {
       printf("%s", files[i].path);
       print_terminator();
