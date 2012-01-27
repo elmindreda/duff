@@ -5,6 +5,8 @@ Maintained since version 0.3.1.
 
 2012-01-27  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffdriver.c (process_clusters): Added test for whether base item has entered
+ INVALID state.
  * dufffile.c (get_file_sample, get_file_digest): Removed duplicate check for
  INVALID state.
 

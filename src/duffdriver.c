@@ -507,6 +507,11 @@ static void process_clusters(void)
           *file_list_alloc(&duplicates) = files[second];
           files[second].status = REPORTED;
         }
+        else
+        {
+          if (files[first].status == INVALID)
+            break;
+        }
       }
 
       if (duplicates.allocated > 0)
