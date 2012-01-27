@@ -133,6 +133,8 @@ static int get_file_sample(File* file)
 
     free(sample);
     fclose(stream);
+
+    file->status = INVALID;
     return -1;
   }
 
