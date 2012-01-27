@@ -138,10 +138,10 @@ static int get_file_sample(File* file)
     return -1;
   }
 
+  fclose(stream);
+
   file->sample = sample;
   file->status = SAMPLED;
-
-  fclose(stream);
   return 0;
 }
 
@@ -197,8 +197,8 @@ static int get_file_digest(File* file)
 
   file->digest = (uint8_t*) malloc(get_digest_size());
   digest_finish(file->digest);
-  file->status = HASHED;
 
+  file->status = HASHED;
   return 0;
 }
 
