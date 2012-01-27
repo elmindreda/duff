@@ -255,18 +255,14 @@ void generate_file_digest(File* file)
  */
 static int compare_file_digests(File* first, File* second)
 {
-  int i, digest_size;
-
   if (get_file_digest(first) != 0)
     return -1;
 
   if (get_file_digest(second) != 0)
     return -1;
 
-  digest_size = get_digest_size();
-  for (i = 0;  i < digest_size;  i++)
-    if (first->digest[i] != second->digest[i])
-      return -1;
+  if (memcmp(first->digest, second->digest, get_digest_size()) != 0)
+    return -1;
 
   return 0;
 }

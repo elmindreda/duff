@@ -5,6 +5,7 @@ Maintained since version 0.3.1.
 
 2012-01-27  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * dufffile.c (compare_file_digests): Replaced for-loop with memcmp.
  * dufffile.c (get_file_sample, get_file_digest): Replaced pointer checks with
  status checks.
  * duff.h (Status): Added SAMPLED and HASHED values.
