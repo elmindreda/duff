@@ -5,6 +5,9 @@ Maintained since version 0.3.1.
 
 2012-01-27  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * dufffile.c (get_file_sample, get_file_digest): Replaced pointer checks with
+ status checks.
+ * duff.h (Status): Added SAMPLED and HASHED values.
  * duffdriver.c (process_clusters): Added test for whether base item has entered
  INVALID state.
  * dufffile.c (get_file_sample, get_file_digest): Removed duplicate check for

@@ -63,6 +63,12 @@ enum Status
   /* The file has been stat:d but its data has not been touched.
    */
   UNTOUCHED,
+  /* The beginning of the file has been hashed.
+   */
+  SAMPLED,
+  /* The entire file has been hashed.
+   */
+  HASHED,
   /* An error ocurred when reading from the file.
    */
   INVALID,
