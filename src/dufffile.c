@@ -107,8 +107,6 @@ static int get_file_sample(File* file)
   size_t size;
   uint8_t* sample;
 
-  if (file->status == INVALID)
-    return -1;
   if (file->sample)
     return 0;
 
@@ -152,8 +150,6 @@ static int get_file_digest(File* file)
   size_t size;
   char buffer[BUFFER_SIZE];
 
-  if (file->status == INVALID)
-    return -1;
   if (file->digest)
     return 0;
 

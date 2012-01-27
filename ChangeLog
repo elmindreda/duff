@@ -3,6 +3,11 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-01-27  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * dufffile.c (get_file_sample, get_file_digest): Removed duplicate check for
+ INVALID state.
+
 2012-01-25  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.h (Status): Removed unused DUPLICATE status.
