@@ -110,7 +110,7 @@ extern int header_uses_digest;
 typedef struct Dir Dir;
 typedef struct DirList DirList;
 
-/* Represents a single recorded physical directory.
+/* Represents a single physical directory.
  */
 struct Dir
 {
@@ -118,7 +118,7 @@ struct Dir
   ino_t inode;
 };
 
-/* Represents a list of recorded directories.
+/* Represents a list of physical directories.
  */
 struct DirList
 {
@@ -127,7 +127,7 @@ struct DirList
   size_t available;
 };
 
-/* List head for traversed directories.
+/* List of traversed physical directories, used to avoid loops.
  */
 static DirList recorded_dirs;
 
