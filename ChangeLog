@@ -5,6 +5,7 @@ Maintained since version 0.3.1.
 
 2012-01-27  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * dufffile.c (compare_entry_contents): Made warnings take -q into account.
  * dufffile.c (get_file_sample): Tagged file INVALID on read error.
  * dufffile.c (compare_file_digests): Replaced for-loop with memcmp.
  * dufffile.c (get_file_sample, get_file_digest): Replaced pointer checks with

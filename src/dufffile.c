@@ -306,7 +306,9 @@ static int compare_file_contents(File* first, File* second)
   first_stream = fopen(first->path, "rb");
   if (!first_stream)
   {
-    warning("%s: %s", first->path, strerror(errno));
+    if (!quiet_flag)
+      warning("%s: %s", first->path, strerror(errno));
+
     first->status = INVALID;
     return -1;
   }
@@ -314,9 +316,11 @@ static int compare_file_contents(File* first, File* second)
   second_stream = fopen(second->path, "rb");
   if (!second_stream)
   {
+    if (!quiet_flag)
+      warning("%s: %s", second->path, strerror(errno));
+
     fclose(first_stream);
 
-    warning("%s: %s", second->path, strerror(errno));
     second->status = INVALID;
     return -1;
   }
@@ -334,13 +338,17 @@ static int compare_file_contents(File* first, File* second)
 
   if (ferror(first_stream))
   {
-    warning("%s: %s", first->path, strerror(errno));
+    if (!quiet_flag)
+      warning("%s: %s", first->path, strerror(errno));
+
     first->status = INVALID;
   }
 
   if (ferror(second_stream))
   {
-    warning("%s: %s", second->path, strerror(errno));
+    if (!quiet_flag)
+      warning("%s: %s", second->path, strerror(errno));
+
     second->status = INVALID;
   }
 
