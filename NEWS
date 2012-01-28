@@ -4,10 +4,11 @@ User-visible changes in duff
 Version 0.5.2
 
  * Improved performance for both small and large file sets.
- * Improved error and warning messages.
+ * Prefixed warning and error messages with program name.
  * Changed sampling use the first n bytes of a file.
  * Changed default sampling limit to zero (sample all files).
  * Fixed broken manpage examples.
+ * Removed length limit on path names read from stdin.
 
 Version 0.5.1
 

@@ -207,3 +207,7 @@ the ball rolling again and thus low on features.
 Version 0.5.1 was a bugfix release, on January 17, 2012, adding a single bugfix
 and a new default cluster header for thorough mode.
 
+Version 0.5.2 was an minor release, on January 29, 2012, adding a number of
+optimizations, prefixing error and warning messages with the program name and
+modifying the default sampling limit.
+
