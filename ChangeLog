@@ -5,6 +5,7 @@ Maintained since version 0.3.1.
 
 2012-01-28  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * dufffile.c (compare_files): Removed superflous physical_flag test.
  * duff.h dufffile.c (init_file_list): Renamed from file_list_init.
  * duff.h dufffile.c (alloc_file): Renamed from file_list_alloc.
  * duff.h dufffile.c (file_list_empty): Renamed from empty_file_list.
