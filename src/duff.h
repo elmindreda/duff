@@ -131,10 +131,10 @@ int compare_files(File* first, File* second);
 void generate_file_digest(File* file);
 
 /* These are defined and documented in duffutil.c */
-void file_list_init(FileList* list);
-File* file_list_alloc(FileList* list);
-void file_list_empty(FileList* list);
-void file_list_free(FileList* list);
+void init_file_list(FileList* list);
+File* alloc_file(FileList* list);
+void empty_file_list(FileList* list);
+void free_file_list(FileList* list);
 char* read_path(FILE* stream);
 void kill_trailing_slashes(char* path);
 size_t get_field_terminator(void);

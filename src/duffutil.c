@@ -92,7 +92,7 @@ static union Context context;
 
 /* Initializes a list for use.
  */
-void file_list_init(FileList* list)
+void init_file_list(FileList* list)
 {
   memset(list, 0, sizeof(FileList));
 }
@@ -100,7 +100,7 @@ void file_list_init(FileList* list)
 /* Allocates and returns a single file within the specified list, resizing the
  * list as necessary.
  */
-File* file_list_alloc(FileList* list)
+File* alloc_file(FileList* list)
 {
   if (list->allocated == list->available)
   {
@@ -125,17 +125,17 @@ File* file_list_alloc(FileList* list)
 
 /* Empties the list without freeing its allocated memory.
  */
-void file_list_empty(FileList* list)
+void empty_file_list(FileList* list)
 {
   list->allocated = 0;
 }
 
 /* Frees the memory allocated by the list and reinitializes it.
  */
-void file_list_free(FileList* list)
+void free_file_list(FileList* list)
 {
   free(list->files);
-  file_list_init(list);
+  init_file_list(list);
 }
 
 /* Reads a path name from the specified stream according to the specified flags.

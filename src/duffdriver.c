@@ -158,7 +158,7 @@ void process_args(int argc, char** argv)
   memset(&recorded_dirs, 0, sizeof(DirList));
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
-    file_list_init(&buckets[i]);
+    init_file_list(&buckets[i]);
 
   if (argc)
   {
@@ -185,7 +185,7 @@ void process_args(int argc, char** argv)
   process_clusters();
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
-    file_list_free(&buckets[i]);
+    free_file_list(&buckets[i]);
 
   free(recorded_dirs.dirs);
   memset(&recorded_dirs, 0, sizeof(DirList));
@@ -348,7 +348,7 @@ static void process_file(const char* path, struct stat* sb)
     }
   }
 
-  init_file(file_list_alloc(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
+  init_file(alloc_file(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
 }
 
 /* Processes a path name according to its type, whether from the command line or
@@ -465,7 +465,7 @@ static void process_clusters(void)
   size_t i, j, first, second, index = 1;
   FileList duplicates;
 
-  file_list_init(&duplicates);
+  init_file_list(&duplicates);
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
   {
@@ -491,11 +491,11 @@ static void process_clusters(void)
         {
           if (duplicates.allocated == 0)
           {
-            *file_list_alloc(&duplicates) = files[first];
+            *alloc_file(&duplicates) = files[first];
             files[first].status = REPORTED;
           }
 
-          *file_list_alloc(&duplicates) = files[second];
+          *alloc_file(&duplicates) = files[second];
           files[second].status = REPORTED;
         }
         else
@@ -508,7 +508,7 @@ static void process_clusters(void)
       if (duplicates.allocated > 0)
       {
         report_cluster(&duplicates, index);
-        file_list_empty(&duplicates);
+        empty_file_list(&duplicates);
 
         index++;
       }
@@ -518,6 +518,6 @@ static void process_clusters(void)
       free_file(&files[j]);
   }
 
-  file_list_free(&duplicates);
+  free_file_list(&duplicates);
 }
 
