@@ -99,6 +99,57 @@ void free_file(File* file)
   free(file->path);
 }
 
+/* This function defines the high-level comparison algorithm, using
+ * lower level primitives.  This is the place to change or add
+ * calls to comparison modes.  The general idea is to find proof of
+ * equality or un-equality as early and as quickly as possible.
+ */
+int compare_files(File* first, File* second)
+{
+  if (first->size != second->size)
+    return -1;
+
+  if (first->size == 0)
+    return 0;
+
+  if (!physical_flag)
+  {
+    if (first->device == second->device && first->inode == second->inode)
+      return 0;
+  }
+
+  if (first->size >= sample_limit)
+  {
+    if (compare_file_samples(first, second) != 0)
+      return -1;
+
+    if (first->size <= SAMPLE_SIZE)
+      return 0;
+  }
+
+  if (thorough_flag)
+  {
+    if (compare_file_contents(first, second) != 0)
+      return -1;
+  }
+  else
+  {
+    /* NOTE: Skip calculating digests if potential cluster only has two files?
+     * NOTE: Requires knowledge from higher level */
+    if (compare_file_digests(first, second) != 0)
+      return -1;
+  }
+
+  return 0;
+}
+
+/* Generates the digest for the specified file if it's not already present.
+ */
+void generate_file_digest(File* file)
+{
+  get_file_digest(file);
+}
+
 /* Retrieves sample from a file, if needed.
  */
 static int get_file_sample(File* file)
@@ -200,57 +251,6 @@ static int get_file_digest(File* file)
 
   file->status = HASHED;
   return 0;
-}
-
-/* This function defines the high-level comparison algorithm, using
- * lower level primitives.  This is the place to change or add
- * calls to comparison modes.  The general idea is to find proof of
- * equality or un-equality as early and as quickly as possible.
- */
-int compare_files(File* first, File* second)
-{
-  if (first->size != second->size)
-    return -1;
-
-  if (first->size == 0)
-    return 0;
-
-  if (!physical_flag)
-  {
-    if (first->device == second->device && first->inode == second->inode)
-      return 0;
-  }
-
-  if (first->size >= sample_limit)
-  {
-    if (compare_file_samples(first, second) != 0)
-      return -1;
-
-    if (first->size <= SAMPLE_SIZE)
-      return 0;
-  }
-
-  if (thorough_flag)
-  {
-    if (compare_file_contents(first, second) != 0)
-      return -1;
-  }
-  else
-  {
-    /* NOTE: Skip calculating digests if potential cluster only has two files?
-     * NOTE: Requires knowledge from higher level */
-    if (compare_file_digests(first, second) != 0)
-      return -1;
-  }
-
-  return 0;
-}
-
-/* Generates the digest for the specified file if it's not already present.
- */
-void generate_file_digest(File* file)
-{
-  get_file_digest(file);
 }
 
 /* Compares the digests of two files, calculating them if neccessary.

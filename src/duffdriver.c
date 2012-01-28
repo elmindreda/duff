@@ -148,6 +148,49 @@ static void process_path(const char* path, int depth);
 static void report_cluster(const FileList* cluster, unsigned int index);
 static void process_clusters(void);
 
+/* Initializes the driver, processes the specified arguments and reports the
+ * clusters found.
+ */
+void process_args(int argc, char** argv)
+{
+  size_t i;
+
+  memset(&recorded_dirs, 0, sizeof(DirList));
+
+  for (i = 0;  i < BUCKET_COUNT;  i++)
+    file_list_init(&buckets[i]);
+
+  if (argc)
+  {
+    /* Read file names from command line */
+    for (i = 0;  i < argc;  i++)
+    {
+      kill_trailing_slashes(argv[i]);
+      process_path(argv[i], 0);
+    }
+  }
+  else
+  {
+    char* path;
+
+    /* Read file names from stdin */
+    while ((path = read_path(stdin)))
+    {
+      kill_trailing_slashes(path);
+      process_path(path, 0);
+      free(path);
+    }
+  }
+
+  process_clusters();
+
+  for (i = 0;  i < BUCKET_COUNT;  i++)
+    file_list_free(&buckets[i]);
+
+  free(recorded_dirs.dirs);
+  memset(&recorded_dirs, 0, sizeof(DirList));
+}
+
 /* Stat:s a file according to the specified options.
  */
 static int stat_path(const char* path, struct stat* sb, int depth)
@@ -308,55 +351,12 @@ static void process_file(const char* path, struct stat* sb)
   init_file(file_list_alloc(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
 }
 
-/* Initializes the driver, processes the specified arguments and reports the
- * clusters found.
- */
-void process_args(int argc, char** argv)
-{
-  size_t i;
-
-  memset(&recorded_dirs, 0, sizeof(DirList));
-
-  for (i = 0;  i < BUCKET_COUNT;  i++)
-    file_list_init(&buckets[i]);
-
-  if (argc)
-  {
-    /* Read file names from command line */
-    for (i = 0;  i < argc;  i++)
-    {
-      kill_trailing_slashes(argv[i]);
-      process_path(argv[i], 0);
-    }
-  }
-  else
-  {
-    char* path;
-
-    /* Read file names from stdin */
-    while ((path = read_path(stdin)))
-    {
-      kill_trailing_slashes(path);
-      process_path(path, 0);
-      free(path);
-    }
-  }
-
-  process_clusters();
-
-  for (i = 0;  i < BUCKET_COUNT;  i++)
-    file_list_free(&buckets[i]);
-
-  free(recorded_dirs.dirs);
-  memset(&recorded_dirs, 0, sizeof(DirList));
-}
-
 /* Processes a path name according to its type, whether from the command line or
  * from directory recursion.
  *
  * This function calls process_file and process_directory as needed.
  */
-void process_path(const char* path, int depth)
+static void process_path(const char* path, int depth)
 {
   mode_t mode;
   struct stat sb;
