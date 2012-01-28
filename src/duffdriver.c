@@ -145,7 +145,6 @@ static void process_directory(const char* path,
 			      int depth);
 static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
-static void print_terminator(void);
 static void report_cluster(const FileList* cluster, unsigned int index);
 static void process_clusters(void);
 
@@ -417,16 +416,6 @@ void process_path(const char* path, int depth)
   }
 }
 
-/* Prints the output field terminator, according to the specified options.
- */
-static void print_terminator(void)
-{
-  if (null_terminate_flag)
-    putchar('\0');
-  else
-    putchar('\n');
-}
-
 /* Reports a cluster to stdout, according to the specified options.
  */
 static void report_cluster(const FileList* cluster, unsigned int index)
@@ -440,7 +429,7 @@ static void report_cluster(const FileList* cluster, unsigned int index)
     for (i = 1;  i < cluster->allocated;  i++)
     {
       printf("%s", files[i].path);
-      print_terminator();
+      putchar(get_field_terminator());
     }
   }
   else
@@ -458,13 +447,13 @@ static void report_cluster(const FileList* cluster, unsigned int index)
 			   files->size,
 			   files->digest);
 
-      print_terminator();
+      putchar(get_field_terminator());
     }
 
     for (i = 0;  i < cluster->allocated;  i++)
     {
       printf("%s", files[i].path);
-      print_terminator();
+      putchar(get_field_terminator());
     }
   }
 }

@@ -5,6 +5,8 @@ Maintained since version 0.3.1.
 
 2012-01-28  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffutil.c (report_cluster, read_path): Made use of get_field_terminator.
+ * duffutil.c (get_field_terminator): Added function.
  * duffutil.c (read_path): Removed limit on path length, updated signature.
 
 2012-01-27  Camilla Berglund  <elmindreda@elmindreda.org>

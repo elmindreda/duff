@@ -142,14 +142,9 @@ void file_list_free(FileList* list)
  */
 char* read_path(FILE* stream)
 {
-  char terminator;
   size_t capacity = 0, size = 0;
   char* path = NULL;
-
-  if (null_terminate_flag)
-    terminator = '\0';
-  else
-    terminator = '\n';
+  char terminator = get_field_terminator();
 
   for (;;)
   {
@@ -187,6 +182,16 @@ void kill_trailing_slashes(char* path)
       break;
     *temp = '\0';
   }
+}
+
+/* Returns the current field terminator used for stdin and stdout.
+ */
+size_t get_field_terminator(void)
+{
+  if (null_terminate_flag)
+    return '\0';
+  else
+    return '\n';
 }
 
 /* Sets the SHA family function to be used by the digest helpers.

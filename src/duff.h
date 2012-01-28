@@ -137,6 +137,7 @@ void file_list_empty(FileList* list);
 void file_list_free(FileList* list);
 char* read_path(FILE* stream);
 void kill_trailing_slashes(char* path);
+size_t get_field_terminator(void);
 void set_digest_function(Function function);
 size_t get_digest_size(void);
 void digest_init(void);
