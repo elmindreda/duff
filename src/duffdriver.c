@@ -462,7 +462,7 @@ static void report_cluster(const FileList* cluster, unsigned int index)
  */
 static void process_clusters(void)
 {
-  size_t i, j, first, second, index;
+  size_t i, j, first, second, index = 1;
   FileList duplicates;
 
   file_list_init(&duplicates);
