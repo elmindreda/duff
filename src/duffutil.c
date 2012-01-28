@@ -138,37 +138,41 @@ void file_list_free(FileList* list)
   file_list_init(list);
 }
 
-/* Reads a path name from stdin according to the specified flags.
+/* Reads a path name from the specified stream according to the specified flags.
  */
-int read_path(FILE* stream, char* path, size_t size)
+char* read_path(FILE* stream)
 {
-  int c, i = 0;
-  size_t length;
+  char terminator;
+  size_t capacity = 0, size = 0;
+  char* path = NULL;
 
   if (null_terminate_flag)
-  {
-    while (i < size)
-    {
-      if ((c = fgetc(stream)) == EOF)
-	return -1;
-
-      path[i++] = (char) c;
-      if (c == '\0')
-	break;
-    }
-  }
+    terminator = '\0';
   else
-  {
-    if (!fgets(path, size, stream))
-      return -1;
+    terminator = '\n';
 
-    /* Kill newline terminator, if present */
-    length = strlen(path);
-    if ((length > 0) && (path[length - 1] == '\n'))
-      path[length - 1] = '\0';
+  for (;;)
+  {
+    const int c = fgetc(stream);
+    if (c == EOF && size == 0)
+      return NULL;
+
+    if (size == capacity)
+    {
+      capacity += 256;
+      path = (char*) realloc(path, capacity);
+      if (!path)
+        error(_("Out of memory"));
+    }
+
+    if (c == EOF || c == terminator)
+      break;
+
+    path[size++] = (char) c;
   }
 
-  return 0;
+  path[size] = '\0';
+  return path;
 }
 
 /* Kills trailing slashes in the specified path (except if it's /).

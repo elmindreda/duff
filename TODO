@@ -8,7 +8,6 @@ Functionality
   - possibly by comparing normalized paths
 * Detect duplicate directory subtrees
   - in the upcoming treeduff, not plain duff
-* Stop using fixed buffer size for reading paths from stdin
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage

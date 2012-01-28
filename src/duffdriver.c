@@ -315,7 +315,6 @@ static void process_file(const char* path, struct stat* sb)
 void process_args(int argc, char** argv)
 {
   size_t i;
-  char path[PATH_MAX];
 
   memset(&recorded_dirs, 0, sizeof(DirList));
 
@@ -333,11 +332,14 @@ void process_args(int argc, char** argv)
   }
   else
   {
+    char* path;
+
     /* Read file names from stdin */
-    while (read_path(stdin, path, sizeof(path)) == 0)
+    while ((path = read_path(stdin)))
     {
       kill_trailing_slashes(path);
       process_path(path, 0);
+      free(path);
     }
   }
 

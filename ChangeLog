@@ -3,6 +3,10 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-01-28  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duffutil.c (read_path): Removed limit on path length, updated signature.
+
 2012-01-27  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * dufffile.c (compare_entry_contents): Made warnings take -q into account.

@@ -135,7 +135,7 @@ void file_list_init(FileList* list);
 File* file_list_alloc(FileList* list);
 void file_list_empty(FileList* list);
 void file_list_free(FileList* list);
-int read_path(FILE* stream, char* path, size_t size);
+char* read_path(FILE* stream);
 void kill_trailing_slashes(char* path);
 void set_digest_function(Function function);
 size_t get_digest_size(void);
