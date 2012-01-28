@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-01-25 17:16+0100\n"
+"POT-Creation-Date: 2012-01-28 21:01+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -152,41 +152,41 @@ msgstr "%n files in cluster %i (%s bytes, digest %d)"
 msgid "Digest (%%d) is not calculated in thorough mode (-t)"
 msgstr "Digest (%%d) is not calculated in thorough mode (-t)"
 
-#: src/duffdriver.c:223 src/duffutil.c:116
+#: src/duffdriver.c:265 src/duffutil.c:116 src/duffutil.c:160
 msgid "Out of memory"
 msgstr "Out of memory"
 
-#: src/duffdriver.c:393
+#: src/duffdriver.c:394
 #, c-format
 msgid "%s is a symbolic link; skipping"
 msgstr "%s is a symbolic link; skipping"
 
-#: src/duffdriver.c:396
+#: src/duffdriver.c:397
 #, c-format
 msgid "%s is a named pipe; skipping"
 msgstr "%s is a named pipe; skipping"
 
-#: src/duffdriver.c:399
+#: src/duffdriver.c:400
 #, c-format
 msgid "%s is a block device; skipping"
 msgstr "%s is a block device; skipping"
 
-#: src/duffdriver.c:402
+#: src/duffdriver.c:403
 #, c-format
 msgid "%s is a character device; skipping"
 msgstr "%s is a character device; skipping"
 
-#: src/duffdriver.c:405
+#: src/duffdriver.c:406
 #, c-format
 msgid "%s is a directory; skipping"
 msgstr "%s is a directory; skipping"
 
-#: src/duffdriver.c:408
+#: src/duffdriver.c:409
 #, c-format
 msgid "%s is a socket; skipping"
 msgstr "%s is a socket; skipping"
 
-#: src/duffdriver.c:411 src/duffutil.c:211 src/duffutil.c:234
-#: src/duffutil.c:257 src/duffutil.c:280
+#: src/duffdriver.c:412 src/duffutil.c:220 src/duffutil.c:243
+#: src/duffutil.c:266 src/duffutil.c:289
 msgid "This cannot happen"
 msgstr "This cannot happen"
