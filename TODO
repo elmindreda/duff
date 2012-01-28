@@ -17,6 +17,7 @@ Documentation
 
 Optimisation
 * Make directory cache less stupid and slow
+* Do work necessary to enable SHA*_FAST_COPY
 * Do "smart stuff" to "make it go faster"
   - people use duff on millions of files; optimise for that
 
