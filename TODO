@@ -6,8 +6,7 @@ Functionality
   - which would require adding gnulib
 * Detect duplicate file arguments?
   - possibly by comparing normalized paths
-* Detect duplicate directory subtrees
-  - in the upcoming treeduff, not plain duff
+* Add flag (-u?) for reporting unique files instead of duplicates
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage
