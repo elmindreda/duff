@@ -7,6 +7,8 @@ Functionality
 * Detect duplicate file arguments?
   - possibly by comparing normalized paths
 * Add flag (-u?) for reporting unique files instead of duplicates
+* Add flag (-D?) for only reporting duplicates if they are on the same device
+  - This will greatly simplify hard linking later in the pipeline
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage
