@@ -203,35 +203,35 @@ int main(int argc, char** argv)
     switch (ch)
     {
       case '0':
-	null_terminate_flag = 1;
-	break;
+        null_terminate_flag = 1;
+        break;
       case 'H':
-	follow_links_mode = ARG_SYMLINKS;
-	break;
+        follow_links_mode = ARG_SYMLINKS;
+        break;
       case 'L':
-	follow_links_mode = ALL_SYMLINKS;
-	break;
+        follow_links_mode = ALL_SYMLINKS;
+        break;
       case 'P':
-	follow_links_mode = NO_SYMLINKS;
-	break;
+        follow_links_mode = NO_SYMLINKS;
+        break;
       case 'a':
         all_files_flag = 1;
         break;
       case 'd':
-	if (strcasecmp(optarg, "sha1") == 0)
-	  set_digest_function(SHA_1);
-	else if (strcasecmp(optarg, "sha256") == 0)
-	  set_digest_function(SHA_256);
-	else if (strcasecmp(optarg, "sha384") == 0)
-	  set_digest_function(SHA_384);
-	else if (strcasecmp(optarg, "sha512") == 0)
-	  set_digest_function(SHA_512);
-	else
-	  error(_("%s is not a supported digest function"), optarg);
-	break;
+        if (strcasecmp(optarg, "sha1") == 0)
+          set_digest_function(SHA_1);
+        else if (strcasecmp(optarg, "sha256") == 0)
+          set_digest_function(SHA_256);
+        else if (strcasecmp(optarg, "sha384") == 0)
+          set_digest_function(SHA_384);
+        else if (strcasecmp(optarg, "sha512") == 0)
+          set_digest_function(SHA_512);
+        else
+          error(_("%s is not a supported digest function"), optarg);
+        break;
       case 'e':
         excess_flag = 1;
-	break;
+        break;
       case 'f':
         header_format = optarg;
         break;
@@ -241,14 +241,14 @@ int main(int argc, char** argv)
         exit(EXIT_SUCCESS);
       case 'l':
         limit = (off_t) strtoull(optarg, &temp, 10);
-	if (temp == optarg || errno == ERANGE || errno == EINVAL)
-	  warning(_("Ignoring invalid sample limit %s"), optarg);
-	else
-	  sample_limit = limit;
-	break;
+        if (temp == optarg || errno == ERANGE || errno == EINVAL)
+          warning(_("Ignoring invalid sample limit %s"), optarg);
+        else
+          sample_limit = limit;
+        break;
       case 'p':
-	physical_flag = 1;
-	break;
+        physical_flag = 1;
+        break;
       case 'q':
         quiet_flag = 1;
         break;
@@ -262,8 +262,8 @@ int main(int argc, char** argv)
         version();
         exit(EXIT_SUCCESS);
       case 'z':
-	ignore_empty_flag = 1;
-	break;
+        ignore_empty_flag = 1;
+        break;
       default:
         usage();
         bugs();
