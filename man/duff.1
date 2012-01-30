@@ -37,11 +37,8 @@ reads file names from stdin.
 Note that as of version 0.4,
 .Nm
 ignores symbolic links to files, as they are by definition always duplicates of files.
-Therefore, the
-.Fl H , L
-and
-.Fl P
-options now apply only to directories.
+If you want to find symbolic links to files, use
+.Xr find 1 .
 .Pp
 The following options are available:
 .Bl -tag -width indent
