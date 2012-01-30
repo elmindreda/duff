@@ -113,9 +113,9 @@ See the file `INSTALL'.
 5. Using Duff
 =============
 
-See the accompanying manpage duff(1).
+See the accompanying man page duff(1).
 
-To read the manpage before installation, use the following command:
+To read the man page before installation, use the following command:
 
   groff -mdoc -Tascii man/duff.1 | less -R
 
