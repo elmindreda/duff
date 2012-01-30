@@ -117,11 +117,11 @@ See the accompanying manpage duff(1).
 
 To read the manpage before installation, use the following command:
 
-  groff -mdoc -Tascii duff.1 | less -R
+  groff -mdoc -Tascii man/duff.1 | less -R
 
 On GNU/Linux systems, however, the following command may suffice:
 
-  man -l duff.1
+  man -l man/duff.1
 
 
 6. Hacking Duff
