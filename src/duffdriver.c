@@ -142,7 +142,7 @@ static int has_recorded_directory(dev_t device, ino_t inode);
 static void record_directory(dev_t device, ino_t inode);
 static void process_directory(const char* path,
                               const struct stat* sb,
-			      int depth);
+                              int depth);
 static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
 static void report_cluster(const FileList* cluster, unsigned int index);
@@ -213,14 +213,14 @@ static int stat_path(const char* path, struct stat* sb, int depth)
     {
       if (stat(path, sb) != 0)
       {
-	if (!quiet_flag)
-	  warning("%s: %s", path, strerror(errno));
+        if (!quiet_flag)
+          warning("%s: %s", path, strerror(errno));
 
-	return -1;
+        return -1;
       }
 
       if (S_ISDIR(sb->st_mode))
-	return -1;
+        return -1;
     }
     else
       return -1;
@@ -277,7 +277,7 @@ static void record_directory(dev_t device, ino_t inode)
  */
 static void process_directory(const char* path,
                               const struct stat* sb,
-			      int depth)
+                              int depth)
 {
   DIR* dir;
   struct dirent* dir_entry;
@@ -304,10 +304,10 @@ static void process_directory(const char* path,
     if (name[0] == '.')
     {
       if (!all_files_flag)
-	continue;
+        continue;
 
       if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
-	continue;
+        continue;
     }
 
     if (asprintf(&child_path, "%s/%s", path, name) > 0)
@@ -377,7 +377,7 @@ static void process_path(const char* path, int depth)
     {
       if (recursive_flag)
       {
-	process_directory(path, &sb, depth + 1);
+        process_directory(path, &sb, depth + 1);
         break;
       }
 
@@ -388,29 +388,29 @@ static void process_path(const char* path, int depth)
     {
       if (!quiet_flag)
       {
-	switch (mode)
-	{
-	  case S_IFLNK:
-	    warning(_("%s is a symbolic link; skipping"), path);
-	    break;
-	  case S_IFIFO:
-	    warning(_("%s is a named pipe; skipping"), path);
-	    break;
+        switch (mode)
+        {
+          case S_IFLNK:
+            warning(_("%s is a symbolic link; skipping"), path);
+            break;
+          case S_IFIFO:
+            warning(_("%s is a named pipe; skipping"), path);
+            break;
           case S_IFBLK:
-	    warning(_("%s is a block device; skipping"), path);
-	    break;
-	  case S_IFCHR:
-	    warning(_("%s is a character device; skipping"), path);
-	    break;
-	  case S_IFDIR:
-	    warning(_("%s is a directory; skipping"), path);
-	    break;
-	  case S_IFSOCK:
-	    warning(_("%s is a socket; skipping"), path);
-	    break;
-	  default:
-	    error(_("This cannot happen"));
-	}
+            warning(_("%s is a block device; skipping"), path);
+            break;
+          case S_IFCHR:
+            warning(_("%s is a character device; skipping"), path);
+            break;
+          case S_IFDIR:
+            warning(_("%s is a directory; skipping"), path);
+            break;
+          case S_IFSOCK:
+            warning(_("%s is a socket; skipping"), path);
+            break;
+          default:
+            error(_("This cannot happen"));
+        }
       }
     }
   }
@@ -442,10 +442,10 @@ static void report_cluster(const FileList* cluster, unsigned int index)
         generate_file_digest(files);
 
       print_cluster_header(header_format,
-			   cluster->allocated,
-			   index,
-			   files->size,
-			   files->digest);
+                           cluster->allocated,
+                           index,
+                           files->size,
+                           files->digest);
 
       putchar(get_field_terminator());
     }

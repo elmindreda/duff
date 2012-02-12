@@ -10,7 +10,7 @@ files `sha1.c' or `sha1.h' for copyright and license details.
 
 Ideas, suggestions, initial feature patches, spelling corrections and bug
 reports have been contributed by various people.  They are noted in the
-appropriate entries of the `ChangeLog' file.
+appropriate entries of the `ChangeLog' file and listed in the `README' file.
 
 
 Supporting files

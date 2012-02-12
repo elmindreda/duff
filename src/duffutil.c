@@ -357,9 +357,9 @@ int cluster_header_uses_digest(const char* format)
  */
 void print_cluster_header(const char* format,
                           unsigned int count,
-			  unsigned int index,
-			  off_t size,
-			  const uint8_t* digest)
+                          unsigned int index,
+                          off_t size,
+                          const uint8_t* digest)
 {
   int i, digest_size;
   const char* c;
@@ -371,37 +371,37 @@ void print_cluster_header(const char* format,
       c++;
       switch (*c)
       {
-	case 's':
-	  printf("%" PRIi64, size);
-	  break;
-	case 'i':
-	  printf("%u", index);
-	  break;
-	case 'n':
-	  printf("%u", count);
-	  break;
-	case 'c':
-	case 'd':
-	  digest_size = get_digest_size();
-	  for (i = 0;  i < digest_size;  i++)
-	    printf("%02x", digest[i]);
-	  break;
-	case '%':
-	  putchar('%');
-	  break;
-	case '\0':
-	  putchar('\n');
-	  return;
-	default:
-	  /* If the character following the '%' looks normal then we figure it
-	   * might be a good idea to silently prepend a '%' and pretend like we
-	   * didn't notice the broken format string.
-	   */
-	  if (isgraph(*c) || isspace(*c))
-	  {
-	    putchar('%');
-	    putchar(*c);
-	  }
+        case 's':
+          printf("%" PRIi64, size);
+          break;
+        case 'i':
+          printf("%u", index);
+          break;
+        case 'n':
+          printf("%u", count);
+          break;
+        case 'c':
+        case 'd':
+          digest_size = get_digest_size();
+          for (i = 0;  i < digest_size;  i++)
+            printf("%02x", digest[i]);
+          break;
+        case '%':
+          putchar('%');
+          break;
+        case '\0':
+          putchar('\n');
+          return;
+        default:
+          /* If the character following the '%' looks normal then we figure it
+           * might be a good idea to silently prepend a '%' and pretend like we
+           * didn't notice the broken format string.
+           */
+          if (isgraph(*c) || isspace(*c))
+          {
+            putchar('%');
+            putchar(*c);
+          }
       }
     }
     else

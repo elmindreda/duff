@@ -113,15 +113,15 @@ See the file `INSTALL'.
 5. Using Duff
 =============
 
-See the accompanying manpage duff(1).
+See the accompanying man page duff(1).
 
-To read the manpage before installation, use the following command:
+To read the man page before installation, use the following command:
 
-  groff -mdoc -Tascii duff.1 | less -R
+  groff -mdoc -Tascii man/duff.1 | less -R
 
 On GNU/Linux systems, however, the following command may suffice:
 
-  man -l duff.1
+  man -l man/duff.1
 
 
 6. Hacking Duff
@@ -136,15 +136,6 @@ See the file `HACKING'.
 Please send bug reports, feedback, patches and cookies to:
 
   Camilla Berglund <elmindreda@elmindreda.org>
-
-Or, if you prefer, you may use the trackers on SF.net to report bugs, submit
-patches or request features:
-
-  http://sourceforge.net/projects/duff
-
-For more involved discussions, please join the mailing list:
-
-  http://lists.sourceforge.net/lists/listinfo/duff-devel
 
 
 8. Credits and thanks

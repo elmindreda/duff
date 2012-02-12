@@ -148,9 +148,9 @@ void warning(const char* format, ...) __attribute__((format(printf, 1, 2)));
 int cluster_header_uses_digest(const char* format);
 void print_cluster_header(const char* format,
                           unsigned int count,
-			  unsigned int index,
-			  off_t size,
-			  const uint8_t* digest);
+                          unsigned int index,
+                          off_t size,
+                          const uint8_t* digest);
 
 /* These are defined and documented in duffdriver.c */
 void process_args(int argc, char** argv);
