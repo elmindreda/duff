@@ -5,6 +5,7 @@ Maintained since version 0.3.1.
 
 2012-02-12  Camilla Berglund  <elmindreda@elmindreda.org>
 
+ * duffutil.c duff.h (PATH_SIZE_STEP): Added constant macro.
  * duff.1: Added documentation for -D flag.
  * dufffile.c (compare_files): Added logic for -D flag.
  * duff.c (main, usage): Added -D flag for limiting clusters to a single device.

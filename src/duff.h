@@ -43,6 +43,11 @@
  */
 #define SAMPLE_SIZE 4096
 
+/* The number of bytes to increase the path read buffer with when it fills up.
+ * NOTE: This must be at least 1.
+ */
+#define PATH_SIZE_STEP 256
+
 /* The number of bits of file size to use as bucket index.
  * NOTE: This must be at least 1.
  */

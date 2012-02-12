@@ -154,10 +154,11 @@ char* read_path(FILE* stream)
 
     if (size == capacity)
     {
-      capacity += 256;
-      path = (char*) realloc(path, capacity);
+      path = (char*) realloc(path, capacity + PATH_SIZE_STEP);
       if (!path)
         error(_("Out of memory"));
+
+      capacity += PATH_SIZE_STEP;
     }
 
     if (c == EOF || c == terminator)
