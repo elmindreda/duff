@@ -64,6 +64,7 @@
 
 /* These flags are defined and documented in duff.c.
  */
+extern int same_device_flag;
 extern int quiet_flag;
 extern int thorough_flag;
 extern off_t sample_limit;
@@ -113,6 +114,12 @@ int compare_files(File* first, File* second)
 
   if (first->device == second->device && first->inode == second->inode)
     return 0;
+
+  if (same_device_flag)
+  {
+    if (first->device != second->device)
+      return -1;
+  }
 
   if (first->size >= sample_limit)
   {

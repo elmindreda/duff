@@ -84,6 +84,10 @@ SymlinkMode follow_links_mode = NO_SYMLINKS;
  */
 int all_files_flag = 0;
 
+/* Whether to only consider files sharing a device as duplicates.
+ */
+int same_device_flag = 0;
+
 /* Makes the program output verbose.
  */
 int verbose_flag = 0;
@@ -153,7 +157,7 @@ static void version(void)
  */
 static void usage(void)
 {
-  printf(_("Usage: %s [-0HLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"),
+  printf(_("Usage: %s [-0DHLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"),
            PACKAGE_NAME);
 
   printf("       %s -h\n", PACKAGE_NAME);
@@ -161,6 +165,7 @@ static void usage(void)
 
   printf(_("Options:\n"));
   printf(_("  -0  read and write file names terminated by a null character\n"));
+  printf(_("  -D  only report files as duplicate if they are on the same device\n"));
   printf(_("  -H  follow symbolic links to directories on the command line\n"));
   printf(_("  -L  follow all symbolic links to directories\n"));
   printf(_("  -P  do not follow any symbolic links (default)\n"));
@@ -198,13 +203,16 @@ int main(int argc, char** argv)
   bindtextdomain(PACKAGE, LOCALEDIR);
   textdomain(PACKAGE);
 
-  while ((ch = getopt(argc, argv, "0HLPad:ef:hl:pqrtvz")) != -1)
+  while ((ch = getopt(argc, argv, "0DHLPad:ef:hl:pqrtvz")) != -1)
   {
     switch (ch)
     {
       case '0':
 	null_terminate_flag = 1;
 	break;
+      case 'D':
+        same_device_flag = 1;
+        break;
       case 'H':
 	follow_links_mode = ARG_SYMLINKS;
 	break;

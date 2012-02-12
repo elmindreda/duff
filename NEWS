@@ -1,6 +1,11 @@
 User-visible changes in duff
 ============================
 
+Version 0.6
+-----------
+
+ * Added flag to only consider files that share a device (-D).
+
 Version 0.5.2
 -------------
 

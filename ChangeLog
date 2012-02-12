@@ -3,6 +3,13 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-02-12  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duff.1: Added documentation for -D flag.
+ * dufffile.c (compare_files): Added logic for -D flag.
+ * duff.c (main, usage): Added -D flag for limiting clusters to a single device.
+ * duff.1: Various clarifications.
+
 2012-01-28  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * dufffile.c (compare_files): Removed superflous physical_flag test.

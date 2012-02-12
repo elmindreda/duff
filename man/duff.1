@@ -10,7 +10,7 @@
 .Nd duplicate file finder
 .Sh SYNOPSIS
 .Nm
-.Op Fl 0HLPaeqprtz
+.Op Fl 0DHLPaeqprtz
 .Op Fl d Ar function
 .Op Fl f Ar format
 .Op Fl l Ar limit
@@ -50,6 +50,11 @@ If reading file names from stdin, assume they are null-terminated, instead of se
 Also, when printing file names and cluster headers, terminate them with null characters instead of newlines.
 .Pp
 This is useful for file names containing whitespace or other non-standard characters.
+.It Fl D
+Only report files as duplicates if they reside on the same device.
+This is useful for example in combination with
+.Fl p
+for finding duplicate physical files that can be replaced by hard links.
 .It Fl H
 Follow symbolic links listed on the command line.
 This overrides any previous
@@ -89,7 +94,7 @@ The default is
 Excess mode.
 List all but one file from each cluster of duplicates.
 Also suppresses output of the cluster header.
-This is useful when you want to automate removal of duplicate files and don't care which duplicates are removed.
+This is useful for example when you want to automate removal of duplicate files and don't care which duplicates are removed.
 .It Fl f Ar format
 Set the format of the cluster header.
 If the header is set to the empty string, no header line is printed.
