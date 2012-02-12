@@ -2,6 +2,7 @@ User-visible changes in duff
 ============================
 
 Version 0.5.2
+-------------
 
  * Improved performance for both small and large file sets.
  * Prefixed warning and error messages with program name.
@@ -11,6 +12,7 @@ Version 0.5.2
  * Removed length limit on path names read from stdin.
 
 Version 0.5.1
+-------------
 
  * Fixed crash where thorough mode cluster header used digest.
  * Added a different default cluster header for thorough mode.
