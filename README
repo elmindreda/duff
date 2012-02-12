@@ -70,8 +70,6 @@ magic should be required.  If it is, then that's a bug and should be reported.
 
 This release of duff has been successfully built on the following systems:
 
-  Cygwin 1.7 i686
-  Mac OS X 10.7 x86_64
   Ubuntu Natty x86_64
 
 Earlier releases have been successfully built on the following systems:
@@ -92,6 +90,7 @@ Earlier releases have been successfully built on the following systems:
   Mac OS X 10.6 i386
   Mac OS X 10.6 x86_64
   Mac OS X 10.6 x86_64 (with MacPorts gettext)
+  Mac OS X 10.7 x86_64
   NetBSD 1.6.1 sparc
   Red Hat Enterprise 4.0 x86
   SunOS 5.9 sparc64
