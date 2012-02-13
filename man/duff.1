@@ -2,7 +2,7 @@
 .\" This document is licensed under the zlib/libpng license.
 .\" Please see the file `COPYING' for license details.
 .\"
-.Dd January 30, 2012
+.Dd February, 2012
 .Os
 .Dt DUFF 1
 .Sh NAME
@@ -14,7 +14,7 @@
 .Op Fl d Ar function
 .Op Fl f Ar format
 .Op Fl l Ar limit
-.Op Ar
+.Op Ar path ...
 .Nm
 .Op Fl h
 .Nm
@@ -28,7 +28,7 @@ utility identifies clusters of duplicate files in the specified files and/or dir
 has three major modes of operation.
 In the default mode,
 .Nm
-lists duplicate files among the specified files and directories.
+lists the duplicate files among the specified files and directories.
 For each cluster of duplicates, a customizable header is printed, followed by the names of all the files in that cluster.
 In excess mode (the
 .Fl e
@@ -41,9 +41,9 @@ option),
 .Nm
 does not print a header and lists every unique file among the specified files and directories
 .Pp
-If no files are specified as arguments,
+If no path names are specified as arguments,
 .Nm
-reads file and directory names from stdin.
+reads path names from stdin.
 .Pp
 Note that as of version 0.4,
 .Nm
@@ -57,15 +57,12 @@ options now apply only to directories.
 The following options are available:
 .Bl -tag -width indent
 .It Fl 0
-If reading file names from stdin, assume they are null-terminated, instead of separated by newlines.
-Also, when printing file names and cluster headers, terminate them with null characters instead of newlines.
-.Pp
-This is useful for file names containing whitespace or other non-standard characters.
+If reading path names from stdin, assume they are terminated by ASCII NUL characters instead of newlines.
+Also, when printing file names and cluster headers, terminate them with ASCII NUL characters instead of newlines.
+This is useful when dealing with path names containing whitespace or other non-standard characters.
 .It Fl D
 Only report files as duplicates if they reside on the same device.
-This is useful for example in combination with
-.Fl p
-for finding duplicate physical files that can be replaced by hard links.
+This is useful for example when searching for duplicate physical files that can be replaced by hard links.
 .It Fl H
 Follow symbolic links listed on the command line.
 This overrides any previous
@@ -105,7 +102,7 @@ The default is
 Excess mode.
 List all but one file from each cluster of duplicates.
 Also suppresses output of the cluster header.
-This is useful for example when you want to automate removal of duplicate files and don't care which duplicates are removed.
+This is useful for example when you wish to automate removal of duplicate files and don't care which duplicates are removed.
 .It Fl f Ar format
 Set the format of the cluster header.
 If the header is set to the empty string, no header line is printed.
@@ -151,7 +148,7 @@ The minimum size of files to be sampled.
 If the size of files in a cluster is equal or greater than the specified limit,
 .Nm
 will sample and compare a few bytes from the start of each file before calculating a full digest.
-This is stricly an optimization and does not affect which files are reported as duplicates.
+This is strictly an optimization and does not affect which files are reported as duplicates.
 The default limit is zero bytes, i.e. to use sampling on all files.
 .It Fl q
 Quiet; suppress warnings and error messages.
@@ -185,7 +182,7 @@ The command:
 removes all duplicate files in the current directory.
 Note that you have no control over which files in each cluster that are selected by
 .Fl e
-(excess mode).  Use with care.
+(excess mode), so only use this mode if this doesn't matter.
 .Pp
 The command:
 .Dl find \&. -name '*.h' -type f \&| duff
