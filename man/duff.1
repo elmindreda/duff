@@ -22,13 +22,24 @@
 .Sh DESCRIPTION
 The
 .Nm
-utility reports clusters of duplicate files in the specified files and/or directories.
+utility identifies clusters of duplicate files in the specified files and/or directories.
+.Pp
+.Nm
+has three major modes of operation.
 In the default mode,
 .Nm
-prints a customizable header, followed by the names of all the files in the cluster.
-In excess mode,
+lists duplicate files among the specified files and directories.
+For each cluster of duplicates, a customizable header is printed, followed by the names of all the files in that cluster.
+In excess mode (the
+.Fl e
+option),
 .Nm
-does not print a header, but instead for each cluster prints the names of all but the first file.
+does not print a header and for each cluster prints the names of all but the first file.
+In unique mode (the
+.Fl u
+option),
+.Nm
+does not print a header and lists every unique file among the specified files and directories
 .Pp
 If no files are specified as arguments,
 .Nm
@@ -111,7 +122,7 @@ for compatibility reasons.
 The message digest of files in the cluster.
 This may not be combined with
 .Fl t
-as no digest is calculated in thorough mode.
+as no digest is calculated when using thorough comparisons.
 .It Cm %i
 The one-based index of the file cluster.
 .It Cm %s
@@ -122,15 +133,17 @@ A
 character.
 .El
 .Pp
+The default format string when not using
+.Fl t
+is:
+.Pp
+.Dl %n files in cluster %i (%s bytes, digest %d)
+.Pp
 The default format string when using
 .Fl t
 is:
 .Pp
 .Dl %n files in cluster %i (%s bytes)
-.Pp
-The default format string for other modes is:
-.Pp
-.Dl %n files in cluster %i (%s bytes, digest %d)
 .It Fl h
 Display help information and exit.
 .It Fl l Ar limit
@@ -141,22 +154,14 @@ will sample and compare a few bytes from the start of each file before calculati
 This is stricly an optimization and does not affect which files are reported as duplicates.
 The default limit is zero bytes, i.e. to use sampling on all files.
 .It Fl q
-Quiet mode.
-Suppress warnings and error messages.
+Quiet; suppress warnings and error messages.
 .It Fl p
-Physical mode.
-Make
-.Nm
-consider physical files instead of hard links.
+Consider physical files (inodes) instead of hard links.
 If specified, multiple hard links to the same physical file will not be reported as duplicates.
 .It Fl r
 Recursively search into all specified directories.
 .It Fl t
-Thorough mode.
-Distrust digests as a guarantee for equality.
-In thorough mode,
-.Nm
-compares files byte by byte when their sizes match.
+Use thorough (byte by byte) comparisons instead of calculating and comparing digests.
 .It Fl u
 Unique mode.
 List unique files instead of duplicate files.
@@ -202,9 +207,9 @@ Note the use of xargs and echo to remove the null separators again before listin
 .Sh BUGS
 .Nm
 doesn't yet check whether the same file has been specified twice on the command line.
-This will lead it to report files listed multiple times as duplicates when not using
+This will lead it to report files listed multiple times as duplicates when not using the
 .Fl p
-(physical mode).
+option.
 Note that this problem only affects files, not directories.
 .Pp
 .Nm

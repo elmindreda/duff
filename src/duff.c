@@ -180,7 +180,7 @@ static void usage(void)
   printf(_("  -h  show this help\n"));
   printf(_("  -l  the minimum size that activates sampling\n"));
   printf(_("  -q  quiet; suppress warnings and error messages\n"));
-  printf(_("  -p  physical mode; do not report multiple links as duplicates\n"));
+  printf(_("  -p  physical files; do not report multiple hard links as duplicates\n"));
   printf(_("  -r  search recursively through specified directories\n"));
   printf(_("  -t  thorough; force byte-by-byte comparison of files\n"));
   printf(_("  -u  unique mode; list unique files instead of duplicates\n"));
@@ -301,7 +301,7 @@ int main(int argc, char** argv)
   header_uses_digest = cluster_header_uses_digest(header_format);
 
   if (thorough_flag && header_uses_digest)
-    error(_("Digest (%%d) is not calculated in thorough mode (-t)"));
+    error(_("Digest (%%d) is not calculated when using -t"));
 
   process_args(argc, argv);
 

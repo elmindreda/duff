@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
-"POT-Creation-Date: 2012-02-13 19:43+0100\n"
+"POT-Creation-Date: 2012-02-13 20:33+0100\n"
 "PO-Revision-Date: 2011-04-11 18:11+0100\n"
 "Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
@@ -105,9 +105,9 @@ msgid "  -q  quiet; suppress warnings and error messages\n"
 msgstr "  -q  utelämna de flesta felmeddelanden\n"
 
 #: src/duff.c:183
-#, c-format
-msgid "  -p  physical mode; do not report multiple links as duplicates\n"
-msgstr "  -p  rapportera inte multipla fysiska länkar som dubletter\n"
+#, fuzzy, c-format
+msgid "  -p  physical files; do not report multiple hard links as duplicates\n"
+msgstr "  -p  rapportera inte hårda länkar till samma fysiska fil som dubletter\n"
 
 #: src/duff.c:184
 #, c-format
@@ -117,7 +117,7 @@ msgstr "  -r  sök rekursivt genom angivna kataloger\n"
 #: src/duff.c:185
 #, c-format
 msgid "  -t  thorough; force byte-by-byte comparison of files\n"
-msgstr "  -t  tvinga byte-för-byte-jämförelse av filer\n"
+msgstr "  -t  använd byte-för-byte-jämförelse av filer\n"
 
 #: src/duff.c:186
 #, fuzzy, c-format
@@ -160,8 +160,8 @@ msgid "%n files in cluster %i (%s bytes, digest %d)"
 msgstr "%n filer i grupp %i (%s byte, hash %d)"
 
 #: src/duff.c:304
-#, c-format
-msgid "Digest (%%d) is not calculated in thorough mode (-t)"
+#, fuzzy, c-format
+msgid "Digest (%%d) is not calculated when using -t"
 msgstr "Hash (%%d) beräknas inte i byte-för-byte läge (-t)"
 
 #: src/duffdriver.c:270 src/duffutil.c:116 src/duffutil.c:159
