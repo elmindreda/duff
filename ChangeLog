@@ -3,6 +3,15 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-02-13  Camilla Berglund  <elmindreda@elmindreda.org>e
+
+ * duff.1: Added documentation for -u flag.
+ * duff.h (DUPLICATE): Renamed from REPORTED.
+ * duffdriver.c (process_uniques): Added function.
+ * duffdriver.c (process_args): Added logic for -u flag.
+ * duff.c (main, usage): Added -u flag for listing unique instead of duplicate
+ files.
+
 2012-02-12  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duffutil.c duff.h (PATH_SIZE_STEP): Added constant macro.

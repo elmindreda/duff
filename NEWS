@@ -5,6 +5,7 @@ Version 0.6
 -----------
 
  * Added flag to only consider files that share a device (-D).
+ * Added flag to list unique instead of duplicate files (-u).
 
 Version 0.5.2
 -------------

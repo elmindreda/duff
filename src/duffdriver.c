@@ -96,6 +96,7 @@
  */
 extern int follow_links_mode;
 extern int all_files_flag;
+extern int unique_files_flag;
 extern int null_terminate_flag;
 extern int recursive_flag;
 extern int ignore_empty_flag;
@@ -147,6 +148,7 @@ static void process_file(const char* path, struct stat* sb);
 static void process_path(const char* path, int depth);
 static void report_cluster(const FileList* cluster, unsigned int index);
 static void process_clusters(void);
+static void process_uniques(void);
 
 /* Initializes the driver, processes the specified arguments and reports the
  * clusters found.
@@ -182,7 +184,10 @@ void process_args(int argc, char** argv)
     }
   }
 
-  process_clusters();
+  if (unique_files_flag)
+    process_uniques();
+  else
+    process_clusters();
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
     free_file_list(&buckets[i]);
@@ -474,7 +479,7 @@ static void process_clusters(void)
     for (first = 0;  first < buckets[i].allocated;  first++)
     {
       if (files[first].status == INVALID ||
-          files[first].status == REPORTED)
+          files[first].status == DUPLICATE)
       {
         continue;
       }
@@ -482,7 +487,7 @@ static void process_clusters(void)
       for (second = first + 1;  second < buckets[i].allocated;  second++)
       {
         if (files[second].status == INVALID ||
-            files[second].status == REPORTED)
+            files[second].status == DUPLICATE)
         {
             continue;
         }
@@ -492,11 +497,11 @@ static void process_clusters(void)
           if (duplicates.allocated == 0)
           {
             *alloc_file(&duplicates) = files[first];
-            files[first].status = REPORTED;
+            files[first].status = DUPLICATE;
           }
 
           *alloc_file(&duplicates) = files[second];
-          files[second].status = REPORTED;
+          files[second].status = DUPLICATE;
         }
         else
         {
@@ -519,5 +524,48 @@ static void process_clusters(void)
   }
 
   free_file_list(&duplicates);
+}
+
+/* Finds and reports all unique files in each bucket of collected files.
+ */
+static void process_uniques(void)
+{
+  size_t i, first, second;
+
+  for (i = 0;  i < BUCKET_COUNT;  i++)
+  {
+    File* files = buckets[i].files;
+
+    for (first = 0;  first < buckets[i].allocated;  first++)
+    {
+      if (files[first].status == INVALID ||
+          files[first].status == DUPLICATE)
+      {
+        continue;
+      }
+
+      for (second = first + 1;  second < buckets[i].allocated;  second++)
+      {
+        if (files[second].status == INVALID ||
+            files[second].status == DUPLICATE)
+        {
+            continue;
+        }
+
+        if (compare_files(&files[first], &files[second]) == 0)
+        {
+          files[first].status = DUPLICATE;
+          files[second].status = DUPLICATE;
+        }
+      }
+
+      if (files[first].status != INVALID &&
+          files[first].status != DUPLICATE)
+      {
+        printf("%s", files[first].path);
+        putchar(get_field_terminator());
+      }
+    }
+  }
 }
 

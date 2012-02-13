@@ -77,9 +77,9 @@ enum Status
   /* An error ocurred when reading from the file.
    */
   INVALID,
-  /* The file has been reported as a duplicate.
+  /* The file has been found to be a duplicate.
    */
-  REPORTED
+  DUPLICATE
 };
 
 /* Symlink dereferencing modes.

@@ -84,6 +84,10 @@ SymlinkMode follow_links_mode = NO_SYMLINKS;
  */
 int all_files_flag = 0;
 
+/* Whether to report unique files instead of duplicates.
+ */
+int unique_files_flag = 0;
+
 /* Whether to only consider files sharing a device as duplicates.
  */
 int same_device_flag = 0;
@@ -157,7 +161,7 @@ static void version(void)
  */
 static void usage(void)
 {
-  printf(_("Usage: %s [-0DHLPaepqrtz] [-d function] [-f format] [-l size] [file ...]\n"),
+  printf(_("Usage: %s [-0DHLPaepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
            PACKAGE_NAME);
 
   printf("       %s -h\n", PACKAGE_NAME);
@@ -179,6 +183,7 @@ static void usage(void)
   printf(_("  -p  physical mode; do not report multiple links as duplicates\n"));
   printf(_("  -r  search recursively through specified directories\n"));
   printf(_("  -t  thorough; force byte-by-byte comparison of files\n"));
+  printf(_("  -u  unique mode; list unique files instead of duplicates\n"));
   printf(_("  -v  show version information\n"));
   printf(_("  -z  do not report empty files\n"));
 }
@@ -203,7 +208,7 @@ int main(int argc, char** argv)
   bindtextdomain(PACKAGE, LOCALEDIR);
   textdomain(PACKAGE);
 
-  while ((ch = getopt(argc, argv, "0DHLPad:ef:hl:pqrtvz")) != -1)
+  while ((ch = getopt(argc, argv, "0DHLPad:ef:hl:pqrtuvz")) != -1)
   {
     switch (ch)
     {
@@ -265,6 +270,9 @@ int main(int argc, char** argv)
         break;
       case 't':
         thorough_flag = 1;
+        break;
+      case 'u':
+        unique_files_flag = 1;
         break;
       case 'v':
         version();

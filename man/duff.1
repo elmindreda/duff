@@ -10,7 +10,7 @@
 .Nd duplicate file finder
 .Sh SYNOPSIS
 .Nm
-.Op Fl 0DHLPaeqprtz
+.Op Fl 0DHLPaeqprtuz
 .Op Fl d Ar function
 .Op Fl f Ar format
 .Op Fl l Ar limit
@@ -157,6 +157,10 @@ Distrust digests as a guarantee for equality.
 In thorough mode,
 .Nm
 compares files byte by byte when their sizes match.
+.It Fl u
+Unique mode.
+List unique files instead of duplicate files.
+Also suppresses output of the cluster header.
 .It Fl v
 Display version information and exit.
 .It Fl z

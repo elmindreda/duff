@@ -6,7 +6,6 @@ Functionality
   - which would require adding gnulib
 * Detect duplicate file arguments?
   - possibly by comparing normalized paths
-* Add flag (-u?) for reporting unique files instead of duplicates
 
 Documentation
 * Add ALGORITHM section (or similar) to manpage
