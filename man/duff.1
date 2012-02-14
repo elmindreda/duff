@@ -154,7 +154,11 @@ The default limit is zero bytes, i.e. to use sampling on all files.
 Quiet; suppress warnings and error messages.
 .It Fl p
 Consider physical files (inodes) instead of hard links.
-If specified, multiple hard links to the same physical file will not be reported as duplicates.
+Multiple hard links to the same physical file will not be reported as duplicates.
+.Pp
+If used together with
+.Fl u ,
+only a single hard link is listed for a given physical file (inode).
 .It Fl r
 Recursively search into all specified directories.
 .It Fl t
