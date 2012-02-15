@@ -24,22 +24,22 @@ The
 .Nm
 utility identifies clusters of duplicate files in the specified files and/or directories.
 .Pp
+The
 .Nm
-has three major modes of operation.
+utility has three major modes of operation.
 In the default mode,
 .Nm
-lists the duplicate files among the specified files and directories.
-For each cluster of duplicates, a customizable header is printed, followed by the names of all the files in that cluster.
+lists clusters of duplicate files.
+For each cluster, a customizable header is printed, followed by the names of all its files.
 In excess mode (the
 .Fl e
 option),
-.Nm
-does not print a header and for each cluster prints the names of all but the first file.
+no header is printed and for each cluster,
+the names of all but one of its files are printed.
 In unique mode (the
 .Fl u
 option),
-.Nm
-does not print a header and lists every unique file among the specified files and directories
+the name of every unique file is printed, i.e. every file not in a cluster.
 .Pp
 If no path names are specified as arguments,
 .Nm
