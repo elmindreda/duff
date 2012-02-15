@@ -3,7 +3,7 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
-2012-02-15  Camilla Berglund  <elmindreda@elmindreda.org>e
+2012-02-15  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.h duffutil.c (init_digest): Renamed from digest_init.
  * duff.h duffutil.c (update_digest): Renamed from digest_update.
@@ -13,7 +13,7 @@ Maintained since version 0.3.1.
  * duff.1: Updated examples.
  * join-duplicates.sh: Fixed a few duff invocation bugs.
 
-2012-02-13  Camilla Berglund  <elmindreda@elmindreda.org>e
+2012-02-13  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.1: Added documentation for -u flag.
  * duff.h (DUPLICATE): Renamed from REPORTED.
