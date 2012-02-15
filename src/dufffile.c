@@ -210,10 +210,10 @@ static int get_file_digest(File* file)
   if (file->status == HASHED)
     return 0;
 
-  digest_init();
+  init_digest();
 
   if (file->status == SAMPLED && file->size <= SAMPLE_SIZE)
-    digest_update(file->sample, file->size);
+    update_digest(file->sample, file->size);
   else if (file->size > 0)
   {
     stream = fopen(file->path, "rb");
@@ -243,14 +243,14 @@ static int get_file_digest(File* file)
       if (size == 0)
         break;
 
-      digest_update(buffer, size);
+      update_digest(buffer, size);
     }
 
     fclose(stream);
   }
 
   file->digest = (uint8_t*) malloc(get_digest_size());
-  digest_finish(file->digest);
+  finish_digest(file->digest);
 
   file->status = HASHED;
   return 0;

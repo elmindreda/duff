@@ -5,6 +5,10 @@ Maintained since version 0.3.1.
 
 2012-02-15  Camilla Berglund  <elmindreda@elmindreda.org>e
 
+ * duff.h duffutil.c (init_digest): Renamed from digest_init.
+ * duff.h duffutil.c (update_digest): Renamed from digest_update.
+ * duff.h duffutil.c (finish_digest): Renamed from digest_finish.
+
  * duff.1: Updated language on the different modes.
  * duff.1: Updated examples.
  * join-duplicates.sh: Fixed a few duff invocation bugs.

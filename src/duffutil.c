@@ -223,7 +223,7 @@ size_t get_digest_size(void)
 
 /* Initializes the context for the current function.
  */
-void digest_init(void)
+void init_digest(void)
 {
   switch (digest_function)
   {
@@ -246,7 +246,7 @@ void digest_init(void)
 
 /* Updates the context for the current function.
  */
-void digest_update(const void* data, size_t size)
+void update_digest(const void* data, size_t size)
 {
   switch (digest_function)
   {
@@ -269,7 +269,7 @@ void digest_update(const void* data, size_t size)
 
 /* Finalizes the digest of the chosen function.
  */
-void digest_finish(uint8_t* digest)
+void finish_digest(uint8_t* digest)
 {
   switch (digest_function)
   {
