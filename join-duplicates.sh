@@ -15,7 +15,7 @@ if [ $# == 0 ]; then
   exit 1
 fi
 
-duff -0Dprz -f '%n' "$*" |
+duff -0Dprz -f '%n' -- "$@" |
 (
   count=0
   while read -d '' -r line 
