@@ -181,23 +181,26 @@ The command:
 lists all duplicate files in the directory foo and its subdirectories.
 .Pp
 The command:
-.Dl duff -e0 * \&| xargs -0 rm
+.Dl duff -e0 -- * \&| xargs -0 rm
 .Pp
-removes all duplicate files in the current directory.
-Note that you have no control over which files in each cluster that are selected by
-.Fl e
-(excess mode), so only use this mode if this doesn't matter.
+uses excess mode to remove all duplicate files in the current directory.
+There are a few things to note about this example:
 .Pp
-The command:
-.Dl find \&. -name '*.h' -type f \&| duff
+The
+.Fl -
+option is used to ensure that file names that look like options aren't interpreted as such.
 .Pp
-lists all duplicate header files in the current directory and its subdirectories.
+The
+.Fl 0
+option is used to correctly handle file names containing whitespace or other special characters that would otherwise be parsed incorrectly.
+.Pp
+Lastly, and this is very important, you have no control over which files in each cluster that are selected in excess mode, so only use this mode if this doesn't matter.
 .Pp
 The command:
 .Dl find \&. -name '*.h' -type f -print0 \&| duff -0 \&| xargs -0 -n1 echo
 .Pp
-lists all duplicate header files in the current directory and its subdirectories, correctly handling file names containing whitespace.
-Note the use of xargs and echo to remove the null separators again before listing.
+lists all duplicate header files in the current directory and its subdirectories.
+The last stage of the pipeline converts the the ASCII NUL separators to newlines, making it human readable.
 .Sh DIAGNOSTICS
 .Ex -std
 .Sh "SEE ALSO"

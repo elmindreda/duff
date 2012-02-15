@@ -3,6 +3,12 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-02-15  Camilla Berglund  <elmindreda@elmindreda.org>e
+
+ * duff.1: Updated language on the different modes.
+ * duff.1: Updated examples.
+ * join-duplicates.sh: Fixed a few duff invocation bugs.
+
 2012-02-13  Camilla Berglund  <elmindreda@elmindreda.org>e
 
  * duff.1: Added documentation for -u flag.
