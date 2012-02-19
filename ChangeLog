@@ -34,9 +34,11 @@ Maintained since version 0.3.1.
 2012-02-12  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duffutil.c duff.h (PATH_SIZE_STEP): Added constant macro.
+
  * duff.1: Added documentation for -D flag.
  * dufffile.c (compare_files): Added logic for -D flag.
  * duff.c (main, usage): Added -D flag for limiting clusters to a single device.
+
  * duff.1: Various clarifications.
 
 2012-01-28  Camilla Berglund  <elmindreda@elmindreda.org>
@@ -47,7 +49,9 @@ Maintained since version 0.3.1.
  * duff.h dufffile.c (file_list_empty): Renamed from empty_file_list.
  * duff.h dufffile.c (free_entry_list): Renamed from file_list_free.
  * duffdriver.c dufffile.c duffutil.c: Put non-static functions on top.
+
  * duffdriver.c (process_clusters): Initialized cluster index.
+
  * duffdriver.c (report_cluster): Made use of get_field_terminator.
  * duffutil.c (read_path): Made use of get_field_terminator.
  * duffutil.c (get_field_terminator): Added function.
@@ -69,13 +73,16 @@ Maintained since version 0.3.1.
 2012-01-25  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.h (Status): Removed unused DUPLICATE status.
+
  * duffdriver.c (process_file): Removed read permission check on files (credits
  to Kamal Mostafa).
 
 2012-01-24  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.h (HASH_BITS): Increased to 10.
+
  * duffdriver.c (print_terminator): Added function.
+
  * duff.h duffdriver.c dufffile.c (file_list_*): Renamed from entry_list_*.
  * duff.h duffdriver.c dufffile.c (free_file): Renamed from free_entry.
  * duff.h duffdriver.c dufffile.c (init_file): Renamed from fill_entry.
@@ -88,22 +95,31 @@ Maintained since version 0.3.1.
  * duff.h duffdriver.c: Moved Directory to duffdriver.
  * duffdriver.c (process_directory): Renamed from recurse_directory.
  * duff.h (EntryList): Renamed from List.
+
  * duffentry.c (get_entry_sample, get_entry_digest, compare_entry_contents):
  Improved error reporting.
+
  * duff.h duffentry.c: Added BUFFER_SIZE macro for size of read buffers.
+
  * duff.1: Improved grammar for -z flag.
+
  * duff.1: Clarified language for -e flag.
+
  * duff.1: Fixed statement claiming digests are calculated in thorough mode.
 
 2012-01-23  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duffdriver.c (process_args, process_clusters): Moved freeing of entries to
  directly after each bucket has been processed.
+
  * duffdriver.c (process_clusters): Renamed from report_clusters.
+
  * duffdriver.c: Moved from single to BUCKET_COUNT entry lists, indexed by size.
+
  * duffdriver.c (process_args): Added function.
  * duffdriver.c (process_path, report_clusters): Made private to duffdriver.
  * duff.c duffdriver.c: Moved argument processing to duffdriver.
+
  * duffentry.c (fill_entry): Renamed function from make_entry.
  * duffdriver.c (free_entry_list): Removed function.
  * duffdriver.c: Replaced doubly linked lists with List.
@@ -112,6 +128,7 @@ Maintained since version 0.3.1.
  * duffutil.c (link_entry, unlink_entry): Removed functions.
  * duff.h (List): Added linear entry list struct and typedef.
  * duff.h (Entry): Removed list links.
+
  * duff.c (main): Saved header digest use before processing entries.
  * duff.c (header_uses_digest): Added global flag.
  * duffentry.c (report_cluster): Ensured that first cluster entry has digest.
@@ -119,13 +136,16 @@ Maintained since version 0.3.1.
  * duffentry.c (get_entry_digest): Stopped reading empty files.
  * duffentry.c (generate_entry_digest): Added function.
  * duffentry.c (get_entry_digest): Hash sample if it contains entire file.
+
  * duffutil.c (error, warning): Prefixed program name to output.
+
  * duffutil.c (set_digest_function): Added function.
  * duffutil.c (digest_init): Added function.
  * duffutil.c (digest_update): Added function.
  * duffutil.c (digest_finish): Added function.
  * duff.c duffutil.c duffentry.c: Moved all calls to sha to duffutil.
  * duff.c duffutil.c duffentry.c: Made digest_function private to duffutil.
+
  * duff.1 duff.c: Changed default sampling limit to zero.
 
 2012-01-22  Camilla Berglund  <elmindreda@elmindreda.org>
