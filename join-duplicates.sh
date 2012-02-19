@@ -18,7 +18,7 @@ fi
 duff -0Dprz -f '%n' -- "$@" |
 (
   count=0
-  while read -d '' -r line 
+  while IFS='' read -d '' -r line 
   do
     if [ "$count" == 0 ]; then
       count="$line"
