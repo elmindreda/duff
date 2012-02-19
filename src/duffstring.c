@@ -39,13 +39,13 @@
 int vasprintf(char** result, const char* format, va_list vl)
 {
   char buffer[8192];
+  int length;
 
-  if (vsnprintf(buffer, sizeof(buffer), format, vl) < 0)
-    buffer[sizeof(buffer) - 1] = '\0';
+  length = vsnprintf(buffer, sizeof(buffer), format, vl);
+  if (length < 0 || length >= sizeof(buffer))
+      return -1;
 
-  size_t length = strlen(buffer);
-  *result = (char*) malloc(length + 1);
-  strcpy(*result, buffer);
+  *result = strdup(buffer);
 
   return length;
 }
