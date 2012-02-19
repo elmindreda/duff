@@ -3,6 +3,15 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-02-19  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * duffdriver.c (process_directory): Made asprintf error exit.
+
+ * duffstring.c (vasprintf): Simplified allocation.
+ * duffstring.c (vasprintf): Made internal buffer overflow an error.
+
+ * join-duplicates.sh: Added missing IFS clearing.
+
 2012-02-15  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * duff.h duffutil.c (init_digest): Renamed from digest_init.
