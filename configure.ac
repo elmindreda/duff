@@ -12,6 +12,7 @@ AM_GNU_GETTEXT([external])
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CC_STDC
 AC_PROG_LN_S
 
 # Checks for libraries.
