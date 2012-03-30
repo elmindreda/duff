@@ -53,14 +53,6 @@
  */
 #define HASH_BITS 10
 
-/* Typedefs for structs and enums.
- */
-typedef enum Status Status;
-typedef enum SymlinkMode SymlinkMode;
-typedef enum Function Function;
-typedef struct File File;
-typedef struct FileList FileList;
-
 /* Status modes for files.
  */
 enum Status
@@ -82,6 +74,8 @@ enum Status
   DUPLICATE
 };
 
+typedef enum Status Status;
+
 /* Symlink dereferencing modes.
  */
 enum SymlinkMode
@@ -97,6 +91,8 @@ enum SymlinkMode
   ARG_SYMLINKS
 };
 
+typedef enum SymlinkMode SymlinkMode;
+
 /* Represents a collected file and potential duplicate.
  */
 struct File
@@ -110,6 +106,8 @@ struct File
   uint8_t* sample;
 };
 
+typedef struct File File;
+
 /* Represents a list of files.
  */
 struct FileList
@@ -118,6 +116,8 @@ struct FileList
   size_t allocated;
   size_t available;
 };
+
+typedef struct FileList FileList;
 
 /* Message digest functions.
  */
@@ -128,6 +128,8 @@ enum Function
   SHA_384,
   SHA_512,
 };
+
+typedef enum Function Function;
 
 /* These are defined and documented in dufffile.c */
 void init_file(File* file, const char* path, const struct stat* sb);
