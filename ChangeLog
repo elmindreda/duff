@@ -6,6 +6,7 @@ Maintained since version 0.3.1.
 2012-03-30  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * configure.ac: Enabled ISO Standard C.
+
  * duff.h duffdriver.c: Corrected order of types and typedefs.
 
 2012-02-19  Camilla Berglund  <elmindreda@elmindreda.org>
