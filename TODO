@@ -12,6 +12,7 @@ Documentation
   - although first we should have an algorithm worthy of the name
 * Add more examples to manpage
 * Improve formatting of examples
+* Clarify that sampling and reporting are different things
 
 Optimisation
 * Make directory cache less stupid and slow
