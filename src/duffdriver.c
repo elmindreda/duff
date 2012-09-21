@@ -94,7 +94,7 @@
 
 /* These flags are defined and documented in duff.c.
  */
-extern int follow_links_mode;
+extern SymlinkMode follow_links_mode;
 extern int all_files_flag;
 extern int unique_files_flag;
 extern int null_terminate_flag;
