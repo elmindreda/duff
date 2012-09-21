@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2005 Ross Newell
 #
-# Modified Feb 12, 2012 by Camilla Berglund <elmindreda@elmindreda.org>
+# Modified Sep 7, 2012 by Camilla Berglund <elmindreda@elmindreda.org>
 #
 # Uses duff to find duplicate physical files and changes them into hard links
 # to a single physical file, thus saving disk space.  Use with care.
@@ -32,7 +32,6 @@ duff -0Dprz -f '%n' -- "$@" |
 
 	mv "$file" "$temp" && \
 	ln "$first" "$file" && \
-	touch --reference="$temp" "$file" && \
 	rm "$temp"
 
 	if [ $? != 0 ]; then

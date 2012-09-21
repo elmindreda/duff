@@ -3,6 +3,10 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2012-09-07  Camilla Berglund  <elmindreda@elmindreda.org>
+
+ * join-duplicates.sh: Removed redundant use of touch(1).
+
 2012-03-30  Camilla Berglund  <elmindreda@elmindreda.org>
 
  * configure.ac: Enabled ISO Standard C.
