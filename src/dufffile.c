@@ -178,7 +178,7 @@ static int get_file_sample(File* file)
   if (size > file->size)
     size = file->size;
 
-  sample = (uint8_t*) malloc(size);
+  sample = malloc(size);
 
   if (fread(sample, size, 1, stream) < 1)
   {
@@ -249,7 +249,7 @@ static int get_file_digest(File* file)
     fclose(stream);
   }
 
-  file->digest = (uint8_t*) malloc(get_digest_size());
+  file->digest = malloc(get_digest_size());
   finish_digest(file->digest);
 
   file->status = HASHED;
