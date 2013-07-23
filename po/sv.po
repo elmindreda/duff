@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
 "Report-Msgid-Bugs-To: dreda@dreda.org\n"
-"POT-Creation-Date: 2012-02-13 20:33+0100\n"
+"POT-Creation-Date: 2013-07-23 15:52+0200\n"
 "PO-Revision-Date: 2011-04-11 18:11+0100\n"
 "Last-Translator: Camilla Berglund <dreda@dreda.org>\n"
 "Language-Team: \n"
@@ -107,7 +107,8 @@ msgstr "  -q  utelämna de flesta felmeddelanden\n"
 #: src/duff.c:183
 #, fuzzy, c-format
 msgid "  -p  physical files; do not report multiple hard links as duplicates\n"
-msgstr "  -p  rapportera inte hårda länkar till samma fysiska fil som dubletter\n"
+msgstr ""
+"  -p  rapportera inte hårda länkar till samma fysiska fil som dubletter\n"
 
 #: src/duff.c:184
 #, c-format
@@ -164,41 +165,42 @@ msgstr "%n filer i grupp %i (%s byte, hash %d)"
 msgid "Digest (%%d) is not calculated when using -t"
 msgstr "Hash (%%d) beräknas inte i byte-för-byte läge (-t)"
 
-#: src/duffdriver.c:270 src/duffutil.c:116 src/duffutil.c:159
+#: src/duffdriver.c:269 src/duffdriver.c:318 src/duffutil.c:116
+#: src/duffutil.c:159
 msgid "Out of memory"
 msgstr "Slut på minne"
 
-#: src/duffdriver.c:399
+#: src/duffdriver.c:398
 #, c-format
 msgid "%s is a symbolic link; skipping"
 msgstr "%s är en symbolisk länk; hoppar över"
 
-#: src/duffdriver.c:402
+#: src/duffdriver.c:401
 #, c-format
 msgid "%s is a named pipe; skipping"
 msgstr "%s är ett namngivet rör (named pipe); hoppar över"
 
-#: src/duffdriver.c:405
+#: src/duffdriver.c:404
 #, c-format
 msgid "%s is a block device; skipping"
 msgstr "%s är en blockspecialfil (block device); hoppar över"
 
-#: src/duffdriver.c:408
+#: src/duffdriver.c:407
 #, c-format
 msgid "%s is a character device; skipping"
 msgstr "%s är en teckenspecialfil (character device); hoppar över"
 
-#: src/duffdriver.c:411
+#: src/duffdriver.c:410
 #, c-format
 msgid "%s is a directory; skipping"
 msgstr "%s är en katalog; hoppar över"
 
-#: src/duffdriver.c:414
+#: src/duffdriver.c:413
 #, c-format
 msgid "%s is a socket; skipping"
 msgstr "%s är ett uttag (socket); hoppar över"
 
-#: src/duffdriver.c:417 src/duffutil.c:221 src/duffutil.c:244
+#: src/duffdriver.c:416 src/duffutil.c:221 src/duffutil.c:244
 #: src/duffutil.c:267 src/duffutil.c:290
 msgid "This cannot happen"
 msgstr "Detta kan inte hända"
