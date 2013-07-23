@@ -3,6 +3,10 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2013-07-23  Camilla Berglund  <dreda@dreda.org>
+
+ * dufffile.c (compare_files): Cleaned up devnode comparison logic.
+
 2013-07-21  Camilla Berglund  <dreda@dreda.org>
 
  * dufffile.c duffutil.c: Removed superfluous casts of malloc and realloc.

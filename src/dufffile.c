@@ -112,12 +112,14 @@ int compare_files(File* first, File* second)
   if (first->size == 0)
     return 0;
 
-  if (first->device == second->device && first->inode == second->inode)
-    return 0;
-
-  if (same_device_flag)
+  if (first->device == second->device)
   {
-    if (first->device != second->device)
+    if (first->inode == second->inode)
+      return 0;
+  }
+  else
+  {
+    if (same_device_flag)
       return -1;
   }
 
