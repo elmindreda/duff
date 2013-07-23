@@ -1,12 +1,12 @@
 # English messages for duff
-# Copyright © 2011 Camilla Berglund <elmindreda@elmindreda.org>
+# Copyright © 2011 Camilla Berglund <dreda@dreda.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
-"Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
+"Report-Msgid-Bugs-To: dreda@dreda.org\n"
 "POT-Creation-Date: 2012-02-13 20:33+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Camilla Berglund <elmindreda@elmindreda.org>\n"
+"Last-Translator: Camilla Berglund <dreda@dreda.org>\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -15,8 +15,8 @@ msgstr ""
 
 #: src/duff.c:153
 #, c-format
-msgid "Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.org>\n"
-msgstr "Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.org>\n"
+msgid "Copyright (c) 2005 Camilla Berglund <dreda@dreda.org>\n"
+msgstr "Copyright (c) 2005 Camilla Berglund <dreda@dreda.org>\n"
 
 #: src/duff.c:154
 #, c-format

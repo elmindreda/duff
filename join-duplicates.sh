@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2005 Ross Newell
 #
-# Modified Sep 7, 2012 by Camilla Berglund <elmindreda@elmindreda.org>
+# Modified Sep 7, 2012 by Camilla Berglund <dreda@dreda>
 #
 # Uses duff to find duplicate physical files and changes them into hard links
 # to a single physical file, thus saving disk space.  Use with care.

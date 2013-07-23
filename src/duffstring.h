@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2005 Camilla Berglund <elmindreda@elmindreda.org>
+ * Copyright (c) 2005 Camilla Berglund <dreda@dreda.org>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
