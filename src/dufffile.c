@@ -106,34 +106,50 @@ void free_file(File* file)
  */
 int compare_files(File* first, File* second)
 {
+  /* Files whose sizes differ are never duplicates.
+   */
   if (first->size != second->size)
     return -1;
 
+  /*! Both files are empty, so there is no file data to compare.
+   */
   if (first->size == 0)
     return 0;
 
   if (first->device == second->device)
   {
+    /*! The files share an inode, so they are by definition duplicates.
+     */
     if (first->inode == second->inode)
       return 0;
   }
   else
   {
+    /*! In this mode, only files sharing a device are considered duplicates.
+     */
     if (same_device_flag)
       return -1;
   }
 
   if (first->size >= sample_limit)
   {
+    /*! The beginning of the files differ, so they are not duplicates.
+     */
     if (compare_file_samples(first, second) != 0)
       return -1;
 
+    /*! The samples compared above included all data in the files, so they are
+     *  duplicates.
+     */
     if (first->size <= SAMPLE_SIZE)
       return 0;
   }
 
   if (thorough_flag)
   {
+    /*! In this mode, a byte-by-byte comparison must be made before files are
+     *  considered duplicates.
+     */
     if (compare_file_contents(first, second) != 0)
       return -1;
   }
