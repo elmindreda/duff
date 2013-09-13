@@ -6,6 +6,7 @@ Version 0.6
 
  * Added flag to only consider files that share a device (-D).
  * Added flag to list unique instead of duplicate files (-u).
+ * Added supported for hyphenated variants of digest names.
 
 Version 0.5.2
 -------------

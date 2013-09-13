@@ -231,15 +231,7 @@ int main(int argc, char** argv)
         all_files_flag = 1;
         break;
       case 'd':
-        if (strcasecmp(optarg, "sha1") == 0)
-          set_digest_function(SHA_1);
-        else if (strcasecmp(optarg, "sha256") == 0)
-          set_digest_function(SHA_256);
-        else if (strcasecmp(optarg, "sha384") == 0)
-          set_digest_function(SHA_384);
-        else if (strcasecmp(optarg, "sha512") == 0)
-          set_digest_function(SHA_512);
-        else
+        if (set_digest_function(optarg) != 0)
           error(_("%s is not a supported digest function"), optarg);
         break;
       case 'e':

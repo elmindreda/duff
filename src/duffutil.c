@@ -72,9 +72,45 @@
  */
 extern int null_terminate_flag;
 
+/* Message digest functions.
+ */
+enum Function
+{
+  SHA_1,
+  SHA_256,
+  SHA_384,
+  SHA_512,
+};
+
+typedef enum Function Function;
+
 /* The message digest function to use.
  */
 static Function digest_function = SHA_1;
+
+/* Represents a name of a digest function.
+ */
+struct FunctionName
+{
+  const char* name;
+  int id;
+};
+
+typedef struct FunctionName FunctionName;
+
+/* Supported digest function names.
+ */
+static FunctionName functions[] =
+{
+  { "sha1", SHA_1 },
+  { "sha256", SHA_256 },
+  { "sha384", SHA_384 },
+  { "sha512", SHA_512 },
+  { "sha-1", SHA_1 },
+  { "sha-256", SHA_256 },
+  { "sha-384", SHA_384 },
+  { "sha-512", SHA_512 }
+};
 
 /* Union of all used SHA family contexts.
  */
@@ -197,9 +233,20 @@ size_t get_field_terminator(void)
 
 /* Sets the SHA family function to be used by the digest helpers.
  */
-void set_digest_function(Function function)
+int set_digest_function(const char* name)
 {
-  digest_function = function;
+  int i;
+
+  for (i = 0;  i < sizeof(functions) / sizeof(functions[0]);  i++)
+  {
+    if (strcasecmp(functions[i].name, name) == 0)
+    {
+      digest_function = functions[i].id;
+      return 0;
+    }
+  }
+
+  return -1;
 }
 
 /*! Returns the size, in bytes, of the specified digest type.

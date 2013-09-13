@@ -119,18 +119,6 @@ struct FileList
 
 typedef struct FileList FileList;
 
-/* Message digest functions.
- */
-enum Function
-{
-  SHA_1,
-  SHA_256,
-  SHA_384,
-  SHA_512,
-};
-
-typedef enum Function Function;
-
 /* These are defined and documented in dufffile.c */
 void init_file(File* file, const char* path, const struct stat* sb);
 void free_file(File* file);
@@ -145,7 +133,7 @@ void free_file_list(FileList* list);
 char* read_path(FILE* stream);
 void kill_trailing_slashes(char* path);
 size_t get_field_terminator(void);
-void set_digest_function(Function function);
+int set_digest_function(const char* name);
 size_t get_digest_size(void);
 void init_digest(void);
 void update_digest(const void* data, size_t size);
