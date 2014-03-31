@@ -213,8 +213,8 @@ int main(int argc, char** argv)
     switch (ch)
     {
       case '0':
-	null_terminate_flag = 1;
-	break;
+        null_terminate_flag = 1;
+        break;
       case 'D':
         same_device_flag = 1;
         break;
