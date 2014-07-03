@@ -59,11 +59,9 @@ See the file `NEWS'.
 ================
 
 If you got this source tree from a Git repository then you will need to
-bootstrap the build environment using first `gettextize' and then `autoreconf
--i'.  Note that this requires that GNU autoconf, automake and gettext are
-installed.  Also note that running gettextize may cause a few duplicate entries
-in various build files.  If you got the source tree using Git, you can remove
-these with `git reset --hard' before moving on.
+bootstrap the build environment using first `gettextize --no-changelog' and then
+`autoreconf -i'.  Note that this requires that GNU autoconf, automake and
+the gettext development tools are installed.
 
 If (or once) you have a `configure' script, go ahead and run it.  No additional
 magic should be required.  If it is, then that's a bug and should be reported.
