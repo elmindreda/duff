@@ -11,14 +11,14 @@
 #
 
 if [ $# == 0 ]; then
-  echo "Usage: `basename $0` directory [...]"
+  echo "Usage: $(basename "$0") directory [...]"
   exit 1
 fi
 
 duff -0Dprz -f '%n' -- "$@" |
 (
   count=0
-  while IFS='' read -d '' -r line 
+  while IFS='' read -d '' -r line
   do
     if [ "$count" == 0 ]; then
       count="$line"
@@ -28,19 +28,19 @@ duff -0Dprz -f '%n' -- "$@" |
         first="$line"
       else
         file="$line"
-	temp="`mktemp -p \`dirname $file\``"
+        temp="$(mktemp -p "$(dirname "$file")")"
 
-	mv "$file" "$temp" && \
-	ln "$first" "$file" && \
-	rm "$temp"
+        mv "$file" "$temp" && \
+        ln "$first" "$file" && \
+        rm "$temp"
 
-	if [ $? != 0 ]; then
-	  echo "`basename $0`: $file: failed to join with $first"
-	  echo "`basename $0`: $file: may exist as $temp"
-	  exit 1
-	fi
+        if [ $? != 0 ]; then
+          echo "$(basename "$0"): \"$file\": failed to join with \"$first\""
+          echo "$(basename "$0"): \"$file\": may exist as \"$temp\""
+          exit 1
+        fi
       fi
-      count="`expr $count - 1`"
+      count="$(expr "$count" - 1)"
     fi
   done
 )
