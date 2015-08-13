@@ -23,41 +23,41 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+ #include "config.h"
 #endif
 
 #if HAVE_SYS_TYPES_H
-#include <sys/types.h>
+ #include <sys/types.h>
 #endif
 
 #if HAVE_SYS_STAT_H
-#include <sys/stat.h>
+ #include <sys/stat.h>
 #endif
 
 #if HAVE_ERRNO_H
-#include <errno.h>
+ #include <errno.h>
 #endif
 
 #if HAVE_UNISTD_H
-#include <unistd.h>
+ #include <unistd.h>
 #endif
 
 #if HAVE_STDIO_H
-#include <stdio.h>
+ #include <stdio.h>
 #endif
 
 #if HAVE_STRING_H
-#include <string.h>
+ #include <string.h>
 #endif
 
 #if HAVE_STDLIB_H
-#include <stdlib.h>
+ #include <stdlib.h>
 #endif
 
 #if HAVE_INTTYPES_H
-#include <inttypes.h>
+ #include <inttypes.h>
 #elif HAVE_STDINT_H
-#include <stdint.h>
+ #include <stdint.h>
 #endif
 
 #include "duff.h"
@@ -81,304 +81,304 @@ static int compare_file_contents(File* first, File* second);
  */
 void init_file(File* file, const char* path, const struct stat* sb)
 {
-  file->path = strdup(path);
-  file->size = sb->st_size;
-  file->device = sb->st_dev;
-  file->inode = sb->st_ino;
-  file->status = UNTOUCHED;
-  file->digest = NULL;
-  file->sample = NULL;
+    file->path = strdup(path);
+    file->size = sb->st_size;
+    file->device = sb->st_dev;
+    file->inode = sb->st_ino;
+    file->status = UNTOUCHED;
+    file->digest = NULL;
+    file->sample = NULL;
 }
 
 /* Frees any memory allocated for the specified file.
  */
 void free_file(File* file)
 {
-  free(file->digest);
-  free(file->sample);
-  free(file->path);
+    free(file->digest);
+    free(file->sample);
+    free(file->path);
 }
 
-/* This function defines the high-level comparison algorithm, using
- * lower level primitives.  This is the place to change or add
- * calls to comparison modes.  The general idea is to find proof of
- * equality or un-equality as early and as quickly as possible.
+/* This function defines the high-level comparison algorithm, using lower level
+ * primitives.  This is the place to change or add calls to comparison modes.
+ * The general idea is to find proof of equality or un-equality as early and as
+ * quickly as possible.
  */
 int compare_files(File* first, File* second)
 {
-  /* Files whose sizes differ are never duplicates.
-   */
-  if (first->size != second->size)
-    return -1;
+    /* Files whose sizes differ are never duplicates.
+     */
+    if (first->size != second->size)
+        return -1;
 
-  /*! Both files are empty, so there is no file data to compare.
-   */
-  if (first->size == 0)
+    /*! Both files are empty, so there is no file data to compare.
+     */
+    if (first->size == 0)
+        return 0;
+
+    if (first->device == second->device)
+    {
+        /*! The files share an inode, so they are by definition duplicates.
+         */
+        if (first->inode == second->inode)
+            return 0;
+    }
+    else
+    {
+        /*! In this mode, only files sharing a device are considered duplicates.
+         */
+        if (same_device_flag)
+            return -1;
+    }
+
+    if (first->size >= sample_limit)
+    {
+        /*! The beginning of the files differ, so they are not duplicates.
+         */
+        if (compare_file_samples(first, second) != 0)
+            return -1;
+
+        /*! The samples compared above included all data in the files, so they
+         *  are duplicates.
+         */
+        if (first->size <= SAMPLE_SIZE)
+            return 0;
+    }
+
+    if (thorough_flag)
+    {
+        /*! In this mode, a byte-by-byte comparison must be made before files are
+         *  considered duplicates.
+         */
+        if (compare_file_contents(first, second) != 0)
+            return -1;
+    }
+    else
+    {
+        /* NOTE: Skip calculating digests if potential cluster only has two files?
+         * NOTE: Requires knowledge from higher level.
+         */
+        if (compare_file_digests(first, second) != 0)
+            return -1;
+    }
+
     return 0;
-
-  if (first->device == second->device)
-  {
-    /*! The files share an inode, so they are by definition duplicates.
-     */
-    if (first->inode == second->inode)
-      return 0;
-  }
-  else
-  {
-    /*! In this mode, only files sharing a device are considered duplicates.
-     */
-    if (same_device_flag)
-      return -1;
-  }
-
-  if (first->size >= sample_limit)
-  {
-    /*! The beginning of the files differ, so they are not duplicates.
-     */
-    if (compare_file_samples(first, second) != 0)
-      return -1;
-
-    /*! The samples compared above included all data in the files, so they are
-     *  duplicates.
-     */
-    if (first->size <= SAMPLE_SIZE)
-      return 0;
-  }
-
-  if (thorough_flag)
-  {
-    /*! In this mode, a byte-by-byte comparison must be made before files are
-     *  considered duplicates.
-     */
-    if (compare_file_contents(first, second) != 0)
-      return -1;
-  }
-  else
-  {
-    /* NOTE: Skip calculating digests if potential cluster only has two files?
-     * NOTE: Requires knowledge from higher level */
-    if (compare_file_digests(first, second) != 0)
-      return -1;
-  }
-
-  return 0;
 }
 
 /* Generates the digest for the specified file if it's not already present.
  */
 void generate_file_digest(File* file)
 {
-  get_file_digest(file);
+    get_file_digest(file);
 }
 
 /* Retrieves sample from a file, if needed.
  */
 static int get_file_sample(File* file)
 {
-  FILE* stream;
-  size_t size;
-  uint8_t* sample;
+    FILE* stream;
+    size_t size;
+    uint8_t* sample;
 
-  if (file->status == SAMPLED || file->status == HASHED)
-    return 0;
+    if (file->status == SAMPLED || file->status == HASHED)
+        return 0;
 
-  stream = fopen(file->path, "rb");
-  if (!stream)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", file->path, strerror(errno));
+    stream = fopen(file->path, "rb");
+    if (!stream)
+    {
+        if (!quiet_flag)
+            warning("%s: %s", file->path, strerror(errno));
 
-    file->status = INVALID;
-    return -1;
-  }
+        file->status = INVALID;
+        return -1;
+    }
 
-  size = SAMPLE_SIZE;
-  if (size > file->size)
-    size = file->size;
+    size = SAMPLE_SIZE;
+    if (size > file->size)
+        size = file->size;
 
-  sample = malloc(size);
+    sample = malloc(size);
 
-  if (fread(sample, size, 1, stream) < 1)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", file->path, strerror(errno));
+    if (fread(sample, size, 1, stream) < 1)
+    {
+        if (!quiet_flag)
+            warning("%s: %s", file->path, strerror(errno));
 
-    free(sample);
+        free(sample);
+        fclose(stream);
+
+        file->status = INVALID;
+        return -1;
+    }
+
     fclose(stream);
 
-    file->status = INVALID;
-    return -1;
-  }
-
-  fclose(stream);
-
-  file->sample = sample;
-  file->status = SAMPLED;
-  return 0;
+    file->sample = sample;
+    file->status = SAMPLED;
+    return 0;
 }
 
 /* Calculates the digest of a file, if needed.
  */
 static int get_file_digest(File* file)
 {
-  FILE* stream;
-  size_t size;
-  char buffer[BUFFER_SIZE];
+    FILE* stream;
+    size_t size;
+    char buffer[BUFFER_SIZE];
 
-  if (file->status == HASHED)
-    return 0;
+    if (file->status == HASHED)
+        return 0;
 
-  init_digest();
+    init_digest();
 
-  if (file->status == SAMPLED && file->size <= SAMPLE_SIZE)
-    update_digest(file->sample, file->size);
-  else if (file->size > 0)
-  {
-    stream = fopen(file->path, "rb");
-    if (!stream)
+    if (file->status == SAMPLED && file->size <= SAMPLE_SIZE)
+        update_digest(file->sample, file->size);
+    else if (file->size > 0)
     {
-      if (!quiet_flag)
-        warning("%s: %s", file->path, strerror(errno));
+        stream = fopen(file->path, "rb");
+        if (!stream)
+        {
+            if (!quiet_flag)
+                warning("%s: %s", file->path, strerror(errno));
 
-      file->status = INVALID;
-      return -1;
-    }
+            file->status = INVALID;
+            return -1;
+        }
 
-    for (;;)
-    {
-      size = fread(buffer, 1, sizeof(buffer), stream);
-      if (ferror(stream))
-      {
-        if (!quiet_flag)
-          warning("%s: %s", file->path, strerror(errno));
+        for (;;)
+        {
+            size = fread(buffer, 1, sizeof(buffer), stream);
+            if (ferror(stream))
+            {
+                if (!quiet_flag)
+                    warning("%s: %s", file->path, strerror(errno));
+
+                fclose(stream);
+
+                file->status = INVALID;
+                return -1;
+            }
+
+            if (size == 0)
+                break;
+
+            update_digest(buffer, size);
+        }
 
         fclose(stream);
-
-        file->status = INVALID;
-        return -1;
-      }
-
-      if (size == 0)
-        break;
-
-      update_digest(buffer, size);
     }
 
-    fclose(stream);
-  }
-
-  file->digest = malloc(get_digest_size());
-  finish_digest(file->digest);
-
-  file->status = HASHED;
-  return 0;
+    file->digest = malloc(get_digest_size());
+    finish_digest(file->digest);
+    file->status = HASHED;
+    return 0;
 }
 
 /* Compares the digests of two files, calculating them if neccessary.
  */
 static int compare_file_digests(File* first, File* second)
 {
-  if (get_file_digest(first) != 0)
-    return -1;
+    if (get_file_digest(first) != 0)
+        return -1;
 
-  if (get_file_digest(second) != 0)
-    return -1;
+    if (get_file_digest(second) != 0)
+        return -1;
 
-  if (memcmp(first->digest, second->digest, get_digest_size()) != 0)
-    return -1;
+    if (memcmp(first->digest, second->digest, get_digest_size()) != 0)
+        return -1;
 
-  return 0;
+    return 0;
 }
 
 /* Compares the samples of two files, retrieving them if neccessary.
  */
 static int compare_file_samples(File* first, File* second)
 {
-  if (get_file_sample(first) != 0)
-    return -1;
+    if (get_file_sample(first) != 0)
+        return -1;
 
-  if (get_file_sample(second) != 0)
-    return -1;
+    if (get_file_sample(second) != 0)
+        return -1;
 
-  size_t size = SAMPLE_SIZE;
-  if (size > first->size)
-    size = first->size;
+    size_t size = SAMPLE_SIZE;
+    if (size > first->size)
+        size = first->size;
 
-  if (memcmp(first->sample, second->sample, size) != 0)
-    return -1;
+    if (memcmp(first->sample, second->sample, size) != 0)
+        return -1;
 
-  return 0;
+    return 0;
 }
 
-/* Performs byte-by-byte comparison of the contents of two files.
- * This is the action we most want to avoid ever having to do.
- * It is also completely un-optmimised.  Enjoy.
- * NOTE: This function assumes that the files are of equal size, as
- * there's little point in calling it otherwise.
+/* Performs byte-by-byte comparison of the contents of two files.  This is the
+ * action we most want to avoid ever having to do.  It is also completely
+ * un-optmimised.  Enjoy.
+ * NOTE: This function assumes that the files are of equal size, as there's
+ * little point in calling it otherwise.
  * TODO: Use a read buffer.
  */
 static int compare_file_contents(File* first, File* second)
 {
-  int fc, sc;
-  off_t count = 0;
-  FILE* first_stream;
-  FILE* second_stream;
+    int fc, sc;
+    off_t count = 0;
+    FILE* first_stream;
+    FILE* second_stream;
 
-  first_stream = fopen(first->path, "rb");
-  if (!first_stream)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", first->path, strerror(errno));
+    first_stream = fopen(first->path, "rb");
+    if (!first_stream)
+    {
+        if (!quiet_flag)
+            warning("%s: %s", first->path, strerror(errno));
 
-    first->status = INVALID;
-    return -1;
-  }
+        first->status = INVALID;
+        return -1;
+    }
 
-  second_stream = fopen(second->path, "rb");
-  if (!second_stream)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", second->path, strerror(errno));
+    second_stream = fopen(second->path, "rb");
+    if (!second_stream)
+    {
+        if (!quiet_flag)
+            warning("%s: %s", second->path, strerror(errno));
+
+        fclose(first_stream);
+
+        second->status = INVALID;
+        return -1;
+    }
+
+    for (;;)
+    {
+        fc = fgetc(first_stream);
+        sc = fgetc(second_stream);
+
+        if (fc != sc || fc == EOF)
+            break;
+
+        count++;
+    }
+
+    if (ferror(first_stream))
+    {
+        if (!quiet_flag)
+            warning("%s: %s", first->path, strerror(errno));
+
+        first->status = INVALID;
+    }
+
+    if (ferror(second_stream))
+    {
+        if (!quiet_flag)
+            warning("%s: %s", second->path, strerror(errno));
+
+        second->status = INVALID;
+    }
 
     fclose(first_stream);
+    fclose(second_stream);
 
-    second->status = INVALID;
-    return -1;
-  }
+    if (count != first->size)
+        return -1;
 
-  for (;;)
-  {
-    fc = fgetc(first_stream);
-    sc = fgetc(second_stream);
-
-    if (fc != sc || fc == EOF)
-      break;
-
-    count++;
-  }
-
-  if (ferror(first_stream))
-  {
-    if (!quiet_flag)
-      warning("%s: %s", first->path, strerror(errno));
-
-    first->status = INVALID;
-  }
-
-  if (ferror(second_stream))
-  {
-    if (!quiet_flag)
-      warning("%s: %s", second->path, strerror(errno));
-
-    second->status = INVALID;
-  }
-
-  fclose(first_stream);
-  fclose(second_stream);
-
-  if (count != first->size)
-    return -1;
-
-  return 0;
+    return 0;
 }
 
