@@ -390,31 +390,31 @@ static void process_path(const char* path, int depth)
 
         default:
         {
-            if (!quiet_flag)
+            if (quiet_flag)
+                return;
+
+            switch (mode)
             {
-                switch (mode)
-                {
-                    case S_IFLNK:
-                        warning(_("%s is a symbolic link; skipping"), path);
-                        break;
-                    case S_IFIFO:
-                        warning(_("%s is a named pipe; skipping"), path);
-                        break;
-                    case S_IFBLK:
-                        warning(_("%s is a block device; skipping"), path);
-                        break;
-                    case S_IFCHR:
-                        warning(_("%s is a character device; skipping"), path);
-                        break;
-                    case S_IFDIR:
-                        warning(_("%s is a directory; skipping"), path);
-                        break;
-                    case S_IFSOCK:
-                        warning(_("%s is a socket; skipping"), path);
-                        break;
-                    default:
-                        error(_("This cannot happen"));
-                }
+                case S_IFLNK:
+                    warning(_("%s is a symbolic link; skipping"), path);
+                    break;
+                case S_IFIFO:
+                    warning(_("%s is a named pipe; skipping"), path);
+                    break;
+                case S_IFBLK:
+                    warning(_("%s is a block device; skipping"), path);
+                    break;
+                case S_IFCHR:
+                    warning(_("%s is a character device; skipping"), path);
+                    break;
+                case S_IFDIR:
+                    warning(_("%s is a directory; skipping"), path);
+                    break;
+                case S_IFSOCK:
+                    warning(_("%s is a socket; skipping"), path);
+                    break;
+                default:
+                    error(_("This cannot happen"));
             }
         }
     }

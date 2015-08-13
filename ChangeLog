@@ -7,6 +7,7 @@ Maintained since version 0.3.1.
 
  * duff.c duff.h duffdriver.c dufffile.c duffstring.c duffstring.h duffutil.c:
  Changed indent width.
+ * duffdriver.c (process_path): Decreased nesting depth.
 
 2013-09-13  Camilla Berglund  <dreda@dreda.org>
 
