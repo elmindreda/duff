@@ -181,7 +181,6 @@ static int get_file_sample(File* file)
 
   if (file->status == SAMPLED || file->status == HASHED)
     return 0;
-
   stream = fopen(file->path, "rb");
   if (!stream)
   {
@@ -197,6 +196,8 @@ static int get_file_sample(File* file)
     size = file->size;
 
   sample = malloc(size);
+  if (sample == NULL)
+    error(_("Out of memory"));
 
   if (fread(sample, size, 1, stream) < 1)
   {
@@ -263,11 +264,13 @@ static int get_file_digest(File* file)
 
       update_digest(buffer, size);
     }
-
     fclose(stream);
   }
 
   file->digest = malloc(get_digest_size());
+  if (file->digest == NULL)
+    error(_("Out of memory"));
+
   finish_digest(file->digest);
 
   file->status = HASHED;
