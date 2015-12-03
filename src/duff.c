@@ -112,6 +112,12 @@ int quiet_flag = 0;
  */
 int physical_flag = 0;
 
+/* Makes the program not consider hard-links to be duplicate files but 
+ * only in case they all point to the same inode. 
+ */
+int physical_cluster_flag = 0;
+
+
 /* For each duplicate cluster, reports all but one.  Useful for uses of
  * `xargs rm'.
  */
@@ -161,7 +167,7 @@ static void version(void)
  */
 static void usage(void)
 {
-  printf(_("Usage: %s [-0DHLPaepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
+  printf(_("Usage: %s [-0DHLPacepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
            PACKAGE_NAME);
 
   printf("       %s -h\n", PACKAGE_NAME);
@@ -181,6 +187,7 @@ static void usage(void)
   printf(_("  -l  the minimum size that activates sampling\n"));
   printf(_("  -q  quiet; suppress warnings and error messages\n"));
   printf(_("  -p  physical files; do not report multiple hard links as duplicates\n"));
+  printf(_("  -c  report multiple hard links as duplicates only if at least two different physical files exist\n"));
   printf(_("  -r  search recursively through specified directories\n"));
   printf(_("  -t  thorough; force byte-by-byte comparison of files\n"));
   printf(_("  -u  unique mode; list unique files instead of duplicates\n"));
@@ -208,7 +215,7 @@ int main(int argc, char** argv)
   bindtextdomain(PACKAGE, LOCALEDIR);
   textdomain(PACKAGE);
 
-  while ((ch = getopt(argc, argv, "0DHLPad:ef:hl:pqrtuvz")) != -1)
+  while ((ch = getopt(argc, argv, "0DHLPacd:ef:hl:pqrtuvz")) != -1)
   {
     switch (ch)
     {
@@ -253,6 +260,9 @@ int main(int argc, char** argv)
         break;
       case 'p':
         physical_flag = 1;
+        break;
+      case 'c':
+        physical_cluster_flag = 1;
         break;
       case 'q':
         quiet_flag = 1;

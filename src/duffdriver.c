@@ -102,6 +102,7 @@ extern int recursive_flag;
 extern int ignore_empty_flag;
 extern int quiet_flag;
 extern int physical_flag;
+extern int physical_cluster_flag;
 extern int excess_flag;
 extern const char* header_format;
 extern int header_uses_digest;
@@ -466,7 +467,7 @@ static void report_cluster(const FileList* cluster, unsigned int index)
  */
 static void process_clusters(void)
 {
-  size_t i, j, first, second, index = 1;
+  size_t i, j, d, first, second, index = 1;
   FileList duplicates;
 
   init_file_list(&duplicates);
@@ -474,6 +475,9 @@ static void process_clusters(void)
   for (i = 0;  i < BUCKET_COUNT;  i++)
   {
     File* files = buckets[i].files;
+
+    /* quick skip for single piece bucket */
+    if (buckets[i].allocated < 2) continue;
 
     for (first = 0;  first < buckets[i].allocated;  first++)
     {
@@ -511,7 +515,27 @@ static void process_clusters(void)
 
       if (duplicates.allocated > 0)
       {
-        report_cluster(&duplicates, index);
+        if (physical_cluster_flag)
+        {
+          ino_t prev_inode = duplicates.files[0].inode;
+          dev_t prev_dev = duplicates.files[0].device;
+          for (d = 1;  d < duplicates.allocated;  d++) /* assume that duplicates count > 1 */
+          {
+            if (duplicates.files[d].inode != prev_inode || duplicates.files[d].device != prev_dev)
+            {
+              report_cluster(&duplicates, index);
+              break;
+            }
+
+            prev_inode = duplicates.files[d].inode;
+            prev_dev = duplicates.files[d].device;
+          }
+        }
+        else
+        {
+          report_cluster(&duplicates, index);
+        }
+
         empty_file_list(&duplicates);
 
         index++;
@@ -519,7 +543,9 @@ static void process_clusters(void)
     }
 
     for (j = 0;  j < buckets[i].allocated;  j++)
+    {
       free_file(&files[j]);
+    }
   }
 
   free_file_list(&duplicates);
