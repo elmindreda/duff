@@ -546,6 +546,7 @@ static void process_clusters(void)
     {
       free_file(&files[j]);
     }
+    free_file_list(&buckets[i]);
   }
 
   free_file_list(&duplicates);
