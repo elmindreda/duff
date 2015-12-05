@@ -106,6 +106,7 @@ extern int physical_cluster_flag;
 extern int excess_flag;
 extern const char* header_format;
 extern int header_uses_digest;
+extern int progress_flag;
 
 /* Represents a single physical directory.
  */
@@ -135,6 +136,11 @@ static DirList recorded_dirs;
 /* Buckets of lists of collected files.
  */
 static FileList buckets[BUCKET_COUNT];
+
+/* Processed files counters for progress reporting
+*/
+static size_t processed_files = 0;
+static size_t processed_files_b = 0;
 
 /* These functions are documented below, where they are defined.
  */
@@ -329,6 +335,9 @@ static void process_directory(const char* path,
  */
 static void process_file(const char* path, struct stat* sb)
 {
+  static time_t prev_progress_time = 0;
+  static time_t start_progress_time = 0;
+
   if (sb->st_size == 0)
   {
     if (ignore_empty_flag)
@@ -354,6 +363,23 @@ static void process_file(const char* path, struct stat* sb)
   }
 
   init_file(alloc_file(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
+
+  processed_files++;
+
+  if (progress_flag && processed_files % 113 == 0)
+  {
+    time_t t = time(NULL);
+
+    if (start_progress_time == 0)
+      start_progress_time = t - 1;
+
+    if (t > prev_progress_time)
+    {
+      float td = (float)(t - start_progress_time);
+      fprintf(stderr, "duff phase 1: processed %d files (%.0f files/s)\r", processed_files, processed_files / td);
+      prev_progress_time = t;
+    }
+  }
 }
 
 /* Processes a path name according to its type, whether from the command line or
@@ -542,6 +568,13 @@ static void process_clusters(void)
       }
     }
 
+    if (progress_flag && buckets[i].allocated > 0)
+    {
+      processed_files_b += buckets[i].allocated;
+      fprintf(stderr, "duff phase 2: processed %.0f%% (%zu files out of %zu)\r", processed_files_b * 100.0 / processed_files, processed_files_b, processed_files);
+    }
+
+
     for (j = 0;  j < buckets[i].allocated;  j++)
     {
       free_file(&files[j]);
@@ -549,6 +582,9 @@ static void process_clusters(void)
   }
 
   free_file_list(&duplicates);
+
+  if (progress_flag)
+    fprintf(stderr, "\n");
 }
 
 /* Finds and reports all unique files in each bucket of collected files.

@@ -117,7 +117,6 @@ int physical_flag = 0;
  */
 int physical_cluster_flag = 0;
 
-
 /* For each duplicate cluster, reports all but one.  Useful for uses of
  * `xargs rm'.
  */
@@ -131,6 +130,9 @@ int thorough_flag = 0;
 /* Makes the program not report files of zero size as duplicates.
  */
 int ignore_empty_flag = 0;
+
+/* some progress indicators */
+int progress_flag = 0;
 
 /* Specifies the look of the cluster header.
  * If set to the empty string, no headers are printed.
@@ -179,6 +181,7 @@ static void usage(void)
   printf(_("  -H  follow symbolic links to directories on the command line\n"));
   printf(_("  -L  follow all symbolic links to directories\n"));
   printf(_("  -P  do not follow any symbolic links (default)\n"));
+  printf(_("  -T  display progress to STDERR\n"));
   printf(_("  -a  include hidden files when searching recursively\n"));
   printf(_("  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"));
   printf(_("  -e  excess mode; list all but one file from each cluster (no headers)\n"));
@@ -215,7 +218,7 @@ int main(int argc, char** argv)
   bindtextdomain(PACKAGE, LOCALEDIR);
   textdomain(PACKAGE);
 
-  while ((ch = getopt(argc, argv, "0DHLPacd:ef:hl:pqrtuvz")) != -1)
+  while ((ch = getopt(argc, argv, "0DHLPTacd:ef:hl:pqrtuvz")) != -1)
   {
     switch (ch)
     {
@@ -233,6 +236,9 @@ int main(int argc, char** argv)
         break;
       case 'P':
         follow_links_mode = NO_SYMLINKS;
+        break;
+      case 'T':
+        progress_flag = 1;
         break;
       case 'a':
         all_files_flag = 1;
