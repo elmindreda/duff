@@ -376,7 +376,9 @@ static void process_file(const char* path, struct stat* sb)
     if (t > prev_progress_time)
     {
       float td = (float)(t - start_progress_time);
-      fprintf(stderr, "duff phase 1: processed %d files (%.0f files/s)\r", processed_files, processed_files / td);
+      char processed_str[256];
+      fprintf(stderr, "duff phase 1: processed %s files (%.0f files/s)\r",
+        add_thousands_separator_z(processed_files, processed_str, 256), processed_files / td);
       prev_progress_time = t;
     }
   }
@@ -519,8 +521,12 @@ static void process_clusters(void)
 
         if (t > prev_progress_time)
         {
-          fprintf(stderr, "duff phase 2: processed %.0f%% (%zu files out of %zu)\r", 
-            processed_files_b * 100.0 / processed_files, processed_files_b, processed_files);
+          char p_str1[256];
+          char p_str2[256];
+          fprintf(stderr, "duff phase 2: processed %.0f%% (%s files out of %s)\r",
+            processed_files_b * 100.0 / processed_files,
+            add_thousands_separator_z(processed_files_b, p_str1, 256),
+            add_thousands_separator_z(processed_files, p_str2, 256));
           prev_progress_time = t;
         }
       }

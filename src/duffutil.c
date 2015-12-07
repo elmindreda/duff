@@ -457,3 +457,65 @@ void print_cluster_header(const char* format,
   }
 }
 
+/* shorten given number to 3 digits + qualifier
+ * eg. "12345" -> "12K"
+ * out buffer must be able to hold 3 digits + 1 letter + null
+ */
+char* human_readable(size_t size, char *out, size_t out_size)
+{
+  int i = 0;
+
+  if (out_size < 5)
+  {
+    error(_("human_readable: output buffer too short"));
+  }
+
+  const char* units[] = {"", "K", "M", "G", "T", "P", "E"};
+  while (size >= 1000)
+  {
+    size /= 1024;
+    i++; /* don't care bout more than thousand exabytes */
+  }
+
+  if (size == 0) { size = 1; } /* corner case between 1000 and 1024 */
+
+  snprintf(out, 5, "%d%s", size, units[i]);
+  return out;
+}
+
+/* add thousand separator to integer (as a string)
+ * eg. 1234567 -> 1,234,567
+ *TODO: assert on out_size overflow
+ */
+char* add_thousands_separator(char *a, char *out, size_t out_size)
+{
+  char *comma = ",";
+  char *o = out;
+  int n = 0;
+  int k = strlen(a);
+  int step = k % 3;
+  if (step == 0) step = 3;
+
+  while (k > 3)
+  {
+    strncpy(o, a, step);
+    o += step;
+    strncpy(o, comma, 1);
+    o++;
+    a += step;
+    k -= step;
+    step = 3; /* only in first round it can be smaller */
+  }
+  strncpy(o, a, k);
+  o += k;
+  *o = '\0';
+  return out;
+}
+
+char* add_thousands_separator_z(size_t sz, char *out, size_t out_size)
+{
+    char tmp[out_size];
+    snprintf(tmp, out_size, "%zu", sz);
+    return add_thousands_separator(tmp, out, out_size);
+}
+
