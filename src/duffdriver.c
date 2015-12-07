@@ -141,6 +141,9 @@ static FileList buckets[BUCKET_COUNT];
 */
 static size_t processed_files = 0;
 static size_t processed_files_b = 0;
+static time_t prev_progress_time = 0;
+static time_t start_progress_time = 0;
+
 
 /* These functions are documented below, where they are defined.
  */
@@ -335,9 +338,6 @@ static void process_directory(const char* path,
  */
 static void process_file(const char* path, struct stat* sb)
 {
-  static time_t prev_progress_time = 0;
-  static time_t start_progress_time = 0;
-
   if (sb->st_size == 0)
   {
     if (ignore_empty_flag)
@@ -366,7 +366,7 @@ static void process_file(const char* path, struct stat* sb)
 
   processed_files++;
 
-  if (progress_flag && processed_files % 113 == 0)
+  if (progress_flag && processed_files % 100 == 0)
   {
     time_t t = time(NULL);
 
@@ -496,6 +496,8 @@ static void process_clusters(void)
   size_t i, j, d, first, second, index = 1;
   FileList duplicates;
 
+  start_progress_time = 0;
+
   init_file_list(&duplicates);
 
   for (i = 0;  i < BUCKET_COUNT;  i++)
@@ -507,6 +509,22 @@ static void process_clusters(void)
 
     for (first = 0;  first < buckets[i].allocated;  first++)
     {
+      if (progress_flag && buckets[i].allocated > 0)
+      {
+        processed_files_b++;
+        time_t t = time(NULL);
+
+        if (start_progress_time == 0)
+          start_progress_time = t - 1;
+
+        if (t > prev_progress_time)
+        {
+          fprintf(stderr, "duff phase 2: processed %.0f%% (%zu files out of %zu)\r", 
+            processed_files_b * 100.0 / processed_files, processed_files_b, processed_files);
+          prev_progress_time = t;
+        }
+      }
+
       if (files[first].status == INVALID ||
           files[first].status == DUPLICATE)
       {
@@ -567,13 +585,6 @@ static void process_clusters(void)
         index++;
       }
     }
-
-    if (progress_flag && buckets[i].allocated > 0)
-    {
-      processed_files_b += buckets[i].allocated;
-      fprintf(stderr, "duff phase 2: processed %.0f%% (%zu files out of %zu)\r", processed_files_b * 100.0 / processed_files, processed_files_b, processed_files);
-    }
-
 
     for (j = 0;  j < buckets[i].allocated;  j++)
     {
