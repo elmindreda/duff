@@ -71,6 +71,7 @@
 /* These flags are defined and documented in duff.c.
  */
 extern int null_terminate_flag;
+extern int human_readable_flag;
 
 /* Message digest functions.
  */
@@ -420,13 +421,31 @@ void print_cluster_header(const char* format,
       switch (*c)
       {
         case 's':
-          printf("%" PRIi64, size);
+          if (human_readable_flag)
+          {
+            char buf[5];
+            human_readable(size, buf, 5);
+            fputs(buf, stdout); fputs("B", stdout);
+          }
+          else
+          {
+            printf("%" PRIi64, size);
+          }
           break;
         case 'i':
           printf("%u", index);
           break;
         case 'n':
-          printf("%u", count);
+          if (human_readable_flag)
+          {
+            char buf[256]; /* probably overkil, would anybody have cluster of more than 999 duplicates? */
+            add_thousands_separator_z((size_t)count, buf, 256);
+            fputs(buf, stdout);
+          }
+          else
+          {
+            printf("%u", count);
+          }
           break;
         case 'c':
         case 'd':

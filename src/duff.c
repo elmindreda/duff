@@ -131,6 +131,10 @@ int thorough_flag = 0;
  */
 int ignore_empty_flag = 0;
 
+/* use human readable mode when displayng sizes in header
+ */
+int human_readable_flag = 0;
+
 /* some progress indicators */
 int progress_flag = 0;
 
@@ -169,7 +173,7 @@ static void version(void)
  */
 static void usage(void)
 {
-  printf(_("Usage: %s [-0DHLPacepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
+  printf(_("Usage: %s [-0DHLPRTacepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
            PACKAGE_NAME);
 
   printf("       %s -h\n", PACKAGE_NAME);
@@ -181,6 +185,7 @@ static void usage(void)
   printf(_("  -H  follow symbolic links to directories on the command line\n"));
   printf(_("  -L  follow all symbolic links to directories\n"));
   printf(_("  -P  do not follow any symbolic links (default)\n"));
+  printf(_("  -R  use human-readable format in cluster header\n"));
   printf(_("  -T  display progress to STDERR\n"));
   printf(_("  -a  include hidden files when searching recursively\n"));
   printf(_("  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"));
@@ -218,7 +223,7 @@ int main(int argc, char** argv)
   bindtextdomain(PACKAGE, LOCALEDIR);
   textdomain(PACKAGE);
 
-  while ((ch = getopt(argc, argv, "0DHLPTacd:ef:hl:pqrtuvz")) != -1)
+  while ((ch = getopt(argc, argv, "0DHLPRTacd:ef:hl:pqrtuvz")) != -1)
   {
     switch (ch)
     {
@@ -236,6 +241,9 @@ int main(int argc, char** argv)
         break;
       case 'P':
         follow_links_mode = NO_SYMLINKS;
+        break;
+      case 'R':
+        human_readable_flag = 1;
         break;
       case 'T':
         progress_flag = 1;
@@ -301,9 +309,19 @@ int main(int argc, char** argv)
   if (!header_format)
   {
     if (thorough_flag)
-      header_format = _("%n files in cluster %i (%s bytes)");
+    {
+      if (human_readable_flag)
+        header_format = _("%n files in cluster %i (size %s)");
+      else
+        header_format = _("%n files in cluster %i (%s bytes)");
+    }
     else
-      header_format = _("%n files in cluster %i (%s bytes, digest %d)");
+    {
+      if (human_readable_flag)
+        header_format = _("%n files in cluster %i (size %s, digest %d)");
+      else
+        header_format = _("%n files in cluster %i (%s bytes, digest %d)");
+    }
   }
 
   header_uses_digest = cluster_header_uses_digest(header_format);
