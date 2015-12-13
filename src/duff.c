@@ -161,53 +161,53 @@ static void bugs(void);
  */
 static void version(void)
 {
-  printf("%s\n", PACKAGE_STRING);
-  printf(_("Copyright (c) 2005 Camilla Berglund <dreda@dreda.org>\n"));
-  printf(_("%s contains shaX-asaddi\n"), PACKAGE_NAME);
-  printf(_("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
+    printf("%s\n", PACKAGE_STRING);
+    printf(_("Copyright (c) 2005 Camilla Berglund <dreda@dreda.org>\n"));
+    printf(_("%s contains shaX-asaddi\n"), PACKAGE_NAME);
+    printf(_("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
 }
 
 /* Prints brief help information to stdout.
- * Note that it is a good idea to keep this synchronised with the actual code.
- * Note that it is also a good idea it keep it synchronised with the manpage.
+ * NOTE: It is a good idea to keep this synchronised with the actual code.
+ * NOTE: It is also a good idea it keep it synchronised with the manpage.
  */
 static void usage(void)
 {
-  printf(_("Usage: %s [-0DHLPRTacepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
-           PACKAGE_NAME);
+    printf(_("Usage: %s [-0DHLPRTacepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
+            PACKAGE_NAME);
 
-  printf("       %s -h\n", PACKAGE_NAME);
-  printf("       %s -v\n", PACKAGE_NAME);
+    printf("       %s -h\n", PACKAGE_NAME);
+    printf("       %s -v\n", PACKAGE_NAME);
 
-  printf(_("Options:\n"));
-  printf(_("  -0  read and write file names terminated by a null character\n"));
-  printf(_("  -D  only report files as duplicate if they are on the same device\n"));
-  printf(_("  -H  follow symbolic links to directories on the command line\n"));
-  printf(_("  -L  follow all symbolic links to directories\n"));
-  printf(_("  -P  do not follow any symbolic links (default)\n"));
-  printf(_("  -R  use human-readable format in cluster header\n"));
-  printf(_("  -T  display progress to STDERR\n"));
-  printf(_("  -a  include hidden files when searching recursively\n"));
-  printf(_("  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"));
-  printf(_("  -e  excess mode; list all but one file from each cluster (no headers)\n"));
-  printf(_("  -f  format for cluster headers\n"));
-  printf(_("  -h  show this help\n"));
-  printf(_("  -l  the minimum size that activates sampling\n"));
-  printf(_("  -q  quiet; suppress warnings and error messages\n"));
-  printf(_("  -p  physical files; do not report multiple hard links as duplicates\n"));
-  printf(_("  -c  report multiple hard links as duplicates only if at least two different physical files exist\n"));
-  printf(_("  -r  search recursively through specified directories\n"));
-  printf(_("  -t  thorough; force byte-by-byte comparison of files\n"));
-  printf(_("  -u  unique mode; list unique files instead of duplicates\n"));
-  printf(_("  -v  show version information\n"));
-  printf(_("  -z  do not report empty files\n"));
+    printf(_("Options:\n"));
+    printf(_("  -0  read and write file names terminated by a null character\n"));
+    printf(_("  -D  only report files as duplicate if they are on the same device\n"));
+    printf(_("  -H  follow symbolic links to directories on the command line\n"));
+    printf(_("  -L  follow all symbolic links to directories\n"));
+    printf(_("  -P  do not follow any symbolic links (default)\n"));
+    printf(_("  -R  use human-readable format in cluster header\n"));
+    printf(_("  -T  display progress to STDERR\n"));
+    printf(_("  -a  include hidden files when searching recursively\n"));
+    printf(_("  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"));
+    printf(_("  -e  excess mode; list all but one file from each cluster (no headers)\n"));
+    printf(_("  -f  format for cluster headers\n"));
+    printf(_("  -h  show this help\n"));
+    printf(_("  -l  the minimum size that activates sampling\n"));
+    printf(_("  -q  quiet; suppress warnings and error messages\n"));
+    printf(_("  -p  physical files; do not report multiple hard links as duplicates\n"));
+    printf(_("  -c  report multiple hard links as duplicates only if at least two different physical files exist\n"));
+    printf(_("  -r  search recursively through specified directories\n"));
+    printf(_("  -t  thorough; force byte-by-byte comparison of files\n"));
+    printf(_("  -u  unique mode; list unique files instead of duplicates\n"));
+    printf(_("  -v  show version information\n"));
+    printf(_("  -z  do not report empty files\n"));
 }
 
 /* Prints bug report address to stdout.
  */
 static void bugs(void)
 {
-  printf(_("Report bugs to <%s>\n"), PACKAGE_BUGREPORT);
+    printf(_("Report bugs to <%s>\n"), PACKAGE_BUGREPORT);
 }
 
 /* I don't know what this function does.
@@ -215,122 +215,122 @@ static void bugs(void)
  */
 int main(int argc, char** argv)
 {
-  int ch;
-  char* temp;
-  off_t limit;
+    int ch;
+    char* temp;
+    off_t limit;
 
-  setlocale(LC_ALL, "");
-  bindtextdomain(PACKAGE, LOCALEDIR);
-  textdomain(PACKAGE);
+    setlocale(LC_ALL, "");
+    bindtextdomain(PACKAGE, LOCALEDIR);
+    textdomain(PACKAGE);
 
-  while ((ch = getopt(argc, argv, "0DHLPRTacd:ef:hl:pqrtuvz")) != -1)
-  {
-    switch (ch)
+    while ((ch = getopt(argc, argv, "0DHLPRTacd:ef:hl:pqrtuvz")) != -1)
     {
-      case '0':
-        null_terminate_flag = 1;
-        break;
-      case 'D':
-        same_device_flag = 1;
-        break;
-      case 'H':
-        follow_links_mode = ARG_SYMLINKS;
-        break;
-      case 'L':
-        follow_links_mode = ALL_SYMLINKS;
-        break;
-      case 'P':
-        follow_links_mode = NO_SYMLINKS;
-        break;
-      case 'R':
-        human_readable_flag = 1;
-        break;
-      case 'T':
-        progress_flag = 1;
-        break;
-      case 'a':
-        all_files_flag = 1;
-        break;
-      case 'd':
-        if (set_digest_function(optarg) != 0)
-          error(_("%s is not a supported digest function"), optarg);
-        break;
-      case 'e':
-        excess_flag = 1;
-        break;
-      case 'f':
-        header_format = optarg;
-        break;
-      case 'h':
-        usage();
-        bugs();
-        exit(EXIT_SUCCESS);
-      case 'l':
-        limit = (off_t) strtoull(optarg, &temp, 10);
-        if (temp == optarg || errno == ERANGE || errno == EINVAL)
-          warning(_("Ignoring invalid sample limit %s"), optarg);
+        switch (ch)
+        {
+            case '0':
+                null_terminate_flag = 1;
+                break;
+            case 'D':
+                same_device_flag = 1;
+                break;
+            case 'H':
+                follow_links_mode = ARG_SYMLINKS;
+                break;
+            case 'L':
+                follow_links_mode = ALL_SYMLINKS;
+                break;
+            case 'P':
+                follow_links_mode = NO_SYMLINKS;
+                break;
+            case 'R':
+                human_readable_flag = 1;
+                break;
+            case 'T':
+                progress_flag = 1;
+                break;
+            case 'a':
+                all_files_flag = 1;
+                break;
+            case 'd':
+                if (set_digest_function(optarg) != 0)
+                    error(_("%s is not a supported digest function"), optarg);
+                break;
+            case 'e':
+                excess_flag = 1;
+                break;
+            case 'f':
+                header_format = optarg;
+                break;
+            case 'h':
+                usage();
+                bugs();
+                exit(EXIT_SUCCESS);
+            case 'l':
+                limit = (off_t) strtoull(optarg, &temp, 10);
+                if (temp == optarg || errno == ERANGE || errno == EINVAL)
+                    warning(_("Ignoring invalid sample limit %s"), optarg);
+                else
+                    sample_limit = limit;
+                break;
+            case 'p':
+                physical_flag = 1;
+                break;
+            case 'c':
+                physical_cluster_flag = 1;
+                break;
+            case 'q':
+                quiet_flag = 1;
+                break;
+            case 'r':
+                recursive_flag = 1;
+                break;
+            case 't':
+                thorough_flag = 1;
+                break;
+            case 'u':
+                unique_files_flag = 1;
+                break;
+            case 'v':
+                version();
+                exit(EXIT_SUCCESS);
+            case 'z':
+                ignore_empty_flag = 1;
+                break;
+            default:
+                usage();
+                bugs();
+                exit(EXIT_FAILURE);
+        }
+    }
+
+    argc -= optind;
+    argv += optind;
+
+    if (!header_format)
+    {
+        if (thorough_flag)
+        {
+            if (human_readable_flag)
+                header_format = _("%n files in cluster %i (size %s)");
+            else
+                header_format = _("%n files in cluster %i (%s bytes)");
+        }
         else
-          sample_limit = limit;
-        break;
-      case 'p':
-        physical_flag = 1;
-        break;
-      case 'c':
-        physical_cluster_flag = 1;
-        break;
-      case 'q':
-        quiet_flag = 1;
-        break;
-      case 'r':
-        recursive_flag = 1;
-        break;
-      case 't':
-        thorough_flag = 1;
-        break;
-      case 'u':
-        unique_files_flag = 1;
-        break;
-      case 'v':
-        version();
-        exit(EXIT_SUCCESS);
-      case 'z':
-        ignore_empty_flag = 1;
-        break;
-      default:
-        usage();
-        bugs();
-        exit(EXIT_FAILURE);
+        {
+            if (human_readable_flag)
+                header_format = _("%n files in cluster %i (size %s, digest %d)");
+            else
+                header_format = _("%n files in cluster %i (%s bytes, digest %d)");
+        }
     }
-  }
 
-  argc -= optind;
-  argv += optind;
+    header_uses_digest = cluster_header_uses_digest(header_format);
 
-  if (!header_format)
-  {
-    if (thorough_flag)
-    {
-      if (human_readable_flag)
-        header_format = _("%n files in cluster %i (size %s)");
-      else
-        header_format = _("%n files in cluster %i (%s bytes)");
-    }
-    else
-    {
-      if (human_readable_flag)
-        header_format = _("%n files in cluster %i (size %s, digest %d)");
-      else
-        header_format = _("%n files in cluster %i (%s bytes, digest %d)");
-    }
-  }
+    if (thorough_flag && header_uses_digest)
+        error(_("Digest (%%d) is not calculated when using -t"));
 
-  header_uses_digest = cluster_header_uses_digest(header_format);
+    process_args(argc, argv);
 
-  if (thorough_flag && header_uses_digest)
-    error(_("Digest (%%d) is not calculated when using -t"));
-
-  process_args(argc, argv);
-
-  exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
 

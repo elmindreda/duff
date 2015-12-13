@@ -30,7 +30,7 @@
 
 /* Only use __attribute__ on GCC and compatible compilers */
 #ifndef __GNUC__
-#define __attribute__(x)
+ #define __attribute__(x)
 #endif
 
 /* The number of bytes to use as read buffer when reading files.
@@ -57,21 +57,21 @@
  */
 enum Status
 {
-  /* The file has been stat:d but its data has not been touched.
-   */
-  UNTOUCHED,
-  /* The beginning of the file has been hashed.
-   */
-  SAMPLED,
-  /* The entire file has been hashed.
-   */
-  HASHED,
-  /* An error ocurred when reading from the file.
-   */
-  INVALID,
-  /* The file has been found to be a duplicate.
-   */
-  DUPLICATE
+    /* The file has been stat:d but its data has not been touched.
+     */
+    UNTOUCHED,
+    /* The beginning of the file has been hashed.
+     */
+    SAMPLED,
+    /* The entire file has been hashed.
+     */
+    HASHED,
+    /* An error ocurred when reading from the file.
+     */
+    INVALID,
+    /* The file has been found to be a duplicate.
+     */
+    DUPLICATE
 };
 
 typedef enum Status Status;
@@ -80,15 +80,15 @@ typedef enum Status Status;
  */
 enum SymlinkMode
 {
-  /* Do not dereference any directory symlinks.
-   */
-  NO_SYMLINKS,
-  /* Dereference all directory symlinks encountered.
-   */
-  ALL_SYMLINKS,
-  /* Dereference only those directory symlinks listed on the command line.
-   */
-  ARG_SYMLINKS
+    /* Do not dereference any directory symlinks.
+     */
+    NO_SYMLINKS,
+    /* Dereference all directory symlinks encountered.
+     */
+    ALL_SYMLINKS,
+    /* Dereference only those directory symlinks listed on the command line.
+     */
+    ARG_SYMLINKS
 };
 
 typedef enum SymlinkMode SymlinkMode;
@@ -97,13 +97,13 @@ typedef enum SymlinkMode SymlinkMode;
  */
 struct File
 {
-  char* path;
-  off_t size;
-  dev_t device;
-  ino_t inode;
-  Status status;
-  uint8_t* digest;
-  uint8_t* sample;
+    char* path;
+    off_t size;
+    dev_t device;
+    ino_t inode;
+    Status status;
+    uint8_t* digest;
+    uint8_t* sample;
 };
 
 typedef struct File File;
@@ -112,9 +112,9 @@ typedef struct File File;
  */
 struct FileList
 {
-  File* files;
-  size_t allocated;
-  size_t available;
+    File* files;
+    size_t allocated;
+    size_t available;
 };
 
 typedef struct FileList FileList;

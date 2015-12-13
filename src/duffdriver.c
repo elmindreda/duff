@@ -23,62 +23,62 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+ #include "config.h"
 #endif
 
 #if HAVE_SYS_TYPES_H
-#include <sys/types.h>
+ #include <sys/types.h>
 #endif
 
 #if HAVE_SYS_STAT_H
-#include <sys/stat.h>
+ #include <sys/stat.h>
 #endif
 
 #if HAVE_INTTYPES_H
-#include <inttypes.h>
+ #include <inttypes.h>
 #elif HAVE_STDINT_H
-#include <stdint.h>
+ #include <stdint.h>
 #endif
 
 #if HAVE_ERRNO_H
-#include <errno.h>
+ #include <errno.h>
 #endif
 
 #if HAVE_UNISTD_H
-#include <unistd.h>
+ #include <unistd.h>
 #endif
 
 #if HAVE_STDIO_H
-#include <stdio.h>
+ #include <stdio.h>
 #endif
 
 #if HAVE_STRING_H
-#include <string.h>
+ #include <string.h>
 #endif
 
 #if HAVE_STDARG_H
-#include <stdarg.h>
+ #include <stdarg.h>
 #endif
 
 #if HAVE_STDLIB_H
-#include <stdlib.h>
+ #include <stdlib.h>
 #endif
 
 #if HAVE_DIRENT_H
-  #include <dirent.h>
-  #define NAMLEN(dirent) strlen((dirent)->d_name)
+ #include <dirent.h>
+ #define NAMLEN(dirent) strlen((dirent)->d_name)
 #else
-  #define dirent direct
-  #define NAMLEN(dirent) (dirent)->d_namlen
-#if HAVE_SYS_NDIR_H
+ #define dirent direct
+ #define NAMLEN(dirent) (dirent)->d_namlen
+ #if HAVE_SYS_NDIR_H
   #include <sys/ndir.h>
-  #endif
-    #if HAVE_SYS_DIR_H
-      #include <sys/dir.h>
-    #endif
-  #if HAVE_NDIR_H
-    #include <ndir.h>
-  #endif
+ #endif
+ #if HAVE_SYS_DIR_H
+  #include <sys/dir.h>
+ #endif
+ #if HAVE_NDIR_H
+  #include <ndir.h>
+ #endif
 #endif
 
 #include "duffstring.h"
@@ -112,8 +112,8 @@ extern int progress_flag;
  */
 struct Dir
 {
-  dev_t device;
-  ino_t inode;
+    dev_t device;
+    ino_t inode;
 };
 
 typedef struct Dir Dir;
@@ -122,9 +122,9 @@ typedef struct Dir Dir;
  */
 struct DirList
 {
-  Dir* dirs;
-  size_t allocated;
-  size_t available;
+    Dir* dirs;
+    size_t allocated;
+    size_t available;
 };
 
 typedef struct DirList DirList;
@@ -164,83 +164,83 @@ static void process_uniques(void);
  */
 void process_args(int argc, char** argv)
 {
-  size_t i;
+    size_t i;
 
-  memset(&recorded_dirs, 0, sizeof(DirList));
+    memset(&recorded_dirs, 0, sizeof(DirList));
 
-  for (i = 0;  i < BUCKET_COUNT;  i++)
-    init_file_list(&buckets[i]);
+    for (i = 0;  i < BUCKET_COUNT;  i++)
+        init_file_list(&buckets[i]);
 
-  if (argc)
-  {
-    /* Read file names from command line */
-    for (i = 0;  i < argc;  i++)
+    if (argc)
     {
-      kill_trailing_slashes(argv[i]);
-      process_path(argv[i], 0);
+        /* Read file names from command line */
+        for (i = 0;  i < argc;  i++)
+        {
+            kill_trailing_slashes(argv[i]);
+            process_path(argv[i], 0);
+        }
     }
-  }
-  else
-  {
-    char* path;
-
-    /* Read file names from stdin */
-    while ((path = read_path(stdin)))
+    else
     {
-      kill_trailing_slashes(path);
-      process_path(path, 0);
-      free(path);
+        char* path;
+
+        /* Read file names from stdin */
+        while ((path = read_path(stdin)))
+        {
+            kill_trailing_slashes(path);
+            process_path(path, 0);
+            free(path);
+        }
     }
-  }
 
-  if (unique_files_flag)
-    process_uniques();
-  else
-    process_clusters();
+    if (unique_files_flag)
+        process_uniques();
+    else
+        process_clusters();
 
-  for (i = 0;  i < BUCKET_COUNT;  i++)
-    free_file_list(&buckets[i]);
+    for (i = 0;  i < BUCKET_COUNT;  i++)
+        free_file_list(&buckets[i]);
 
-  free(recorded_dirs.dirs);
-  memset(&recorded_dirs, 0, sizeof(DirList));
+    free(recorded_dirs.dirs);
+    memset(&recorded_dirs, 0, sizeof(DirList));
 }
 
 /* Stat:s a file according to the specified options.
  */
 static int stat_path(const char* path, struct stat* sb, int depth)
 {
-  if (*path == '\0')
-    return -1;
-
-  if (lstat(path, sb) != 0)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", path, strerror(errno));
-
-    return -1;
-  }
-
-  if (S_ISLNK(sb->st_mode))
-  {
-    if (follow_links_mode == ALL_SYMLINKS ||
-        (depth == 0 && follow_links_mode == ARG_SYMLINKS))
-    {
-      if (stat(path, sb) != 0)
-      {
-        if (!quiet_flag)
-          warning("%s: %s", path, strerror(errno));
-
+    if (*path == '\0')
         return -1;
-      }
 
-      if (S_ISDIR(sb->st_mode))
+    if (lstat(path, sb) != 0)
+    {
+        if (!quiet_flag)
+            warning("%s: %s", path, strerror(errno));
+
         return -1;
     }
-    else
-      return -1;
-  }
 
-  return 0;
+    if (S_ISLNK(sb->st_mode))
+    {
+        if (follow_links_mode == ALL_SYMLINKS ||
+            (depth == 0 && follow_links_mode == ARG_SYMLINKS))
+        {
+            if (stat(path, sb) != 0)
+            {
+                if (!quiet_flag)
+                    warning("%s: %s", path, strerror(errno));
+
+                return -1;
+            }
+
+            if (S_ISDIR(sb->st_mode))
+                return -1;
+        }
+        else
+            return -1;
+    }
+
+    return 0;
 }
 
 /* Returns true if the directory has already been recorded.
@@ -248,16 +248,16 @@ static int stat_path(const char* path, struct stat* sb, int depth)
  */
 static int has_recorded_directory(dev_t device, ino_t inode)
 {
-  size_t i;
-  const Dir* dirs = recorded_dirs.dirs;
+    size_t i;
+    const Dir* dirs = recorded_dirs.dirs;
 
-  for (i = 0;  i < recorded_dirs.allocated;  i++)
-  {
-    if (dirs[i].device == device && dirs[i].inode == inode)
-      return 1;
-  }
+    for (i = 0;  i < recorded_dirs.allocated;  i++)
+    {
+        if (dirs[i].device == device && dirs[i].inode == inode)
+            return 1;
+    }
 
-  return 0;
+    return 0;
 }
 
 /* Records the specified directory.
@@ -265,25 +265,25 @@ static int has_recorded_directory(dev_t device, ino_t inode)
  */
 static void record_directory(dev_t device, ino_t inode)
 {
-  if (recorded_dirs.allocated == recorded_dirs.available)
-  {
-    size_t count;
+    if (recorded_dirs.allocated == recorded_dirs.available)
+    {
+        size_t count;
 
-    if (recorded_dirs.available)
-      count = recorded_dirs.available * 2;
-    else
-      count = 1024;
+        if (recorded_dirs.available)
+            count = recorded_dirs.available * 2;
+        else
+            count = 1024;
 
-    recorded_dirs.dirs = realloc(recorded_dirs.dirs, count * sizeof(Dir));
-    if (recorded_dirs.dirs == NULL)
-      error(_("Out of memory"));
+        recorded_dirs.dirs = realloc(recorded_dirs.dirs, count * sizeof(Dir));
+        if (recorded_dirs.dirs == NULL)
+            error(_("Out of memory"));
 
-    recorded_dirs.available = count;
-  }
+        recorded_dirs.available = count;
+    }
 
-  recorded_dirs.dirs[recorded_dirs.allocated].device = device;
-  recorded_dirs.dirs[recorded_dirs.allocated].inode = inode;
-  recorded_dirs.allocated++;
+    recorded_dirs.dirs[recorded_dirs.allocated].device = device;
+    recorded_dirs.dirs[recorded_dirs.allocated].inode = inode;
+    recorded_dirs.allocated++;
 }
 
 /* Recurses into a directory, collecting all or all non-hidden files,
@@ -293,95 +293,95 @@ static void process_directory(const char* path,
                               const struct stat* sb,
                               int depth)
 {
-  DIR* dir;
-  struct dirent* dir_entry;
-  char* child_path;
-  const char* name;
+    DIR* dir;
+    struct dirent* dir_entry;
+    char* child_path;
+    const char* name;
 
-  if (has_recorded_directory(sb->st_dev, sb->st_ino))
-    return;
+    if (has_recorded_directory(sb->st_dev, sb->st_ino))
+        return;
 
-  record_directory(sb->st_dev, sb->st_ino);
+    record_directory(sb->st_dev, sb->st_ino);
 
-  dir = opendir(path);
-  if (!dir)
-  {
-    if (!quiet_flag)
-      warning("%s: %s", path, strerror(errno));
-
-    return;
-  }
-
-  while ((dir_entry = readdir(dir)))
-  {
-    name = dir_entry->d_name;
-    if (name[0] == '.')
+    dir = opendir(path);
+    if (!dir)
     {
-      if (!all_files_flag)
-        continue;
+        if (!quiet_flag)
+            warning("%s: %s", path, strerror(errno));
 
-      if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
-        continue;
+        return;
     }
 
-    if (asprintf(&child_path, "%s/%s", path, name) < 0)
-        error(_("Out of memory"));
+    while ((dir_entry = readdir(dir)))
+    {
+        name = dir_entry->d_name;
+        if (name[0] == '.')
+        {
+            if (!all_files_flag)
+                continue;
 
-    process_path(child_path, depth);
-    free(child_path);
-  }
+            if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0)
+                continue;
+        }
 
-  closedir(dir);
+        if (asprintf(&child_path, "%s/%s", path, name) < 0)
+            error(_("Out of memory"));
+
+        process_path(child_path, depth);
+        free(child_path);
+    }
+
+    closedir(dir);
 }
 
 /* Processes a single file.
  */
 static void process_file(const char* path, struct stat* sb)
 {
-  if (sb->st_size == 0)
-  {
-    if (ignore_empty_flag)
-      return;
-  }
-
-  /* NOTE: Check for duplicate arguments? */
-
-  if (physical_flag)
-  {
-    /* TODO: Make this less pessimal */
-
-    size_t i, bucket = BUCKET_INDEX(sb->st_size);
-
-    for (i = 0;  i < buckets[bucket].allocated;  i++)
+    if (sb->st_size == 0)
     {
-      if (buckets[bucket].files[i].device == sb->st_dev &&
-          buckets[bucket].files[i].inode == sb->st_ino)
-      {
+        if (ignore_empty_flag)
         return;
-      }
     }
-  }
 
-  init_file(alloc_file(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
+    /* NOTE: Check for duplicate arguments? */
 
-  processed_files++;
-
-  if (progress_flag && processed_files % 100 == 0)
-  {
-    time_t t = time(NULL);
-
-    if (start_progress_time == 0)
-      start_progress_time = t - 1;
-
-    if (t > prev_progress_time)
+    if (physical_flag)
     {
-      float td = (float)(t - start_progress_time);
-      char processed_str[256];
-      fprintf(stderr, "duff phase 1: processed %s files (%.0f files/s)\r",
-        add_thousands_separator_z(processed_files, processed_str, 256), processed_files / td);
-      prev_progress_time = t;
+        /* TODO: Make this less pessimal */
+
+        size_t i, bucket = BUCKET_INDEX(sb->st_size);
+
+        for (i = 0;  i < buckets[bucket].allocated;  i++)
+        {
+            if (buckets[bucket].files[i].device == sb->st_dev &&
+                buckets[bucket].files[i].inode == sb->st_ino)
+            {
+                return;
+            }
+        }
     }
-  }
+
+    init_file(alloc_file(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
+
+    processed_files++;
+
+    if (progress_flag && processed_files % 100 == 0)
+    {
+        time_t t = time(NULL);
+
+        if (start_progress_time == 0)
+            start_progress_time = t - 1;
+
+        if (t > prev_progress_time)
+        {
+            float td = (float)(t - start_progress_time);
+            char processed_str[256];
+            fprintf(stderr, "duff phase 1: processed %s files (%.0f files/s)\r",
+                add_thousands_separator_z(processed_files, processed_str, 256), processed_files / td);
+            prev_progress_time = t;
+        }
+    }
 }
 
 /* Processes a path name according to its type, whether from the command line or
@@ -391,260 +391,260 @@ static void process_file(const char* path, struct stat* sb)
  */
 static void process_path(const char* path, int depth)
 {
-  mode_t mode;
-  struct stat sb;
+    mode_t mode;
+    struct stat sb;
 
-  if (stat_path(path, &sb, depth) != 0)
-    return;
+    if (stat_path(path, &sb, depth) != 0)
+        return;
 
-  mode = sb.st_mode & S_IFMT;
-  switch (mode)
-  {
-    case S_IFREG:
+    mode = sb.st_mode & S_IFMT;
+    switch (mode)
     {
-      process_file(path, &sb);
-      break;
-    }
-
-    case S_IFDIR:
-    {
-      if (recursive_flag)
-      {
-        process_directory(path, &sb, depth + 1);
-        break;
-      }
-
-      /* FALLTHROUGH */
-    }
-
-    default:
-    {
-      if (!quiet_flag)
-      {
-        switch (mode)
+        case S_IFREG:
         {
-          case S_IFLNK:
-            warning(_("%s is a symbolic link; skipping"), path);
+            process_file(path, &sb);
             break;
-          case S_IFIFO:
-            warning(_("%s is a named pipe; skipping"), path);
-            break;
-          case S_IFBLK:
-            warning(_("%s is a block device; skipping"), path);
-            break;
-          case S_IFCHR:
-            warning(_("%s is a character device; skipping"), path);
-            break;
-          case S_IFDIR:
-            warning(_("%s is a directory; skipping"), path);
-            break;
-          case S_IFSOCK:
-            warning(_("%s is a socket; skipping"), path);
-            break;
-          default:
-            error(_("This cannot happen"));
         }
-      }
+
+        case S_IFDIR:
+        {
+            if (recursive_flag)
+            {
+                process_directory(path, &sb, depth + 1);
+                break;
+            }
+
+            /* FALLTHROUGH */
+        }
+
+        default:
+        {
+            if (quiet_flag)
+                return;
+
+            switch (mode)
+            {
+                case S_IFLNK:
+                    warning(_("%s is a symbolic link; skipping"), path);
+                    break;
+                case S_IFIFO:
+                    warning(_("%s is a named pipe; skipping"), path);
+                    break;
+                case S_IFBLK:
+                    warning(_("%s is a block device; skipping"), path);
+                    break;
+                case S_IFCHR:
+                    warning(_("%s is a character device; skipping"), path);
+                    break;
+                case S_IFDIR:
+                    warning(_("%s is a directory; skipping"), path);
+                    break;
+                case S_IFSOCK:
+                    warning(_("%s is a socket; skipping"), path);
+                    break;
+                default:
+                    error(_("This cannot happen"));
+            }
+        }
     }
-  }
 }
 
 /* Reports a cluster to stdout, according to the specified options.
  */
 static void report_cluster(const FileList* cluster, unsigned int index)
 {
-  size_t i;
-  File* files = cluster->files;
+    size_t i;
+    File* files = cluster->files;
 
-  if (excess_flag)
-  {
-    /* Report all but the first file in the cluster */
-    for (i = 1;  i < cluster->allocated;  i++)
+    if (excess_flag)
     {
-      printf("%s", files[i].path);
-      putchar(get_field_terminator());
+        /* Report all but the first file in the cluster */
+        for (i = 1;  i < cluster->allocated;  i++)
+        {
+            printf("%s", files[i].path);
+            putchar(get_field_terminator());
+        }
     }
-  }
-  else
-  {
-    /* Print header and report all files in the cluster */
-
-    if (*header_format != '\0')
+    else
     {
-      if (header_uses_digest)
-        generate_file_digest(files);
+        /* Print header and report all files in the cluster */
 
-      print_cluster_header(header_format,
-                           cluster->allocated,
-                           index,
-                           files->size,
-                           files->digest);
+        if (*header_format != '\0')
+        {
+            if (header_uses_digest)
+                generate_file_digest(files);
 
-      putchar(get_field_terminator());
+            print_cluster_header(header_format,
+                                 cluster->allocated,
+                                 index,
+                                 files->size,
+                                 files->digest);
+
+            putchar(get_field_terminator());
+        }
+
+        for (i = 0;  i < cluster->allocated;  i++)
+        {
+            printf("%s", files[i].path);
+            putchar(get_field_terminator());
+        }
     }
-
-    for (i = 0;  i < cluster->allocated;  i++)
-    {
-      printf("%s", files[i].path);
-      putchar(get_field_terminator());
-    }
-  }
 }
 
 /* Finds and reports all duplicate clusters in each bucket of collected files.
  */
 static void process_clusters(void)
 {
-  size_t i, j, d, first, second, index = 1;
-  FileList duplicates;
+    size_t i, j, d, first, second, index = 1;
+    FileList duplicates;
 
-  start_progress_time = 0;
+    start_progress_time = 0;
 
-  init_file_list(&duplicates);
+    init_file_list(&duplicates);
 
-  for (i = 0;  i < BUCKET_COUNT;  i++)
-  {
-    File* files = buckets[i].files;
-
-    /* quick skip for single piece bucket */
-    if (buckets[i].allocated < 2) continue;
-
-    for (first = 0;  first < buckets[i].allocated;  first++)
+    for (i = 0;  i < BUCKET_COUNT;  i++)
     {
-      if (progress_flag && buckets[i].allocated > 0)
-      {
-        processed_files_b++;
-        time_t t = time(NULL);
+        File* files = buckets[i].files;
 
-        if (start_progress_time == 0)
-          start_progress_time = t - 1;
+        /* quick skip for single piece bucket */
+        if (buckets[i].allocated < 2) continue;
 
-        if (t > prev_progress_time)
+        for (first = 0;  first < buckets[i].allocated;  first++)
         {
-          char p_str1[256];
-          char p_str2[256];
-          fprintf(stderr, "duff phase 2: processed %.0f%% (%s files out of %s)\r",
-            processed_files_b * 100.0 / processed_files,
-            add_thousands_separator_z(processed_files_b, p_str1, 256),
-            add_thousands_separator_z(processed_files, p_str2, 256));
-          prev_progress_time = t;
-        }
-      }
-
-      if (files[first].status == INVALID ||
-          files[first].status == DUPLICATE)
-      {
-        continue;
-      }
-
-      for (second = first + 1;  second < buckets[i].allocated;  second++)
-      {
-        if (files[second].status == INVALID ||
-            files[second].status == DUPLICATE)
-        {
-            continue;
-        }
-
-        if (compare_files(&files[first], &files[second]) == 0)
-        {
-          if (duplicates.allocated == 0)
-          {
-            *alloc_file(&duplicates) = files[first];
-            files[first].status = DUPLICATE;
-          }
-
-          *alloc_file(&duplicates) = files[second];
-          files[second].status = DUPLICATE;
-        }
-        else
-        {
-          if (files[first].status == INVALID)
-            break;
-        }
-      }
-
-      if (duplicates.allocated > 0)
-      {
-        if (physical_cluster_flag)
-        {
-          ino_t prev_inode = duplicates.files[0].inode;
-          dev_t prev_dev = duplicates.files[0].device;
-          for (d = 1;  d < duplicates.allocated;  d++) /* assume that duplicates count > 1 */
-          {
-            if (duplicates.files[d].inode != prev_inode || duplicates.files[d].device != prev_dev)
+            if (progress_flag && buckets[i].allocated > 0)
             {
-              report_cluster(&duplicates, index);
-              break;
+                processed_files_b++;
+                time_t t = time(NULL);
+
+                if (start_progress_time == 0)
+                    start_progress_time = t - 1;
+
+                if (t > prev_progress_time)
+                {
+                    char p_str1[256];
+                    char p_str2[256];
+                    fprintf(stderr, "duff phase 2: processed %.0f%% (%s files out of %s)\r",
+                            processed_files_b * 100.0 / processed_files,
+                            add_thousands_separator_z(processed_files_b, p_str1, 256),
+                            add_thousands_separator_z(processed_files, p_str2, 256));
+                    prev_progress_time = t;
+                }
             }
 
-            prev_inode = duplicates.files[d].inode;
-            prev_dev = duplicates.files[d].device;
-          }
+            if (files[first].status == INVALID ||
+                    files[first].status == DUPLICATE)
+            {
+                continue;
+            }
+
+            for (second = first + 1;  second < buckets[i].allocated;  second++)
+            {
+                if (files[second].status == INVALID ||
+                        files[second].status == DUPLICATE)
+                {
+                    continue;
+                }
+
+                if (compare_files(&files[first], &files[second]) == 0)
+                {
+                    if (duplicates.allocated == 0)
+                    {
+                        *alloc_file(&duplicates) = files[first];
+                        files[first].status = DUPLICATE;
+                    }
+
+                    *alloc_file(&duplicates) = files[second];
+                    files[second].status = DUPLICATE;
+                }
+                else
+                {
+                    if (files[first].status == INVALID)
+                        break;
+                }
+            }
+
+            if (duplicates.allocated > 0)
+            {
+                if (physical_cluster_flag)
+                {
+                    ino_t prev_inode = duplicates.files[0].inode;
+                    dev_t prev_dev = duplicates.files[0].device;
+                    for (d = 1;  d < duplicates.allocated;  d++) /* assume that duplicates count > 1 */
+                    {
+                        if (duplicates.files[d].inode != prev_inode || duplicates.files[d].device != prev_dev)
+                        {
+                            report_cluster(&duplicates, index);
+                            break;
+                        }
+
+                        prev_inode = duplicates.files[d].inode;
+                        prev_dev = duplicates.files[d].device;
+                    }
+                }
+                else
+                {
+                    report_cluster(&duplicates, index);
+                }
+
+                empty_file_list(&duplicates);
+
+                index++;
+            }
         }
-        else
+
+        for (j = 0;  j < buckets[i].allocated;  j++)
         {
-          report_cluster(&duplicates, index);
+            free_file(&files[j]);
         }
-
-        empty_file_list(&duplicates);
-
-        index++;
-      }
+        free_file_list(&buckets[i]);
     }
 
-    for (j = 0;  j < buckets[i].allocated;  j++)
-    {
-      free_file(&files[j]);
-    }
-    free_file_list(&buckets[i]);
-  }
+    free_file_list(&duplicates);
 
-  free_file_list(&duplicates);
-
-  if (progress_flag)
-    fprintf(stderr, "\n");
+    if (progress_flag)
+        fprintf(stderr, "\n");
 }
 
 /* Finds and reports all unique files in each bucket of collected files.
  */
 static void process_uniques(void)
 {
-  size_t i, first, second;
+    size_t i, first, second;
 
-  for (i = 0;  i < BUCKET_COUNT;  i++)
-  {
-    File* files = buckets[i].files;
-
-    for (first = 0;  first < buckets[i].allocated;  first++)
+    for (i = 0;  i < BUCKET_COUNT;  i++)
     {
-      if (files[first].status == INVALID ||
-          files[first].status == DUPLICATE)
-      {
-        continue;
-      }
+        File* files = buckets[i].files;
 
-      for (second = first + 1;  second < buckets[i].allocated;  second++)
-      {
-        if (files[second].status == INVALID ||
-            files[second].status == DUPLICATE)
+        for (first = 0;  first < buckets[i].allocated;  first++)
         {
-            continue;
-        }
+            if (files[first].status == INVALID ||
+                files[first].status == DUPLICATE)
+            {
+                continue;
+            }
 
-        if (compare_files(&files[first], &files[second]) == 0)
-        {
-          files[first].status = DUPLICATE;
-          files[second].status = DUPLICATE;
-        }
-      }
+            for (second = first + 1;  second < buckets[i].allocated;  second++)
+            {
+                if (files[second].status == INVALID ||
+                    files[second].status == DUPLICATE)
+                {
+                    continue;
+                }
 
-      if (files[first].status != INVALID &&
-          files[first].status != DUPLICATE)
-      {
-        printf("%s", files[first].path);
-        putchar(get_field_terminator());
-      }
+                if (compare_files(&files[first], &files[second]) == 0)
+                {
+                    files[first].status = DUPLICATE;
+                    files[second].status = DUPLICATE;
+                }
+            }
+
+            if (files[first].status != INVALID &&
+                files[first].status != DUPLICATE)
+            {
+                printf("%s", files[first].path);
+                putchar(get_field_terminator());
+            }
+        }
     }
-  }
 }
 

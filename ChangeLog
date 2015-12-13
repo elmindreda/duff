@@ -3,6 +3,12 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
+2015-08-13  Camilla Berglund  <dreda@dreda.org>
+
+ * duff.c duff.h duffdriver.c dufffile.c duffstring.c duffstring.h duffutil.c:
+ Changed indent width.
+ * duffdriver.c (process_path): Decreased nesting depth.
+
 2013-09-13  Camilla Berglund  <dreda@dreda.org>
 
  * duffutil.c (set_digest_function): Changed to accept a string.

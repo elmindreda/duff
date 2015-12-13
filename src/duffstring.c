@@ -23,31 +23,31 @@
  */
 
 #if HAVE_CONFIG_H
-#include "config.h"
+ #include "config.h"
 #endif
 
 #if HAVE_STDARG_H
-#include <stdarg.h>
+ #include <stdarg.h>
 #endif
 
 #if HAVE_STRING_H
-#include <string.h>
+ #include <string.h>
 #endif
 
 #if !HAVE_VASPRINTF
 
 int vasprintf(char** result, const char* format, va_list vl)
 {
-  char buffer[8192];
-  int length;
+    char buffer[8192];
+    int length;
 
-  length = vsnprintf(buffer, sizeof(buffer), format, vl);
-  if (length < 0 || length >= sizeof(buffer))
-      return -1;
+    length = vsnprintf(buffer, sizeof(buffer), format, vl);
+    if (length < 0 || length >= sizeof(buffer))
+        return -1;
 
-  *result = strdup(buffer);
+    *result = strdup(buffer);
 
-  return length;
+    return length;
 }
 
 #endif /*HAVE_VASPRINTF*/
@@ -56,14 +56,14 @@ int vasprintf(char** result, const char* format, va_list vl)
 
 int asprintf(char** result, const char* format, ...)
 {
-  va_list vl;
-  int length;
+    va_list vl;
+    int length;
 
-  va_start(vl, format);
-  length = vasprintf(result, format, vl);
-  va_end(vl);
+    va_start(vl, format);
+    length = vasprintf(result, format, vl);
+    va_end(vl);
 
-  return length;
+    return length;
 }
 
 #endif /*HAVE_ASPRINTF*/
