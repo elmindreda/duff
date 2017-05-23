@@ -32,7 +32,7 @@ The version numbering scheme for duff is as follows:
 1. License and copyright
 ========================
 
-Duff is copyright (c) 2005 Camilla Berglund <dreda@dreda.org>
+Duff is copyright (c) 2005 Camilla Löwy <dreda@dreda.org>
 
 Duff is licensed under the zlib/libpng license.  See the file `COPYING' for
 license details.  The license is also included at the top of each source file.
@@ -132,7 +132,7 @@ See the file `HACKING'.
 
 Please send bug reports, feedback, patches and cookies to:
 
-  Camilla Berglund <dreda@dreda.org>
+  Camilla Löwy <dreda@dreda.org>
 
 
 8. Credits and thanks

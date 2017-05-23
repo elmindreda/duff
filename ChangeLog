@@ -3,42 +3,42 @@ Change log for duff
 
 Maintained since version 0.3.1.
 
-2015-08-13  Camilla Berglund  <dreda@dreda.org>
+2015-08-13  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c duff.h duffdriver.c dufffile.c duffstring.c duffstring.h duffutil.c:
  Changed indent width.
  * duffdriver.c (process_path): Decreased nesting depth.
 
-2013-09-13  Camilla Berglund  <dreda@dreda.org>
+2013-09-13  Camilla Löwy  <dreda@dreda.org>
 
  * duffutil.c (set_digest_function): Changed to accept a string.
  * duff.h duff.c duffutil.c: Made all digest function selection logic local to
  util module.
 
-2013-07-23  Camilla Berglund  <dreda@dreda.org>
+2013-07-23  Camilla Löwy  <dreda@dreda.org>
 
  * dufffile.c (compare_files): Cleaned up devnode comparison logic.
 
-2013-07-21  Camilla Berglund  <dreda@dreda.org>
+2013-07-21  Camilla Löwy  <dreda@dreda.org>
 
  * dufffile.c duffutil.c: Removed superfluous casts of malloc and realloc.
 
-2012-09-21  Camilla Berglund  <dreda@dreda.org>
+2012-09-21  Camilla Löwy  <dreda@dreda.org>
 
  * duffdriver.c (follow_links_mode): Corrected type (credits to Michael
  Tautschnig).
 
-2012-09-07  Camilla Berglund  <dreda@dreda.org>
+2012-09-07  Camilla Löwy  <dreda@dreda.org>
 
  * join-duplicates.sh: Removed redundant use of touch(1).
 
-2012-03-30  Camilla Berglund  <dreda@dreda.org>
+2012-03-30  Camilla Löwy  <dreda@dreda.org>
 
  * configure.ac: Enabled ISO Standard C.
 
  * duff.h duffdriver.c: Corrected order of types and typedefs.
 
-2012-02-19  Camilla Berglund  <dreda@dreda.org>
+2012-02-19  Camilla Löwy  <dreda@dreda.org>
 
  * duffdriver.c (process_directory): Made asprintf error exit.
 
@@ -47,7 +47,7 @@ Maintained since version 0.3.1.
 
  * join-duplicates.sh: Added missing IFS clearing.
 
-2012-02-15  Camilla Berglund  <dreda@dreda.org>
+2012-02-15  Camilla Löwy  <dreda@dreda.org>
 
  * duff.h duffutil.c (init_digest): Renamed from digest_init.
  * duff.h duffutil.c (update_digest): Renamed from digest_update.
@@ -57,7 +57,7 @@ Maintained since version 0.3.1.
  * duff.1: Updated examples.
  * join-duplicates.sh: Fixed a few duff invocation bugs.
 
-2012-02-13  Camilla Berglund  <dreda@dreda.org>
+2012-02-13  Camilla Löwy  <dreda@dreda.org>
 
  * duff.1: Added documentation for -u flag.
  * duff.h (DUPLICATE): Renamed from REPORTED.
@@ -66,7 +66,7 @@ Maintained since version 0.3.1.
  * duff.c (main, usage): Added -u flag for listing unique instead of duplicate
  files.
 
-2012-02-12  Camilla Berglund  <dreda@dreda.org>
+2012-02-12  Camilla Löwy  <dreda@dreda.org>
 
  * duffutil.c duff.h (PATH_SIZE_STEP): Added constant macro.
 
@@ -76,7 +76,7 @@ Maintained since version 0.3.1.
 
  * duff.1: Various clarifications.
 
-2012-01-28  Camilla Berglund  <dreda@dreda.org>
+2012-01-28  Camilla Löwy  <dreda@dreda.org>
 
  * dufffile.c (compare_files): Removed superflous physical_flag test.
  * duff.h dufffile.c (init_file_list): Renamed from file_list_init.
@@ -92,7 +92,7 @@ Maintained since version 0.3.1.
  * duffutil.c (get_field_terminator): Added function.
  * duffutil.c (read_path): Removed limit on path length, updated signature.
 
-2012-01-27  Camilla Berglund  <dreda@dreda.org>
+2012-01-27  Camilla Löwy  <dreda@dreda.org>
 
  * dufffile.c (compare_entry_contents): Made warnings take -q into account.
  * dufffile.c (get_file_sample): Tagged file INVALID on read error.
@@ -105,14 +105,14 @@ Maintained since version 0.3.1.
  * dufffile.c (get_file_sample, get_file_digest): Removed duplicate check for
  INVALID state.
 
-2012-01-25  Camilla Berglund  <dreda@dreda.org>
+2012-01-25  Camilla Löwy  <dreda@dreda.org>
 
  * duff.h (Status): Removed unused DUPLICATE status.
 
  * duffdriver.c (process_file): Removed read permission check on files (credits
  to Kamal Mostafa).
 
-2012-01-24  Camilla Berglund  <dreda@dreda.org>
+2012-01-24  Camilla Löwy  <dreda@dreda.org>
 
  * duff.h (HASH_BITS): Increased to 10.
 
@@ -142,7 +142,7 @@ Maintained since version 0.3.1.
 
  * duff.1: Fixed statement claiming digests are calculated in thorough mode.
 
-2012-01-23  Camilla Berglund  <dreda@dreda.org>
+2012-01-23  Camilla Löwy  <dreda@dreda.org>
 
  * duffdriver.c (process_args, process_clusters): Moved freeing of entries to
  directly after each bucket has been processed.
@@ -183,29 +183,29 @@ Maintained since version 0.3.1.
 
  * duff.1 duff.c: Changed default sampling limit to zero.
 
-2012-01-22  Camilla Berglund  <dreda@dreda.org>
+2012-01-22  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c duff.h duffentry.c: Changed sampling to read (up to) the first
  SAMPLE_SIZE bytes (credits to Kamal Mostafa).
  * duff.c: Clarified help for -H and -L flags.
  * duff.c: Added list of supported digest functions to help for -d flag.
 
-2012-01-20  Camilla Berglund  <dreda@dreda.org>
+2012-01-20  Camilla Löwy  <dreda@dreda.org>
 
  * duff.1: Added missing -type f to example (credits to Stephan Hegel).
 
-2012-01-19  Camilla Berglund  <dreda@dreda.org>
+2012-01-19  Camilla Löwy  <dreda@dreda.org>
 
  * duff.h: Tagged functions error and warning with GCC attributes.
  * duff.1: Clarified default sampling limit.
  * duffdriver.c: Renamed cluster index variable to index.
 
-2012-01-18  Camilla Berglund  <dreda@dreda.org>
+2012-01-18  Camilla Löwy  <dreda@dreda.org>
 
  * duff.1: Clarified language regarding -t and %d.
  * duff.1: Made the output of examples human-readable.
 
-2012-01-16  Camilla Berglund  <dreda@dreda.org>
+2012-01-16  Camilla Löwy  <dreda@dreda.org>
 
  * duff.1: Added new cluster header to description of -f flag.
  * duff.c (main): Added error if thorough mode output uses digest (credits to
@@ -213,7 +213,7 @@ Maintained since version 0.3.1.
  * duff.c (main): Added non-digest default cluster header for thorough mode.
  * duffutil.c duff.h: Added function cluster_header_uses_digest.
 
-2011-04-11  Camilla Berglund  <dreda@dreda.org>
+2011-04-11  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (main): Made cluster header translatable.
  * duffutil.c (error): Changed exit status to EXIT_FAILURE.
@@ -227,7 +227,7 @@ Maintained since version 0.3.1.
    (EXTRA_DIST): Add config.rpath, m4/ChangeLog.
  * configure.ac (AC_OUTPUT): Add po/Makefile.in.
 
-2011-04-10  Camilla Berglund  <dreda@dreda.org>
+2011-04-10  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c duff.h duffdriver.c duffentry.c: Changed gettext macro to _.
  * gettext.h: Added file to lib directory.
@@ -236,50 +236,50 @@ Maintained since version 0.3.1.
  * duff.c duff.h duffdriver.c duffentry.c duffutil.c
    duffstring.c: Moved to use autoconf large file support detection.
 
-2010-08-15  Camilla Berglund  <dreda@dreda.org>
+2010-08-15  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (usage): Annotated strings for i18n.
  * duff.c (main): Made digest function name comparison case-insensitive.
 
-2009-09-21  Camilla Berglund  <dreda@dreda.org>
+2009-09-21  Camilla Löwy  <dreda@dreda.org>
 
  * duff.h: Added enum typedefs.
 
-2009-09-20  Camilla Berglund  <dreda@dreda.org>
+2009-09-20  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (version, usage, bugs): Changed to output to stdout.
 
-2009-09-19  Camilla Berglund  <dreda@dreda.org>
+2009-09-19  Camilla Löwy  <dreda@dreda.org>
 
  * bootstrap.sh: Added instruction to run configure. 
  * duffentry.c (get_entry_digest): Removed broken optimization.
  * duff.1: Added note on file modification.
  * duff.h: Added struct typedefs.
 
-2009-08-09  Camilla Berglund  <dreda@dreda.org>
+2009-08-09  Camilla Löwy  <dreda@dreda.org>
 
  * duffdriver.c (recurse_directory): Added error handling for asprintf.
  * duffentry.c (get_entry_samples): Added error handling for fread.
  * duffutil.c (error, warning): Added error handling for asprintf.
  * duff.c (usage): Clarified wording of help text.
 
-2009-01-16  Camilla Berglund  <dreda@dreda.org>
+2009-01-16  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (read_path, kill_trailing_slashes): Moved functions into duffutil.c.
  * duff.h: Added declarations for read_path and kill_trailing_slashes.
  * duff.c (version): Annotated strings for i18n.
 
-2009-01-05  Camilla Berglund  <dreda@dreda.org>
+2009-01-05  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (main): Moved option default values into source file.
  * duff.c (main) (usage): Renamed -c flag to -d.
 
-2009-01-04  Camilla Berglund  <dreda@dreda.org>
+2009-01-04  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c duffdriver.c duffentry.c duffstring.c duffutil.c: Annotated strings for i18n.
  * duff.c (main): Added call to setlocale(3).
 
-2009-01-03  Camilla Berglund  <dreda@dreda.org>
+2009-01-03  Camilla Löwy  <dreda@dreda.org>
 
  * sha256.c: Added file.
  * sha256.h: Added file.
@@ -297,24 +297,24 @@ Maintained since version 0.3.1.
 
  * duff.c duffdriver.c duffentry.c duffstring.c duffutil.c: Made off_t 64-bit on glibc.
 
-2006-10-07  Camilla Berglund  <dreda@dreda.org>
+2006-10-07  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (main): Always kill trailing slashes (and in a nicer way).
  * duff.c (kill_trailing_slashes): Added function.
  * duff.c (main) (read_path): Don't kill newlines for -0 option.
 
-2006-09-29  Camilla Berglund  <dreda@dreda.org>
+2006-09-29  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (main) (usage): Added -0 option (credits to Clemens Lucas Fries).
  * duff.c (read_path): Added function.
  * duffdriver.c (report_clusters): Added -0 option (credits to Clemens Lucas Fries).
  * duffutil.c (print_cluster_header): Removed newline termination.
 
-2006-01-11  Camilla Berglund  <dreda@dreda.org>
+2006-01-11  Camilla Löwy  <dreda@dreda.org>
 
  * duffdriver.c (stat_file): Added parenthesis to remove warning.
 
-2006-01-09  Camilla Berglund  <dreda@dreda.org>
+2006-01-09  Camilla Löwy  <dreda@dreda.org>
 
  * duff.h (copy_entry): Removed unused function.
  * duffentry.c (copy_entry): Removed unused function.
@@ -325,11 +325,11 @@ Maintained since version 0.3.1.
 
  * join-duplicates.sh: Removed logging, added some error checking and mktemp.
 
-2006-01-08  Camilla Berglund  <dreda@dreda.org>
+2006-01-08  Camilla Löwy  <dreda@dreda.org>
 
  * join-duplicates.sh: Added file (credits to Ross Newell).
 
-2006-01-07  Camilla Berglund  <dreda@dreda.org>
+2006-01-07  Camilla Löwy  <dreda@dreda.org>
 
  * duffentry.c (get_entry_samples): Fixed seek bug (credits to Alexander Bostrom).
 
@@ -345,7 +345,7 @@ Maintained since version 0.3.1.
 
  * duff.c (main): Improved warnings for -l option.
 
-2006-01-04  Camilla Berglund  <dreda@dreda.org>
+2006-01-04  Camilla Löwy  <dreda@dreda.org>
 
  * duffentry.c (compare_entries): Removed code for -z option.
  * duffdriver.c (stat_file): Do not collect empty files when using -z option.
@@ -353,7 +353,7 @@ Maintained since version 0.3.1.
  * duffdriver.c (report_clusters): Fixed unlink bug.
  * duffdriver.c (report_clusters): All entries are now freed by the cluster search phase.
 
-2006-01-03  Camilla Berglund  <dreda@dreda.org>
+2006-01-03  Camilla Löwy  <dreda@dreda.org>
 
  * duff.h: Added inode and device fields to struct Entry (credits to Ross Newell).
  * duffdriver.c (process_path): Implemented physical mode (credits to Ross Newell).
@@ -364,20 +364,20 @@ Maintained since version 0.3.1.
  * duffentry.c (make_entry): Added storing of device and inode fields.
  * duffdriver.c: Moved to using doubly-linked entries.
 
-2005-12-14  Camilla Berglund  <dreda@dreda.org>
+2005-12-14  Camilla Löwy  <dreda@dreda.org>
 
  * duffdriver.c (stat_file): Eliminated duplicate stat call for -L option.
 
  * duffdriver.c (stat_file): Added inital sketch for symlink-aware -e option.
 
-2005-12-01  Camilla Berglund  <dreda@dreda.org>
+2005-12-01  Camilla Löwy  <dreda@dreda.org>
 
  * duffutil.c (print_cluster_header): Fixed bug when printing off_t values on Mac OS X.
 
  * duffdriver.c: Added includes for building on Solaris.
  * duff.c: Added includes for building on Solaris.
 
-2005-11-28  Camilla Berglund  <dreda@dreda.org>
+2005-11-28  Camilla Löwy  <dreda@dreda.org>
 
  * duffdriver.c (has_recursed_directory)
    (record_directory): Added primitive directory loop detection.
@@ -386,7 +386,7 @@ Maintained since version 0.3.1.
 
  * duffdriver.c: Added several additional TODO items.
 
-2005-11-27  Camilla Berglund  <dreda@dreda.org>
+2005-11-27  Camilla Löwy  <dreda@dreda.org>
 
  * duffdriver.c (report_clusters): Added freeing of entries.
 
@@ -394,20 +394,20 @@ Maintained since version 0.3.1.
 
  * duff.c (main): Added file name reading from stdin.
 
-2005-11-26  Camilla Berglund  <dreda@dreda.org>
+2005-11-26  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (main, usage): Added -z option for ignoring empty files.
 
  * duff.c: Moved primary driver logic into duffdriver.c.
  * duffdriver.c: Created new file for primary driver logic.
 
-2005-11-24  Camilla Berglund  <dreda@dreda.org>
+2005-11-24  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c: Added missing 't' to the getopt string (credits to Richard Levitte).
 
  * duffentry.c (compare_entries): Fixed bug in ordering of phases.
 
-2005-11-23  Camilla Berglund  <dreda@dreda.org>
+2005-11-23  Camilla Löwy  <dreda@dreda.org>
 
  * duff.c (usage): Fixed typo in -t option (credits to Patrik Jarnefelt).
 
