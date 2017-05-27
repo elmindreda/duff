@@ -146,7 +146,9 @@ void print_cluster_header(const char* format,
                           unsigned int index,
                           off_t size,
                           const uint8_t* digest);
+char* add_thousands_separator(char *a, char *out, size_t out_size);
+char* add_thousands_separator_z(size_t sz, char *out, size_t out_size);
+char* human_readable(size_t size, char *out, size_t out_size);
 
 /* These are defined and documented in duffdriver.c */
 void process_args(int argc, char** argv);
-

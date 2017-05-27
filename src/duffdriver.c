@@ -102,9 +102,11 @@ extern int recursive_flag;
 extern int ignore_empty_flag;
 extern int quiet_flag;
 extern int physical_flag;
+extern int physical_cluster_flag;
 extern int excess_flag;
 extern const char* header_format;
 extern int header_uses_digest;
+extern int progress_flag;
 
 /* Represents a single physical directory.
  */
@@ -134,6 +136,14 @@ static DirList recorded_dirs;
 /* Buckets of lists of collected files.
  */
 static FileList buckets[BUCKET_COUNT];
+
+/* Processed files counters for progress reporting
+*/
+static size_t processed_files = 0;
+static size_t processed_files_b = 0;
+static time_t prev_progress_time = 0;
+static time_t start_progress_time = 0;
+
 
 /* These functions are documented below, where they are defined.
  */
@@ -353,6 +363,25 @@ static void process_file(const char* path, struct stat* sb)
     }
 
     init_file(alloc_file(&buckets[BUCKET_INDEX(sb->st_size)]), path, sb);
+
+    processed_files++;
+
+    if (progress_flag && processed_files % 100 == 0)
+    {
+        time_t t = time(NULL);
+
+        if (start_progress_time == 0)
+            start_progress_time = t - 1;
+
+        if (t > prev_progress_time)
+        {
+            float td = (float)(t - start_progress_time);
+            char processed_str[256];
+            fprintf(stderr, "duff phase 1: processed %s files (%.0f files/s)\r",
+                add_thousands_separator_z(processed_files, processed_str, 256), processed_files / td);
+            prev_progress_time = t;
+        }
+    }
 }
 
 /* Processes a path name according to its type, whether from the command line or
@@ -466,8 +495,10 @@ static void report_cluster(const FileList* cluster, unsigned int index)
  */
 static void process_clusters(void)
 {
-    size_t i, j, first, second, index = 1;
+    size_t i, j, d, first, second, index = 1;
     FileList duplicates;
+
+    start_progress_time = 0;
 
     init_file_list(&duplicates);
 
@@ -475,10 +506,33 @@ static void process_clusters(void)
     {
         File* files = buckets[i].files;
 
+        /* quick skip for single piece bucket */
+        if (buckets[i].allocated < 2) continue;
+
         for (first = 0;  first < buckets[i].allocated;  first++)
         {
+            if (progress_flag && buckets[i].allocated > 0)
+            {
+                processed_files_b++;
+                time_t t = time(NULL);
+
+                if (start_progress_time == 0)
+                    start_progress_time = t - 1;
+
+                if (t > prev_progress_time)
+                {
+                    char p_str1[256];
+                    char p_str2[256];
+                    fprintf(stderr, "duff phase 2: processed %.0f%% (%s files out of %s)\r",
+                            processed_files_b * 100.0 / processed_files,
+                            add_thousands_separator_z(processed_files_b, p_str1, 256),
+                            add_thousands_separator_z(processed_files, p_str2, 256));
+                    prev_progress_time = t;
+                }
+            }
+
             if (files[first].status == INVALID ||
-                files[first].status == DUPLICATE)
+                    files[first].status == DUPLICATE)
             {
                 continue;
             }
@@ -486,7 +540,7 @@ static void process_clusters(void)
             for (second = first + 1;  second < buckets[i].allocated;  second++)
             {
                 if (files[second].status == INVALID ||
-                    files[second].status == DUPLICATE)
+                        files[second].status == DUPLICATE)
                 {
                     continue;
                 }
@@ -511,7 +565,27 @@ static void process_clusters(void)
 
             if (duplicates.allocated > 0)
             {
-                report_cluster(&duplicates, index);
+                if (physical_cluster_flag)
+                {
+                    ino_t prev_inode = duplicates.files[0].inode;
+                    dev_t prev_dev = duplicates.files[0].device;
+                    for (d = 1;  d < duplicates.allocated;  d++) /* assume that duplicates count > 1 */
+                    {
+                        if (duplicates.files[d].inode != prev_inode || duplicates.files[d].device != prev_dev)
+                        {
+                            report_cluster(&duplicates, index);
+                            break;
+                        }
+
+                        prev_inode = duplicates.files[d].inode;
+                        prev_dev = duplicates.files[d].device;
+                    }
+                }
+                else
+                {
+                    report_cluster(&duplicates, index);
+                }
+
                 empty_file_list(&duplicates);
 
                 index++;
@@ -519,10 +593,16 @@ static void process_clusters(void)
         }
 
         for (j = 0;  j < buckets[i].allocated;  j++)
+        {
             free_file(&files[j]);
+        }
+        free_file_list(&buckets[i]);
     }
 
     free_file_list(&duplicates);
+
+    if (progress_flag)
+        fprintf(stderr, "\n");
 }
 
 /* Finds and reports all unique files in each bucket of collected files.

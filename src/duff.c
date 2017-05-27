@@ -23,53 +23,53 @@
  */
 
 #if HAVE_CONFIG_H
- #include "config.h"
+#include "config.h"
 #endif
 
 #if HAVE_SYS_TYPES_H
- #include <sys/types.h>
+#include <sys/types.h>
 #endif
 
 #if HAVE_SYS_STAT_H
- #include <sys/stat.h>
+#include <sys/stat.h>
 #endif
 
 #if HAVE_SYS_PARAM_H
- #include <sys/param.h>
+#include <sys/param.h>
 #endif
 
 #if HAVE_INTTYPES_H
- #include <inttypes.h>
+#include <inttypes.h>
 #elif HAVE_STDINT_H
- #include <stdint.h>
+#include <stdint.h>
 #endif
 
 #if HAVE_ERRNO_H
- #include <errno.h>
+#include <errno.h>
 #endif
 
 #if HAVE_UNISTD_H
- #include <unistd.h>
+#include <unistd.h>
 #endif
 
 #if HAVE_STDIO_H
- #include <stdio.h>
+#include <stdio.h>
 #endif
 
 #if HAVE_STRING_H
- #include <string.h>
+#include <string.h>
 #endif
 
 #if HAVE_STDLIB_H
- #include <stdlib.h>
+#include <stdlib.h>
 #endif
 
 #if HAVE_LIMITS_H
- #include <limits.h>
+#include <limits.h>
 #endif
 
 #if HAVE_LOCALE_H
- #include <locale.h>
+#include <locale.h>
 #endif
 
 #include "duffstring.h"
@@ -112,6 +112,11 @@ int quiet_flag = 0;
  */
 int physical_flag = 0;
 
+/* Makes the program not consider hard-links to be duplicate files but 
+ * only in case they all point to the same inode. 
+ */
+int physical_cluster_flag = 0;
+
 /* For each duplicate cluster, reports all but one.  Useful for uses of
  * `xargs rm'.
  */
@@ -125,6 +130,13 @@ int thorough_flag = 0;
 /* Makes the program not report files of zero size as duplicates.
  */
 int ignore_empty_flag = 0;
+
+/* use human readable mode when displayng sizes in header
+ */
+int human_readable_flag = 0;
+
+/* some progress indicators */
+int progress_flag = 0;
 
 /* Specifies the look of the cluster header.
  * If set to the empty string, no headers are printed.
@@ -161,8 +173,8 @@ static void version(void)
  */
 static void usage(void)
 {
-    printf(_("Usage: %s [-0DHLPaepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
-           PACKAGE_NAME);
+    printf(_("Usage: %s [-0DHLPRTacepqrtuz] [-d function] [-f format] [-l size] [file ...]\n"),
+            PACKAGE_NAME);
 
     printf("       %s -h\n", PACKAGE_NAME);
     printf("       %s -v\n", PACKAGE_NAME);
@@ -173,6 +185,8 @@ static void usage(void)
     printf(_("  -H  follow symbolic links to directories on the command line\n"));
     printf(_("  -L  follow all symbolic links to directories\n"));
     printf(_("  -P  do not follow any symbolic links (default)\n"));
+    printf(_("  -R  use human-readable format in cluster header\n"));
+    printf(_("  -T  display progress to STDERR\n"));
     printf(_("  -a  include hidden files when searching recursively\n"));
     printf(_("  -d  the message digest function to use: sha1 sha256 sha384 sha512\n"));
     printf(_("  -e  excess mode; list all but one file from each cluster (no headers)\n"));
@@ -181,6 +195,7 @@ static void usage(void)
     printf(_("  -l  the minimum size that activates sampling\n"));
     printf(_("  -q  quiet; suppress warnings and error messages\n"));
     printf(_("  -p  physical files; do not report multiple hard links as duplicates\n"));
+    printf(_("  -c  report multiple hard links as duplicates only if at least two different physical files exist\n"));
     printf(_("  -r  search recursively through specified directories\n"));
     printf(_("  -t  thorough; force byte-by-byte comparison of files\n"));
     printf(_("  -u  unique mode; list unique files instead of duplicates\n"));
@@ -208,7 +223,7 @@ int main(int argc, char** argv)
     bindtextdomain(PACKAGE, LOCALEDIR);
     textdomain(PACKAGE);
 
-    while ((ch = getopt(argc, argv, "0DHLPad:ef:hl:pqrtuvz")) != -1)
+    while ((ch = getopt(argc, argv, "0DHLPRTacd:ef:hl:pqrtuvz")) != -1)
     {
         switch (ch)
         {
@@ -226,6 +241,12 @@ int main(int argc, char** argv)
                 break;
             case 'P':
                 follow_links_mode = NO_SYMLINKS;
+                break;
+            case 'R':
+                human_readable_flag = 1;
+                break;
+            case 'T':
+                progress_flag = 1;
                 break;
             case 'a':
                 all_files_flag = 1;
@@ -253,6 +274,9 @@ int main(int argc, char** argv)
                 break;
             case 'p':
                 physical_flag = 1;
+                break;
+            case 'c':
+                physical_cluster_flag = 1;
                 break;
             case 'q':
                 quiet_flag = 1;
@@ -285,9 +309,19 @@ int main(int argc, char** argv)
     if (!header_format)
     {
         if (thorough_flag)
-            header_format = _("%n files in cluster %i (%s bytes)");
+        {
+            if (human_readable_flag)
+                header_format = _("%n files in cluster %i (size %s)");
+            else
+                header_format = _("%n files in cluster %i (%s bytes)");
+        }
         else
-            header_format = _("%n files in cluster %i (%s bytes, digest %d)");
+        {
+            if (human_readable_flag)
+                header_format = _("%n files in cluster %i (size %s, digest %d)");
+            else
+                header_format = _("%n files in cluster %i (%s bytes, digest %d)");
+        }
     }
 
     header_uses_digest = cluster_header_uses_digest(header_format);
