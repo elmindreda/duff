@@ -8,10 +8,6 @@ Duff is a command-line utility for identifying duplicates in a given set of
 files.  It attempts to be usably fast and uses the SHA family of message
 digests as a part of the comparisons.
 
-The project website is here:
-
-  http://duff.dreda.org/
-
 Duff resides in public Git repository on GitHub:
 
   https://github.com/elmindreda/duff
@@ -32,7 +28,7 @@ The version numbering scheme for duff is as follows:
 1. License and copyright
 ========================
 
-Duff is copyright (c) 2005 Camilla Löwy <dreda@dreda.org>
+Duff is copyright (c) 2005 Camilla Löwy <elmindreda@elmindreda.org>
 
 Duff is licensed under the zlib/libpng license.  See the file `COPYING' for
 license details.  The license is also included at the top of each source file.
@@ -132,7 +128,7 @@ See the file `HACKING'.
 
 Please send bug reports, feedback, patches and cookies to:
 
-  Camilla Löwy <dreda@dreda.org>
+  Camilla Löwy <elmindreda@elmindreda.org>
 
 
 8. Credits and thanks

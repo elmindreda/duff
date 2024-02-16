@@ -1,12 +1,12 @@
 # English messages for duff
-# Copyright © 2011 Camilla Löwy <dreda@dreda.org>
+# Copyright © 2011 Camilla Löwy <elmindreda@elmindreda.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: duff 0.5.2\n"
-"Report-Msgid-Bugs-To: dreda@dreda.org\n"
+"Report-Msgid-Bugs-To: elmindreda@elmindreda.org\n"
 "POT-Creation-Date: 2013-07-23 15:52+0200\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Camilla Löwy <dreda@dreda.org>\n"
+"Last-Translator: Camilla Löwy <elmindreda@elmindreda.org>\n"
 "Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
@@ -15,8 +15,8 @@ msgstr ""
 
 #: src/duff.c:153
 #, c-format
-msgid "Copyright (c) 2005 Camilla Löwy <dreda@dreda.org>\n"
-msgstr "Copyright (c) 2005 Camilla Löwy <dreda@dreda.org>\n"
+msgid "Copyright (c) 2005 Camilla Löwy <elmindreda@elmindreda.org>\n"
+msgstr "Copyright (c) 2005 Camilla Löwy <elmindreda@elmindreda.org>\n"
 
 #: src/duff.c:154
 #, c-format

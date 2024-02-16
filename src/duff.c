@@ -1,6 +1,6 @@
 /*
  * duff - Duplicate file finder
- * Copyright (c) 2005 Camilla Löwy <dreda@dreda.org>
+ * Copyright (c) 2005 Camilla Löwy <elmindreda@elmindreda.org>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any
@@ -150,7 +150,7 @@ static void bugs(void);
 static void version(void)
 {
     printf("%s\n", PACKAGE_STRING);
-    printf(_("Copyright (c) 2005 Camilla Löwy <dreda@dreda.org>\n"));
+    printf(_("Copyright (c) 2005 Camilla Löwy <elmindreda@elmindreda.org>\n"));
     printf(_("%s contains shaX-asaddi\n"), PACKAGE_NAME);
     printf(_("Copyright (c) 2001-2003 Allan Saddi <allan@saddi.com>\n"));
 }

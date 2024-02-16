@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([duff], [0.6], [dreda@dreda.org], [duff], [http://duff.dreda.org/])
+AC_INIT([duff], [0.6], [elmindreda@elmindreda.org], [duff], [])
 AC_CONFIG_SRCDIR([src/duff.c])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([check-news dist-bzip2])
